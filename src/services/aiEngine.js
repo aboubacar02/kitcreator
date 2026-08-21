@@ -1,5 +1,6 @@
 import { isSupabaseConfigured } from './supabase.js'
-import { languageInstruction } from './language.js'
+import { resolveLanguage } from './language.js'
+import { SYSTEM_PROMPT, buildToolPrompt, validateOutput } from '../prompts/index.js'
 
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
@@ -72,22 +73,7 @@ export function getTool(id) {
   return TOOLS.find((t) => t.id === id)
 }
 
-function buildPrompt(toolId, params) {
-  switch (toolId) {
-    case 'hook':
-      return `You are a viral content expert. Generate 5 scroll-stopping hooks for a ${params.platform} video about "${params.topic}". Tone: ${params.tone}. Each hook must be under 15 words and make viewers want to stay. Reply with a numbered list only, no extra commentary.`
-    case 'script':
-      return `You are a viral short-form video scriptwriter. Write a structured script for a ${params.duration}-second video about "${params.topic}", in a ${params.style} style. Structure: Hook (0-3s), Body, Climax, Call-to-action. Include timecodes. Reply in light markdown only, no extra commentary.`
-    case 'hashtag':
-      return `You are an organic growth expert. For the niche "${params.niche}" on ${params.platform}, suggest 30 hashtags split into 3 groups: 10 broad (high volume), 10 medium, 10 niche. Reply with 3 lists separated by blank lines only, no extra commentary.`
-    case 'title':
-      return `You are a YouTube copywriting expert. Analyze this title: "${params.title}". Provide: 1) a click-potential score out of 100, 2) 3 quick strengths/weaknesses, 3) 5 more clickable variants. Reply in light markdown format, no extra commentary.`
-    default:
-      throw new Error(`Unknown tool: ${toolId}`)
-  }
-}
-
-async function callApiWithKey(prompt, apiKey) {
+async function callApiWithKey(prompt, systemContent, apiKey) {
   const { url, model } = resolveProvider(apiKey)
   const res = await fetch(url, {
     method: 'POST',
@@ -98,7 +84,7 @@ async function callApiWithKey(prompt, apiKey) {
     body: JSON.stringify({
       model,
       messages: [
-        { role: 'system', content: languageInstruction() },
+        { role: 'system', content: systemContent },
         { role: 'user', content: prompt },
       ],
       temperature: 0.8,
@@ -113,11 +99,11 @@ async function callApiWithKey(prompt, apiKey) {
   return data.choices?.[0]?.message?.content ?? ''
 }
 
-async function callApi(prompt) {
+async function callApi(prompt, systemContent) {
   let lastError
   for (let attempt = 0; attempt < API_KEYS.length; attempt++) {
     try {
-      return await callApiWithKey(prompt, getNextApiKey())
+      return await callApiWithKey(prompt, systemContent, getNextApiKey())
     } catch (err) {
       lastError = err
       const retryable =
@@ -190,12 +176,13 @@ function mockGenerate(toolId, params) {
 }
 
 export async function generate(toolId, params) {
-  const prompt = buildPrompt(toolId, params)
+  const prompt = buildToolPrompt(toolId, params)
   if (API_KEYS.length === 0) {
     await new Promise((r) => setTimeout(r, 600))
     return mockGenerate(toolId, params)
   }
-  return callApi(prompt)
+  const result = await callApi(prompt, SYSTEM_PROMPT(resolveLanguage()))
+  return validateOutput(toolId, result)
 }
 
 export { isSupabaseConfigured }
