@@ -1,8 +1,44 @@
 import { isSupabaseConfigured } from './supabase.js'
 
-const API_URL = import.meta.env.VITE_AI_API_URL || 'https://api.openai.com/v1/chat/completions'
-const API_KEY = import.meta.env.VITE_AI_API_KEY || ''
-const MODEL = import.meta.env.VITE_AI_MODEL || 'gpt-4o-mini'
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
+
+const DEFAULT_URL = import.meta.env.VITE_AI_API_URL || 'https://api.openai.com/v1/chat/completions'
+const DEFAULT_MODEL = import.meta.env.VITE_AI_MODEL || 'gpt-4o-mini'
+
+function resolveProvider(key) {
+  if (/^(AIza|AQ\.)/.test(key)) {
+    return {
+      url: GEMINI_URL,
+      model: import.meta.env.VITE_AI_MODEL_GEMINI || 'gemini-3.6-flash',
+    }
+  }
+  if (key.startsWith('gsk_')) {
+    return {
+      url: GROQ_URL,
+      model: import.meta.env.VITE_AI_MODEL_GROQ || 'openai/gpt-oss-120b',
+    }
+  }
+  return { url: DEFAULT_URL, model: DEFAULT_MODEL }
+}
+
+const API_KEYS = [
+  import.meta.env.VITE_AI_API_KEY,
+  import.meta.env.VITE_AI_KEY_1,
+  import.meta.env.VITE_AI_KEY_2,
+  import.meta.env.VITE_AI_KEY_3,
+  import.meta.env.VITE_AI_KEY_4,
+  import.meta.env.VITE_AI_KEY_5,
+  import.meta.env.VITE_AI_KEY_6,
+].filter(Boolean)
+
+let currentKeyIndex = 0
+
+function getNextApiKey() {
+  const key = API_KEYS[currentKeyIndex]
+  currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length
+  return key
+}
 
 export const TOOLS = [
   {
@@ -50,24 +86,44 @@ function buildPrompt(toolId, params) {
   }
 }
 
-async function callApi(prompt) {
-  const res = await fetch(API_URL, {
+async function callApiWithKey(prompt, apiKey) {
+  const { url, model } = resolveProvider(apiKey)
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: MODEL,
+      model,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.8,
     }),
   })
   if (!res.ok) {
-    throw new Error(`AI API error (${res.status})`)
+    const error = new Error(`AI API error (${res.status})`)
+    error.status = res.status
+    throw error
   }
   const data = await res.json()
   return data.choices?.[0]?.message?.content ?? ''
+}
+
+async function callApi(prompt) {
+  let lastError
+  for (let attempt = 0; attempt < API_KEYS.length; attempt++) {
+    try {
+      return await callApiWithKey(prompt, getNextApiKey())
+    } catch (err) {
+      lastError = err
+      const retryable =
+        !err.status ||
+        [401, 403, 429].includes(err.status) ||
+        err.status >= 500
+      if (!retryable) throw err
+    }
+  }
+  throw lastError
 }
 
 function slug(text) {
@@ -131,7 +187,7 @@ function mockGenerate(toolId, params) {
 
 export async function generate(toolId, params) {
   const prompt = buildPrompt(toolId, params)
-  if (!API_KEY) {
+  if (API_KEYS.length === 0) {
     await new Promise((r) => setTimeout(r, 600))
     return mockGenerate(toolId, params)
   }

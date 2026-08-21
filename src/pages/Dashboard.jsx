@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.jsx'
 import Sidebar from '../components/Sidebar.jsx'
 import {
   getSession,
+  ensureProfile,
   getProfile,
   signOut,
   onAuthStateChange,
@@ -33,8 +34,8 @@ export default function Dashboard() {
       const currentSession = await getSession()
       if (!mounted) return
       setSession(currentSession)
-      if (currentSession?.user?.id) {
-        const userProfile = await getProfile(currentSession.user.id)
+      if (currentSession?.user) {
+        const userProfile = await ensureProfile(currentSession.user)
         if (mounted) setProfile(userProfile)
       }
       setLoading(false)
@@ -94,6 +95,12 @@ export default function Dashboard() {
             <p className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
               Demo mode: Supabase is not configured yet. Credits reset daily and
               data is not persisted.
+            </p>
+          )}
+          {isSupabaseConfigured && !profile && (
+            <p className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              Profile not found: run supabase/schema.sql in the Supabase SQL
+              Editor (table profiles + policies), then reload this page.
             </p>
           )}
           <Outlet context={{ user, credits, consume }} />

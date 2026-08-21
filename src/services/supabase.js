@@ -49,8 +49,21 @@ export async function getProfile(userId) {
   if (!supabase) return null
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, email, credits, is_pro')
+    .select('id, email, credits')
     .eq('id', userId)
+    .single()
+  if (error) return null
+  return data
+}
+
+export async function ensureProfile(user) {
+  if (!supabase) return null
+  const existing = await getProfile(user.id)
+  if (existing) return existing
+  const { data, error } = await supabase
+    .from('profiles')
+    .upsert({ id: user.id, email: user.email }, { onConflict: 'id' })
+    .select('id, email, credits')
     .single()
   if (error) return null
   return data
