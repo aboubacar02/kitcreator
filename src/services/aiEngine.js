@@ -1,4 +1,5 @@
 import { isSupabaseConfigured } from './supabase.js'
+import { languageInstruction } from './language.js'
 
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
@@ -74,13 +75,13 @@ export function getTool(id) {
 function buildPrompt(toolId, params) {
   switch (toolId) {
     case 'hook':
-      return `You are a viral content expert. Generate 5 scroll-stopping hooks in English for a ${params.platform} video about "${params.topic}". Tone: ${params.tone}. Each hook must be under 15 words and make viewers want to stay. Reply with a numbered list only, no extra commentary.`
+      return `You are a viral content expert. Generate 5 scroll-stopping hooks for a ${params.platform} video about "${params.topic}". Tone: ${params.tone}. Each hook must be under 15 words and make viewers want to stay. Reply with a numbered list only, no extra commentary.`
     case 'script':
-      return `You are a viral short-form video scriptwriter. Write a structured script in English for a ${params.duration}-second video about "${params.topic}", in a ${params.style} style. Structure: Hook (0-3s), Body, Climax, Call-to-action. Include timecodes. Reply in light markdown only, no extra commentary.`
+      return `You are a viral short-form video scriptwriter. Write a structured script for a ${params.duration}-second video about "${params.topic}", in a ${params.style} style. Structure: Hook (0-3s), Body, Climax, Call-to-action. Include timecodes. Reply in light markdown only, no extra commentary.`
     case 'hashtag':
-      return `You are an organic growth expert. For the niche "${params.niche}" on ${params.platform}, suggest 30 hashtags in English split into 3 groups: 10 broad (high volume), 10 medium, 10 niche. Reply with 3 lists separated by blank lines only, no extra commentary.`
+      return `You are an organic growth expert. For the niche "${params.niche}" on ${params.platform}, suggest 30 hashtags split into 3 groups: 10 broad (high volume), 10 medium, 10 niche. Reply with 3 lists separated by blank lines only, no extra commentary.`
     case 'title':
-      return `You are a YouTube copywriting expert. Analyze this title: "${params.title}". Provide: 1) a click-potential score out of 100, 2) 3 quick strengths/weaknesses, 3) 5 more clickable variants. Reply in English, light markdown format, no extra commentary.`
+      return `You are a YouTube copywriting expert. Analyze this title: "${params.title}". Provide: 1) a click-potential score out of 100, 2) 3 quick strengths/weaknesses, 3) 5 more clickable variants. Reply in light markdown format, no extra commentary.`
     default:
       throw new Error(`Unknown tool: ${toolId}`)
   }
@@ -96,7 +97,10 @@ async function callApiWithKey(prompt, apiKey) {
     },
     body: JSON.stringify({
       model,
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: languageInstruction() },
+        { role: 'user', content: prompt },
+      ],
       temperature: 0.8,
     }),
   })

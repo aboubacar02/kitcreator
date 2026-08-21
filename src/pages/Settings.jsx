@@ -1,11 +1,19 @@
+import { useState } from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
-import { User, LogOut, Zap, CreditCard } from 'lucide-react'
+import { User, LogOut, Zap, CreditCard, Languages } from 'lucide-react'
 import { signOut } from '../services/supabase.js'
+import CustomSelect from '../components/CustomSelect.jsx'
+import {
+  LANGUAGES,
+  getLanguagePreference,
+  setLanguagePreference,
+} from '../services/language.js'
 
 export default function Settings() {
   const { user, credits } = useOutletContext()
   const navigate = useNavigate()
   const initial = (user?.email || '?').charAt(0).toUpperCase()
+  const [langPref, setLangPref] = useState(getLanguagePreference())
 
   async function handleSignOut() {
     await signOut()
@@ -60,6 +68,30 @@ export default function Settings() {
           <p className="mt-1 text-xs text-slate-500">
             Upgrade anytime from the navbar
           </p>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
+          <Languages className="h-4 w-4 text-brand-400" />
+          AI Output Language
+        </div>
+        <p className="mt-1 text-xs text-slate-500">
+          All AI-generated content (hooks, scripts, hashtags, titles) will be
+          written in this language.
+        </p>
+        <div className="mt-4 max-w-xs">
+          <CustomSelect
+            options={LANGUAGES.map((l) => l.label)}
+            value={LANGUAGES.find((l) => l.value === langPref)?.label}
+            onChange={(label) => {
+              const found = LANGUAGES.find((l) => l.label === label)
+              if (found) {
+                setLangPref(found.value)
+                setLanguagePreference(found.value)
+              }
+            }}
+          />
         </div>
       </div>
 
