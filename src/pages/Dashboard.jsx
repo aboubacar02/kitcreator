@@ -15,8 +15,10 @@ import {
   getLocalCredits,
   consumeLocalCredits,
 } from '../services/credits.js'
+import { useI18n } from '../i18n/LanguageContext.jsx'
 
 export default function Dashboard() {
+  const { t } = useI18n()
   const [session, setSession] = useState(null)
   const [profile, setProfile] = useState(null)
   const [localCredits, setLocalCredits] = useState(getLocalCredits())
@@ -113,14 +115,12 @@ export default function Dashboard() {
         <main className="mx-auto w-full max-w-4xl flex-1 p-6 md:p-12">
           {!isSupabaseConfigured && (
             <p className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
-              Demo mode: Supabase is not configured yet. Credits reset daily and
-              data is not persisted.
+              {t('demo.notice')}
             </p>
           )}
           {isSupabaseConfigured && !profile && (
             <p className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-              Profile not found: run supabase/schema.sql in the Supabase SQL
-              Editor (table profiles + policies), then reload this page.
+              {t('setup.profileMissing')}
             </p>
           )}
           <Outlet context={{ user, credits, consume }} />

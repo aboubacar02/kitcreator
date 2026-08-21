@@ -1,20 +1,24 @@
 const STORAGE_KEY = 'kitcreator-language'
 
 export const LANGUAGES = [
-  { value: 'auto', label: 'Auto (browser)' },
-  { value: 'en', label: 'English' },
+  { value: 'auto', label: 'Auto' },
   { value: 'fr', label: 'Français' },
+  { value: 'en', label: 'English' },
+  { value: 'es', label: 'Español' },
 ]
 
 function detectBrowserLanguage() {
   const candidates =
     navigator.languages && navigator.languages.length
       ? navigator.languages
-      : [navigator.language || 'en']
+      : [navigator.language || '']
   for (const tag of candidates) {
-    if ((tag || '').toLowerCase().startsWith('fr')) return 'fr'
+    const lower = (tag || '').toLowerCase()
+    if (lower.startsWith('fr')) return 'fr'
+    if (lower.startsWith('es')) return 'es'
+    if (lower.startsWith('en')) return 'en'
   }
-  return 'en'
+  return 'fr'
 }
 
 export function getLanguagePreference() {
@@ -46,6 +50,7 @@ export function languageInstruction(language = resolveLanguage()) {
 }
 
 export function applyDocumentLang() {
+  if (typeof document === 'undefined') return
   document.documentElement.lang = resolveLanguage()
 }
 

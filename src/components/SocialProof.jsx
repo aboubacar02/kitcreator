@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { animate, motion } from 'framer-motion'
 import { isSupabaseConfigured, supabase } from '../services/supabase.js'
+import { useI18n } from '../i18n/LanguageContext.jsx'
 
 const FALLBACK_COUNT = 2400
 
-function Counter({ to }) {
+const LOCALES = { fr: 'fr-FR', en: 'en-US', es: 'es-ES' }
+
+function Counter({ to, locale }) {
   const [value, setValue] = useState(0)
 
   useEffect(() => {
@@ -16,7 +19,7 @@ function Counter({ to }) {
     return () => controls.stop()
   }, [to])
 
-  return <span>{value.toLocaleString('en-US')}+</span>
+  return <span>{value.toLocaleString(locale)}+</span>
 }
 
 const avatars = [
@@ -28,6 +31,7 @@ const avatars = [
 ]
 
 export default function SocialProof() {
+  const { t, lang } = useI18n()
   const [count, setCount] = useState(
     isSupabaseConfigured ? null : FALLBACK_COUNT,
   )
@@ -68,12 +72,11 @@ export default function SocialProof() {
           </motion.div>
         ))}
       </div>
-      <p className="text-sm text-slate-400">
+      <p className="max-w-xs text-center text-sm text-slate-400 sm:max-w-none sm:text-left">
         <span className="font-bold text-white">
-          <Counter to={count ?? FALLBACK_COUNT} />
+          <Counter to={count ?? FALLBACK_COUNT} locale={LOCALES[lang] ?? 'en-US'} />
         </span>{' '}
-        {(count ?? FALLBACK_COUNT) === 1 ? 'creator' : 'creators'} already
-        generate faster with KitCreator
+        {t('social.proof')}
       </p>
     </div>
   )

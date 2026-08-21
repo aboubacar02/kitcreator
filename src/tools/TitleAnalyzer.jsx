@@ -1,19 +1,24 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
 import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
+import { useI18n } from '../i18n/LanguageContext.jsx'
+import { friendlyError } from '../i18n/strings.js'
 
 export default function TitleAnalyzer() {
   const { consume } = useOutletContext()
+  const { t } = useI18n()
   const [title, setTitle] = useState('')
   const [result, setResult] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const resultRef = useRef(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
+    if (loading) return
     setError('')
     setResult('')
     setLoading(true)
@@ -21,8 +26,11 @@ export default function TitleAnalyzer() {
       await consume(getTool('title').credits)
       const text = await generate('title', { title })
       setResult(text)
+      requestAnimationFrame(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
     } catch (err) {
-      setError(err.message)
+      setError(friendlyError(err, t))
     } finally {
       setLoading(false)
     }
@@ -31,24 +39,22 @@ export default function TitleAnalyzer() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white">Title Analyzer</h2>
-        <p className="mt-1 text-sm text-slate-400">
-          Score your titles and get more clickable variants in one click.
-        </p>
+        <h2 className="text-2xl font-bold text-white">{t('tools.title')}</h2>
+        <p className="mt-1 text-sm text-slate-400">{t('tools.title.desc')}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="card space-y-4">
         <div>
-          <label htmlFor="title" className="label">
-            Your video title
+          <label htmlFor="video-title" className="label">
+            {t('form.yourTitle.label')}
           </label>
           <textarea
-            id="title"
+            id="video-title"
             required
             rows={3}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Paste the title you want to analyze..."
+            placeholder={t('form.yourTitle.placeholder')}
             className="input resize-none"
           />
         </div>
@@ -58,12 +64,16 @@ export default function TitleAnalyzer() {
           </p>
         )}
         <GenerateButton loading={loading} disabled={!title.trim()}>
-          Analyze Title
+          {t('btn.analyzeTitle')}
         </GenerateButton>
       </form>
 
       {loading && <LoadingSkeleton />}
-      {result && <ResultCard title="Generated Results:" content={result} />}
+      <div ref={resultRef} className="scroll-mt-24">
+        {result && !loading && (
+          <ResultCard title={t('result.title')} content={result} />
+        )}
+      </div>
     </div>
   )
 }

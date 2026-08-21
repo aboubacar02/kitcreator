@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion'
 import { Sparkles, Zap } from 'lucide-react'
+import { useI18n } from '../i18n/LanguageContext.jsx'
 
 export default function GenerateButton({ loading, disabled, children }) {
+  const { t } = useI18n()
   return (
     <motion.button
       type="submit"
@@ -15,7 +17,7 @@ export default function GenerateButton({ loading, disabled, children }) {
       ) : (
         <Sparkles className="h-5 w-5" />
       )}
-      {loading ? 'Generating...' : children}
+      {loading ? t('common.generating') : children}
     </motion.button>
   )
 }

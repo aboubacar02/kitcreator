@@ -1,24 +1,19 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Zap, FileText, Hash, BarChart3, Settings, User } from 'lucide-react'
+import { Settings, User } from 'lucide-react'
 import { TOOLS } from '../services/aiEngine.js'
-import { t } from '../i18n/strings.js'
-
-const icons = {
-  hook: Zap,
-  script: FileText,
-  hashtag: Hash,
-  title: BarChart3,
-}
+import { TOOL_ICONS } from './toolIcons.js'
+import { useI18n } from '../i18n/LanguageContext.jsx'
 
 export default function Sidebar({ user }) {
+  const { t } = useI18n()
   const navigate = useNavigate()
   const initial = (user?.email || '?').charAt(0).toUpperCase()
 
   return (
-    <aside className="flex w-full shrink-0 flex-col gap-2 border-b border-slate-800/80 bg-surface/80 backdrop-blur-md p-4 md:w-64 md:border-b-0 md:border-r md:p-6">
+    <aside className="hidden w-full shrink-0 flex-col gap-2 border-b border-slate-800/80 bg-surface/80 p-4 backdrop-blur-md md:flex md:w-64 md:border-b-0 md:border-r md:p-6">
       <nav className="flex flex-1 flex-col gap-2">
         {TOOLS.map((tool) => {
-          const Icon = icons[tool.id]
+          const Icon = TOOL_ICONS[tool.id]
           return (
             <NavLink
               key={tool.id}
@@ -50,8 +45,7 @@ export default function Sidebar({ user }) {
           }
         >
           <Settings className="h-4 w-4 shrink-0" />
-          <span>{t('sidebar.settings')}</span>
-        </NavLink>
+          <span>{t('sidebar.settings')}</span>        </NavLink>
 
         <div
           onClick={() => navigate('/dashboard/settings')}

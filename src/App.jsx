@@ -8,10 +8,11 @@ import HookGenerator from './tools/HookGenerator.jsx'
 import ScriptWriter from './tools/ScriptWriter.jsx'
 import HashtagFinder from './tools/HashtagFinder.jsx'
 import TitleAnalyzer from './tools/TitleAnalyzer.jsx'
+import { LanguageProvider } from './i18n/LanguageContext.jsx'
 
 export default function App() {
   return (
-    <>
+    <LanguageProvider>
       <AnimatedBackground />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -26,6 +27,6 @@ export default function App() {
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </LanguageProvider>
   )
 }
