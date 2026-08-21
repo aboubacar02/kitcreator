@@ -15,7 +15,7 @@ export async function getSession() {
   return data.session
 }
 
-export async function onAuthStateChange(callback) {
+export function onAuthStateChange(callback) {
   if (!supabase) return () => {}
   const { data } = supabase.auth.onAuthStateChange((_event, session) =>
     callback(session),
@@ -49,7 +49,7 @@ export async function getProfile(userId) {
   if (!supabase) return null
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, email, credits, plan')
+    .select('id, email, credits, is_pro')
     .eq('id', userId)
     .single()
   if (error) return null

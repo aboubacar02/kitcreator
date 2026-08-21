@@ -7,20 +7,30 @@ export default function Auth() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [info, setInfo] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    setInfo('')
     setLoading(true)
     try {
       if (mode === 'login') {
         await signIn(email, password)
+        navigate('/dashboard')
       } else {
-        await signUp(email, password)
+        const data = await signUp(email, password)
+        if (data?.session) {
+          navigate('/dashboard')
+        } else {
+          setInfo(
+            'Account created! Check your inbox and confirm your email before logging in.',
+          )
+          setMode('login')
+        }
       }
-      navigate('/dashboard')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -54,6 +64,12 @@ export default function Auth() {
             <p className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
               Supabase is not configured yet. Set VITE_SUPABASE_URL and
               VITE_SUPABASE_ANON_KEY in your .env file.
+            </p>
+          )}
+
+          {info && (
+            <p className="mt-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
+              {info}
             </p>
           )}
 
