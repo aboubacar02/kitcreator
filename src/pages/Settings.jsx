@@ -8,6 +8,7 @@ import {
   getLanguagePreference,
   setLanguagePreference,
 } from '../services/language.js'
+import { t } from '../i18n/strings.js'
 
 export default function Settings() {
   const { user, credits } = useOutletContext()
@@ -23,10 +24,8 @@ export default function Settings() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white">Settings</h2>
-        <p className="mt-1 text-sm text-slate-400">
-          Manage your account and subscription.
-        </p>
+        <h2 className="text-2xl font-bold text-white">{t('settings.title')}</h2>
+        <p className="mt-1 text-sm text-slate-400">{t('settings.subtitle')}</p>
       </div>
 
       <div className="card flex items-center gap-4">
@@ -42,7 +41,7 @@ export default function Settings() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
-            Active session
+            {t('settings.activeSession')}
           </p>
         </div>
       </div>
@@ -51,35 +50,28 @@ export default function Settings() {
         <div className="card">
           <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
             <Zap className="h-4 w-4 text-brand-400" />
-            Credits
+            {t('settings.credits')}
           </div>
           <p className="mt-3 text-3xl font-extrabold text-white">{credits}</p>
-          <p className="mt-1 text-xs text-slate-500">
-            Free plan — resets daily
-          </p>
+          <p className="mt-1 text-xs text-slate-500">{t('settings.freePlan')}</p>
         </div>
 
         <div className="card">
           <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
             <CreditCard className="h-4 w-4 text-brand-400" />
-            Plan
+            {t('settings.plan')}
           </div>
-          <p className="mt-3 text-3xl font-extrabold text-white">Free</p>
-          <p className="mt-1 text-xs text-slate-500">
-            Upgrade anytime from the navbar
-          </p>
+          <p className="mt-3 text-3xl font-extrabold text-white">{t('settings.free')}</p>
+          <p className="mt-1 text-xs text-slate-500">{t('settings.upgradeHint')}</p>
         </div>
       </div>
 
       <div className="card">
         <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
           <Languages className="h-4 w-4 text-brand-400" />
-          AI Output Language
+          {t('settings.language')}
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          All AI-generated content (hooks, scripts, hashtags, titles) will be
-          written in this language.
-        </p>
+        <p className="mt-1 text-xs text-slate-500">{t('settings.languageHint')}</p>
         <div className="mt-4 max-w-xs">
           <CustomSelect
             options={LANGUAGES.map((l) => l.label)}
@@ -89,6 +81,7 @@ export default function Settings() {
               if (found) {
                 setLangPref(found.value)
                 setLanguagePreference(found.value)
+                window.location.reload()
               }
             }}
           />
@@ -100,7 +93,7 @@ export default function Settings() {
         className="btn-ghost !border-red-500/40 !text-red-300 hover:!border-red-500 hover:!text-red-200"
       >
         <LogOut className="h-4 w-4" />
-        Log out
+        {t('settings.logout')}
       </button>
     </div>
   )

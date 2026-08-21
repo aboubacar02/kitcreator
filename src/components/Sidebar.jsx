@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Zap, FileText, Hash, BarChart3, Settings, User } from 'lucide-react'
 import { TOOLS } from '../services/aiEngine.js'
+import { t } from '../i18n/strings.js'
 
 const icons = {
   hook: Zap,
@@ -31,7 +32,7 @@ export default function Sidebar({ user }) {
               }
             >
               <Icon className="h-4 w-4 shrink-0" />
-              <span className="whitespace-nowrap">{tool.name}</span>
+              <span className="whitespace-nowrap">{t(`tools.${tool.id}`)}</span>
             </NavLink>
           )
         })}
@@ -49,7 +50,7 @@ export default function Sidebar({ user }) {
           }
         >
           <Settings className="h-4 w-4 shrink-0" />
-          <span>Settings</span>
+          <span>{t('sidebar.settings')}</span>
         </NavLink>
 
         <div
@@ -64,7 +65,7 @@ export default function Sidebar({ user }) {
             </span>
           </div>
           <div className="overflow-hidden">
-            <p className="truncate text-sm font-medium text-white">My account</p>
+            <p className="truncate text-sm font-medium text-white">{t('sidebar.myAccount')}</p>
             <p className="truncate text-xs text-slate-400">{user?.email}</p>
           </div>
         </div>
