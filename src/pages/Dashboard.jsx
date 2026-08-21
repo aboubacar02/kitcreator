@@ -43,10 +43,20 @@ export default function Dashboard() {
 
     init()
 
-    const unsubscribe = onAuthStateChange((newSession) => {
+    const unsubscribe = onAuthStateChange((event, newSession) => {
       if (!mounted) return
-      setSession(newSession)
-      if (!newSession) navigate('/auth')
+      if (event === 'SIGNED_OUT') {
+        setSession(null)
+        setProfile(null)
+        navigate('/auth')
+        return
+      }
+      if (newSession) {
+        setSession(newSession)
+        ensureProfile(newSession.user).then((p) => {
+          if (mounted) setProfile(p)
+        })
+      }
     })
 
     return () => {
