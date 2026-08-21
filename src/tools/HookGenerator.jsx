@@ -4,6 +4,7 @@ import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
 import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
 import PlatformSelector from '../components/PlatformSelector.jsx'
+import CustomSelect from '../components/CustomSelect.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
 
 const tones = ['Energetic', 'Curious', 'Bold', 'Inspirational', 'Funny']
@@ -64,25 +65,9 @@ export default function HookGenerator() {
             onChange={setPlatform}
           />
         </div>
-        <div>
-          <label htmlFor="tone" className="label">
-            Tone
-          </label>
-          <select
-            id="tone"
-            value={tone}
-            onChange={(e) => setTone(e.target.value)}
-            className="input"
-          >
-            {tones.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CustomSelect label="Tone" options={tones} value={tone} onChange={setTone} />
         {error && (
-          <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          <p className="animate-shake rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
             {error}
           </p>
         )}

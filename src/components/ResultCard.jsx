@@ -37,6 +37,33 @@ function CopyButton({ text }) {
   )
 }
 
+function Celebration() {
+  const particles = Array.from({ length: 10 })
+  return (
+    <div className="pointer-events-none absolute left-1/2 top-0">
+      {particles.map((_, i) => {
+        const angle = (i / particles.length) * Math.PI * 2
+        return (
+          <motion.span
+            key={i}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+            animate={{
+              x: Math.cos(angle) * 80,
+              y: Math.sin(angle) * 60 + 40,
+              opacity: 0,
+              scale: 0,
+            }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
+            className={`absolute h-1.5 w-1.5 rounded-full ${
+              i % 3 === 0 ? 'bg-brand-400' : i % 3 === 1 ? 'bg-fuchsia-400' : 'bg-white'
+            }`}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
 export default function ResultCard({ title, content }) {
   const blocks = content
     .split(/\n{2,}/)
@@ -44,7 +71,8 @@ export default function ResultCard({ title, content }) {
     .filter(Boolean)
 
   return (
-    <div className="space-y-4">
+    <div className="relative space-y-4">
+      <Celebration />
       <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
         {title}
       </h3>

@@ -53,7 +53,7 @@ export default function TitleAnalyzer() {
           />
         </div>
         {error && (
-          <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          <p className="animate-shake rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
             {error}
           </p>
         )}

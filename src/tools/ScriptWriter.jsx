@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
 import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
+import CustomSelect from '../components/CustomSelect.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
 
 const durations = ['15', '30', '60']
@@ -58,43 +59,21 @@ export default function ScriptWriter() {
           />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label htmlFor="duration" className="label">
-              Duration (seconds)
-            </label>
-            <select
-              id="duration"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              className="input"
-            >
-              {durations.map((d) => (
-                <option key={d} value={d}>
-                  {d}s
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="style" className="label">
-              Style
-            </label>
-            <select
-              id="style"
-              value={style}
-              onChange={(e) => setStyle(e.target.value)}
-              className="input"
-            >
-              {styles.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </div>
+          <CustomSelect
+            label="Duration (seconds)"
+            options={durations.map((d) => `${d}s`)}
+            value={`${duration}s`}
+            onChange={(v) => setDuration(v.replace('s', ''))}
+          />
+          <CustomSelect
+            label="Style"
+            options={styles}
+            value={style}
+            onChange={setStyle}
+          />
         </div>
         {error && (
-          <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          <p className="animate-shake rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
             {error}
           </p>
         )}
