@@ -1,0 +1,104 @@
+import { useEffect, useState } from 'react'
+import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar.jsx'
+import Sidebar from '../components/Sidebar.jsx'
+import {
+  getSession,
+  getProfile,
+  signOut,
+  onAuthStateChange,
+  consumeCredits,
+  isSupabaseConfigured,
+} from '../services/supabase.js'
+import {
+  getLocalCredits,
+  consumeLocalCredits,
+} from '../services/credits.js'
+
+export default function Dashboard() {
+  const [session, setSession] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [localCredits, setLocalCredits] = useState(getLocalCredits())
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      return
+    }
+    let mounted = true
+
+    async function init() {
+      const currentSession = await getSession()
+      if (!mounted) return
+      setSession(currentSession)
+      if (currentSession?.user?.id) {
+        const userProfile = await getProfile(currentSession.user.id)
+        if (mounted) setProfile(userProfile)
+      }
+      setLoading(false)
+    }
+
+    init()
+
+    const unsubscribe = onAuthStateChange((newSession) => {
+      if (!mounted) return
+      setSession(newSession)
+      if (!newSession) navigate('/auth')
+    })
+
+    return () => {
+      mounted = false
+      unsubscribe()
+    }
+  }, [navigate])
+
+  async function consume(amount) {
+    if (isSupabaseConfigured && session?.user?.id) {
+      await consumeCredits(session.user.id, amount)
+      const updated = await getProfile(session.user.id)
+      if (updated) setProfile(updated)
+    } else {
+      setLocalCredits(consumeLocalCredits(amount))
+    }
+  }
+
+  async function handleSignOut() {
+    await signOut()
+    navigate('/')
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-ink">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-700 border-t-brand-500" />
+      </div>
+    )
+  }
+
+  if (isSupabaseConfigured && !session) {
+    return <Navigate to="/auth" replace />
+  }
+
+  const user = session?.user ?? { id: 'demo', email: 'demo@kitcreator.app' }
+  const credits = isSupabaseConfigured ? (profile?.credits ?? 0) : localCredits
+
+  return (
+    <div className="flex min-h-screen flex-col bg-ink text-slate-100">
+      <Navbar credits={credits} onSignOut={handleSignOut} />
+      <div className="flex flex-1 flex-col md:flex-row">
+        <Sidebar />
+        <main className="mx-auto w-full max-w-4xl flex-1 p-6 md:p-12">
+          {!isSupabaseConfigured && (
+            <p className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+              Demo mode: Supabase is not configured yet. Credits reset daily and
+              data is not persisted.
+            </p>
+          )}
+          <Outlet context={{ user, credits, consume }} />
+        </main>
+      </div>
+    </div>
+  )
+}
