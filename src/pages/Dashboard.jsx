@@ -86,10 +86,10 @@ export default function Dashboard() {
   const credits = isSupabaseConfigured ? (profile?.credits ?? 0) : localCredits
 
   return (
-    <div className="flex min-h-screen flex-col bg-ink text-slate-100">
+    <div className="flex min-h-screen flex-col text-slate-100">
       <Navbar credits={credits} onSignOut={handleSignOut} />
       <div className="flex flex-1 flex-col md:flex-row">
-        <Sidebar />
+        <Sidebar user={user} />
         <main className="mx-auto w-full max-w-4xl flex-1 p-6 md:p-12">
           {!isSupabaseConfigured && (
             <p className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">

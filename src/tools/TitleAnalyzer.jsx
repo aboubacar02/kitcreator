@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Sparkles, Zap } from 'lucide-react'
 import ResultCard from '../components/ResultCard.jsx'
+import GenerateButton from '../components/GenerateButton.jsx'
+import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
 
 export default function TitleAnalyzer() {
@@ -56,20 +57,12 @@ export default function TitleAnalyzer() {
             {error}
           </p>
         )}
-        <button
-          type="submit"
-          disabled={loading || !title.trim()}
-          className="btn-primary w-full !py-3.5 !text-base"
-        >
-          {loading ? (
-            <Zap className="h-5 w-5 animate-spin" />
-          ) : (
-            <Sparkles className="h-5 w-5" />
-          )}
-          {loading ? 'Analyzing...' : 'Analyze Title'}
-        </button>
+        <GenerateButton loading={loading} disabled={!title.trim()}>
+          Analyze Title
+        </GenerateButton>
       </form>
 
+      {loading && <LoadingSkeleton />}
       {result && <ResultCard title="Generated Results:" content={result} />}
     </div>
   )

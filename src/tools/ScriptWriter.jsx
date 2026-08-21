@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Sparkles, Zap } from 'lucide-react'
 import ResultCard from '../components/ResultCard.jsx'
+import GenerateButton from '../components/GenerateButton.jsx'
+import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
 
 const durations = ['15', '30', '60']
@@ -97,20 +98,12 @@ export default function ScriptWriter() {
             {error}
           </p>
         )}
-        <button
-          type="submit"
-          disabled={loading || !topic.trim()}
-          className="btn-primary w-full !py-3.5 !text-base"
-        >
-          {loading ? (
-            <Zap className="h-5 w-5 animate-spin" />
-          ) : (
-            <Sparkles className="h-5 w-5" />
-          )}
-          {loading ? 'Generating...' : 'Generate Script'}
-        </button>
+        <GenerateButton loading={loading} disabled={!topic.trim()}>
+          Generate Script
+        </GenerateButton>
       </form>
 
+      {loading && <LoadingSkeleton />}
       {result && <ResultCard title="Generated Results:" content={result} />}
     </div>
   )

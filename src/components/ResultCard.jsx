@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Copy, Check } from 'lucide-react'
 
 function CopyButton({ text }) {
@@ -20,17 +21,19 @@ function CopyButton({ text }) {
   }
 
   return (
-    <button
+    <motion.button
       onClick={handleCopy}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
       className={`shrink-0 rounded-lg p-2.5 transition ${
         copied
           ? 'bg-slate-800 text-green-400'
-          : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
+          : 'bg-slate-800 text-slate-300 hover:bg-brand-600 hover:text-white'
       }`}
       aria-label="Copy"
     >
       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-    </button>
+    </motion.button>
   )
 }
 
@@ -46,15 +49,18 @@ export default function ResultCard({ title, content }) {
         {title}
       </h3>
       {blocks.map((block, index) => (
-        <div
+        <motion.div
           key={index}
-          className="flex items-start justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900 p-4"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.3 }}
+          className="group flex items-start justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900 p-4 transition-colors hover:border-brand-500/50"
         >
           <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-slate-200">
             {block}
           </pre>
           <CopyButton text={block} />
-        </div>
+        </motion.div>
       ))}
     </div>
   )

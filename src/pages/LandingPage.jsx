@@ -27,7 +27,7 @@ const features = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen">
       <header className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-brand-600 px-2.5 py-1 text-lg font-black text-white">
@@ -43,11 +43,11 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section className="mx-auto max-w-4xl px-4 py-20 text-center sm:py-28">
-          <span className="inline-flex rounded-full border border-brand-500/40 bg-brand-600/10 px-3 py-1 text-xs font-semibold text-brand-300">
-            AI-powered — Built for creators
-          </span>
-          <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
+        <section className="relative overflow-hidden">
+          <div className="pointer-events-none absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-brand-600/20 blur-[120px]" />
+          <div className="pointer-events-none absolute left-1/3 top-1/3 h-[300px] w-[300px] rounded-full bg-blue-600/15 blur-[100px]" />
+          <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:py-28">
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
             Create viral content
             <br />
             <span className="bg-gradient-to-r from-brand-400 to-fuchsia-400 bg-clip-text text-transparent">
@@ -70,6 +70,7 @@ export default function LandingPage() {
           <p className="mt-4 text-xs text-slate-500">
             No credit card required · 5 free daily credits included
           </p>
+          </div>
         </section>
 
         <section id="tools" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">

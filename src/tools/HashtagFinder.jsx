@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Sparkles, Zap } from 'lucide-react'
 import ResultCard from '../components/ResultCard.jsx'
+import GenerateButton from '../components/GenerateButton.jsx'
+import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
+import PlatformSelector from '../components/PlatformSelector.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
-
-const platforms = ['TikTok', 'Instagram Reels', 'YouTube Shorts']
 
 export default function HashtagFinder() {
   const { consume } = useOutletContext()
   const [niche, setNiche] = useState('')
-  const [platform, setPlatform] = useState(platforms[0])
+  const [platform, setPlatform] = useState('TikTok')
   const [result, setResult] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -55,41 +55,23 @@ export default function HashtagFinder() {
           />
         </div>
         <div>
-          <label htmlFor="platform" className="label">
-            Platform
-          </label>
-          <select
-            id="platform"
+          <label className="label">Platform</label>
+          <PlatformSelector
             value={platform}
-            onChange={(e) => setPlatform(e.target.value)}
-            className="input"
-          >
-            {platforms.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
+            onChange={setPlatform}
+          />
         </div>
         {error && (
           <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
             {error}
           </p>
         )}
-        <button
-          type="submit"
-          disabled={loading || !niche.trim()}
-          className="btn-primary w-full !py-3.5 !text-base"
-        >
-          {loading ? (
-            <Zap className="h-5 w-5 animate-spin" />
-          ) : (
-            <Sparkles className="h-5 w-5" />
-          )}
-          {loading ? 'Generating...' : 'Find Hashtags'}
-        </button>
+        <GenerateButton loading={loading} disabled={!niche.trim()}>
+          Find Hashtags
+        </GenerateButton>
       </form>
 
+      {loading && <LoadingSkeleton />}
       {result && <ResultCard title="Generated Results:" content={result} />}
     </div>
   )

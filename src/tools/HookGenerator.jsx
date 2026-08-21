@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Sparkles, Zap } from 'lucide-react'
 import ResultCard from '../components/ResultCard.jsx'
+import GenerateButton from '../components/GenerateButton.jsx'
+import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
+import PlatformSelector from '../components/PlatformSelector.jsx'
 import { generate, getTool } from '../services/aiEngine.js'
 
-const platforms = ['TikTok', 'Instagram Reels', 'YouTube Shorts']
 const tones = ['Energetic', 'Curious', 'Bold', 'Inspirational', 'Funny']
 
 export default function HookGenerator() {
   const { consume } = useOutletContext()
   const [topic, setTopic] = useState('')
-  const [platform, setPlatform] = useState(platforms[0])
+  const [platform, setPlatform] = useState('TikTok')
   const [tone, setTone] = useState(tones[0])
   const [result, setResult] = useState('')
   const [loading, setLoading] = useState(false)
@@ -56,61 +57,41 @@ export default function HookGenerator() {
             className="input"
           />
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label htmlFor="platform" className="label">
-              Platform
-            </label>
-            <select
-              id="platform"
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value)}
-              className="input"
-            >
-              {platforms.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="tone" className="label">
-              Tone
-            </label>
-            <select
-              id="tone"
-              value={tone}
-              onChange={(e) => setTone(e.target.value)}
-              className="input"
-            >
-              {tones.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <label className="label">Platform</label>
+          <PlatformSelector
+            value={platform}
+            onChange={setPlatform}
+          />
+        </div>
+        <div>
+          <label htmlFor="tone" className="label">
+            Tone
+          </label>
+          <select
+            id="tone"
+            value={tone}
+            onChange={(e) => setTone(e.target.value)}
+            className="input"
+          >
+            {tones.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
         </div>
         {error && (
           <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
             {error}
           </p>
         )}
-        <button
-          type="submit"
-          disabled={loading || !topic.trim()}
-          className="btn-primary w-full !py-3.5 !text-base"
-        >
-          {loading ? (
-            <Zap className="h-5 w-5 animate-spin" />
-          ) : (
-            <Sparkles className="h-5 w-5" />
-          )}
-          {loading ? 'Generating...' : 'Generate Hooks'}
-        </button>
+        <GenerateButton loading={loading} disabled={!topic.trim()}>
+          Generate Hooks
+        </GenerateButton>
       </form>
 
+      {loading && <LoadingSkeleton />}
       {result && <ResultCard title="Generated Results:" content={result} />}
     </div>
   )
