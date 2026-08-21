@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { animate, motion } from 'framer-motion'
+import { isSupabaseConfigured, supabase } from '../services/supabase.js'
 
-const CREATORS_COUNT = 2400
+const FALLBACK_COUNT = 2400
 
 function Counter({ to }) {
   const [value, setValue] = useState(0)
@@ -27,6 +28,27 @@ const avatars = [
 ]
 
 export default function SocialProof() {
+  const [count, setCount] = useState(
+    isSupabaseConfigured ? null : FALLBACK_COUNT,
+  )
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return
+    let mounted = true
+    supabase
+      .rpc('profiles_count')
+      .then(({ data, error }) => {
+        if (!mounted || error || typeof data !== 'number') {
+          if (mounted) setCount(FALLBACK_COUNT)
+          return
+        }
+        setCount(Math.max(data, 1))
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
   return (
     <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-5">
       <div className="flex -space-x-3">
@@ -48,9 +70,10 @@ export default function SocialProof() {
       </div>
       <p className="text-sm text-slate-400">
         <span className="font-bold text-white">
-          <Counter to={CREATORS_COUNT} />
+          <Counter to={count ?? FALLBACK_COUNT} />
         </span>{' '}
-        creators already generate faster with KitCreator
+        {(count ?? FALLBACK_COUNT) === 1 ? 'creator' : 'creators'} already
+        generate faster with KitCreator
       </p>
     </div>
   )

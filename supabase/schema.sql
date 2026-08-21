@@ -89,3 +89,17 @@ create trigger on_auth_user_created
 insert into public.profiles (id, email)
 select id, email from auth.users
 on conflict (id) do nothing;
+
+-- 6. Compteur public de créateurs (sûr : ne renvoie que le total,
+-- aucune donnée personnelle) — utilisé par le composant SocialProof
+create or replace function public.profiles_count()
+returns integer
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select count(*)::int from public.profiles;
+$$;
+
+grant execute on function public.profiles_count() to anon, authenticated;
