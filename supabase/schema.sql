@@ -202,8 +202,25 @@ grant execute on function public.consume_credits(uuid, int) to authenticated;
 -- ============================================================
 -- 8. REMBOURSEMENT : si l'appel IA echoue APRES le debit
 -- (tous fournisseurs indisponibles), l'Edge Function rembourse.
--- Meme garde-fous que consume_credits.
+--
+-- DURETE MAXIMALE : une fonction de remboursement ne doit JAMAIS
+-- pouvoir servir a fabriquer des credits.
+--   - executable UNIQUEMENT par le role service_role (Edge Function) ;
+--   - aucun utilisateur final ne peut l'appeler en RPC ;
+--   - plafond anti-abus : 30 credits remboursables max / 24h / profil
+--     (registre credit_refunds, table sans policy => invisible).
 -- ============================================================
+create table if not exists public.credit_refunds (
+  id bigint generated always as identity primary key,
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  amount int not null check (amount between 1 and 10),
+  created_at timestamptz not null default timezone('utc'::text, now())
+);
+
+alter table public.credit_refunds enable row level security;
+-- Aucune policy : les utilisateurs ne voient rien ; le role service_role
+-- contourne la RLS et reste le seul a pouvoir ecrire via la fonction.
+
 create or replace function public.refund_credits(p_user_id uuid, p_amount int)
 returns int
 language plpgsql
@@ -211,26 +228,50 @@ security definer
 set search_path = public
 as $$
 declare
+  refunded_24h int;
   remaining int;
 begin
-  if auth.uid() is null or p_user_id is null or p_user_id <> auth.uid() then
+  -- Reserve au service_role (Edge Function). Ni anon, ni authenticated,
+  -- ni appel manuel depuis le SQL Editor.
+  if coalesce(auth.role(), '') <> 'service_role' then
     raise exception 'Forbidden.';
   end if;
-  if p_amount is null or p_amount < 1 or p_amount > 10 then
-    raise exception 'Invalid credit amount.';
+
+  if p_user_id is null or p_amount is null or p_amount < 1 or p_amount > 10 then
+    raise exception 'Invalid refund parameters.';
+  end if;
+
+  -- Plafond anti-abus : pas plus de 30 credits rembourses / 24h / profil.
+  select coalesce(sum(amount), 0)
+    into refunded_24h
+    from public.credit_refunds
+   where user_id = p_user_id
+     and created_at > timezone('utc'::text, now()) - interval '24 hours';
+
+  if refunded_24h + p_amount > 30 then
+    raise exception 'Refund limit exceeded.';
   end if;
 
   update public.profiles
     set credits = credits + p_amount,
         updated_at = timezone('utc'::text, now())
-    where id = auth.uid()
+    where id = p_user_id
     returning credits into remaining;
 
   if remaining is null then
     raise exception 'Profile not found.';
   end if;
+
+  insert into public.credit_refunds (user_id, amount)
+  values (p_user_id, p_amount);
+
   return remaining;
 end;
 $$;
 
-grant execute on function public.refund_credits(uuid, int) to authenticated;
+-- Une fonction accorde EXECUTE a PUBLIC par defaut : on retire tout,
+-- puis on n'autorise que le service_role.
+revoke execute on function public.refund_credits(uuid, int) from public;
+revoke execute on function public.refund_credits(uuid, int) from anon;
+revoke execute on function public.refund_credits(uuid, int) from authenticated;
+grant execute on function public.refund_credits(uuid, int) to service_role;

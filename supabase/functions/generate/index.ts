@@ -241,6 +241,17 @@ Deno.serve(async (req: Request) => {
       global: { headers: { Authorization: `Bearer ${token}` } },
     })
 
+    // Client service_role : réservé au remboursement (refund_credits
+    // n'est exécutable QUE par ce rôle côté base).
+    const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    if (!SERVICE_ROLE_KEY) {
+      console.error('[generate] SUPABASE_SERVICE_ROLE_KEY manquant')
+      return json(req, 500, { error: 'generic' })
+    }
+    const serviceClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+
     // 2. Validation serveur stricte
     let body: Record<string, unknown>
     try {
@@ -304,7 +315,7 @@ Deno.serve(async (req: Request) => {
       })
     } catch (genErr) {
       console.error('[generate] generation failed, refunding:', genErr)
-      const { error: refundError } = await userClient.rpc('refund_credits', {
+      const { error: refundError } = await serviceClient.rpc('refund_credits', {
         p_user_id: user.id,
         p_amount: cost,
       })
