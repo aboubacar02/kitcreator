@@ -164,6 +164,12 @@ begin
     raise exception 'Invalid credit amount.';
   end if;
 
+  -- VERROU CONCURRENTIEL : pose un verrou ligne sur le profil AVANT le
+  -- comptage. Deux requêtes simultanées du même utilisateur sont donc
+  -- sérialisées : la seconde voit la génération de la première déjà
+  -- insérée -> le rate limit ne peut plus être contourné en parallèle.
+  perform 1 from public.profiles where id = auth.uid() for update;
+
   -- Rate limiting : fenêtre glissante d'une heure
   select count(*) into recent_count
     from public.generations
@@ -192,3 +198,39 @@ end;
 $$;
 
 grant execute on function public.consume_credits(uuid, int) to authenticated;
+
+-- ============================================================
+-- 8. REMBOURSEMENT : si l'appel IA echoue APRES le debit
+-- (tous fournisseurs indisponibles), l'Edge Function rembourse.
+-- Meme garde-fous que consume_credits.
+-- ============================================================
+create or replace function public.refund_credits(p_user_id uuid, p_amount int)
+returns int
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  remaining int;
+begin
+  if auth.uid() is null or p_user_id is null or p_user_id <> auth.uid() then
+    raise exception 'Forbidden.';
+  end if;
+  if p_amount is null or p_amount < 1 or p_amount > 10 then
+    raise exception 'Invalid credit amount.';
+  end if;
+
+  update public.profiles
+    set credits = credits + p_amount,
+        updated_at = timezone('utc'::text, now())
+    where id = auth.uid()
+    returning credits into remaining;
+
+  if remaining is null then
+    raise exception 'Profile not found.';
+  end if;
+  return remaining;
+end;
+$$;
+
+grant execute on function public.refund_credits(uuid, int) to authenticated;

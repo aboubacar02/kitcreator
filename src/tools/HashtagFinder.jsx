@@ -9,7 +9,7 @@ import { useI18n } from '../i18n/LanguageContext.jsx'
 import { friendlyError } from '../i18n/strings.js'
 
 export default function HashtagFinder() {
-  const { consume } = useOutletContext()
+  const { refreshCredits } = useOutletContext()
   const { t } = useI18n()
   const [niche, setNiche] = useState('')
   const [platform, setPlatform] = useState('TikTok')
@@ -25,12 +25,12 @@ export default function HashtagFinder() {
     setResult('')
     setLoading(true)
     try {
-      await consume(getTool('hashtag').credits)
       const text = await generate('hashtag', { niche, platform })
       setResult(text)
       requestAnimationFrame(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
+      await refreshCredits('hashtag')
     } catch (err) {
       setError(friendlyError(err, t))
     } finally {

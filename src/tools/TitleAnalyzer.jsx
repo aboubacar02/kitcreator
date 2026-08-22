@@ -8,7 +8,7 @@ import { useI18n } from '../i18n/LanguageContext.jsx'
 import { friendlyError } from '../i18n/strings.js'
 
 export default function TitleAnalyzer() {
-  const { consume } = useOutletContext()
+  const { refreshCredits } = useOutletContext()
   const { t } = useI18n()
   const [title, setTitle] = useState('')
   const [result, setResult] = useState('')
@@ -23,12 +23,12 @@ export default function TitleAnalyzer() {
     setResult('')
     setLoading(true)
     try {
-      await consume(getTool('title').credits)
       const text = await generate('title', { title })
       setResult(text)
       requestAnimationFrame(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
+      await refreshCredits('title')
     } catch (err) {
       setError(friendlyError(err, t))
     } finally {

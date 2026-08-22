@@ -12,7 +12,7 @@ import { friendlyError } from '../i18n/strings.js'
 const TONES = ['Energetic', 'Curious', 'Bold', 'Inspirational', 'Funny']
 
 export default function HookGenerator() {
-  const { consume } = useOutletContext()
+  const { refreshCredits } = useOutletContext()
   const { t } = useI18n()
   const [topic, setTopic] = useState('')
   const [platform, setPlatform] = useState('TikTok')
@@ -29,12 +29,12 @@ export default function HookGenerator() {
     setResult('')
     setLoading(true)
     try {
-      await consume(getTool('hook').credits)
       const text = await generate('hook', { topic, platform, tone })
       setResult(text)
       requestAnimationFrame(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
+      await refreshCredits('hook')
     } catch (err) {
       setError(friendlyError(err, t))
     } finally {

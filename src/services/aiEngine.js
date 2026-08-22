@@ -1,48 +1,13 @@
-import { isSupabaseConfigured } from './supabase.js'
+﻿import { FunctionsHttpError } from '@supabase/supabase-js'
+import { isSupabaseConfigured, supabase } from './supabase.js'
 import { resolveLanguage } from './language.js'
-import { SYSTEM_PROMPT, buildToolPrompt, validateOutput } from '../prompts/index.js'
 
-const ENV = import.meta.env || {}
-
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-
-const DEFAULT_URL = ENV.VITE_AI_API_URL || 'https://api.openai.com/v1/chat/completions'
-const DEFAULT_MODEL = ENV.VITE_AI_MODEL || 'gpt-4o-mini'
-
-function resolveProvider(key) {
-  if (/^(AIza|AQ\.)/.test(key)) {
-    return {
-      url: GEMINI_URL,
-      model: ENV.VITE_AI_MODEL_GEMINI || 'gemini-3.6-flash',
-    }
-  }
-  if (key.startsWith('gsk_')) {
-    return {
-      url: GROQ_URL,
-      model: ENV.VITE_AI_MODEL_GROQ || 'openai/gpt-oss-120b',
-    }
-  }
-  return { url: DEFAULT_URL, model: DEFAULT_MODEL }
-}
-
-const API_KEYS = [
-  ENV.VITE_AI_API_KEY,
-  ENV.VITE_AI_KEY_1,
-  ENV.VITE_AI_KEY_2,
-  ENV.VITE_AI_KEY_3,
-  ENV.VITE_AI_KEY_4,
-  ENV.VITE_AI_KEY_5,
-  ENV.VITE_AI_KEY_6,
-].filter(Boolean)
-
-let currentKeyIndex = 0
-
-function getNextApiKey() {
-  const key = API_KEYS[currentKeyIndex]
-  currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length
-  return key
-}
+// ------------------------------------------------------------
+// AUCUNE clÃ© IA cÃ´tÃ© client.
+// Les appels fournisseurs passent exclusivement par l'Edge Function
+// `generate` (secrets serveur). Le frontend n'envoie que :
+//   { tool, language, input }
+// ------------------------------------------------------------
 
 export const TOOLS = [
   {
@@ -76,8 +41,8 @@ export function getTool(id) {
 }
 
 // ------------------------------------------------------------
-// Validation stricte des entrées utilisateur (défense en profondeur)
-// Le frontend ne fait jamais confiance aux valeurs envoyées.
+// Validation stricte des entrÃ©es (dÃ©fense en profondeur ;
+// l'Edge Function re-valide tout cÃ´tÃ© serveur)
 // ------------------------------------------------------------
 export const INPUT_LIMITS = {
   topic: 300,
@@ -144,62 +109,14 @@ export function validateParams(toolId, params) {
 }
 
 // ------------------------------------------------------------
-// Anti-spam client : intervalle minimum entre deux générations
-// (le rate limiting serveur reste la source de vérité)
+// Anti-spam UX : intervalle minimum entre deux gÃ©nÃ©rations
+// (la protection de sÃ©curitÃ© rÃ©elle est cÃ´tÃ© serveur)
 // ------------------------------------------------------------
-const DEFAULT_MIN_GENERATE_INTERVAL_MS =
-  Number(ENV.VITE_MIN_GENERATE_INTERVAL_MS) > 0
-    ? Number(ENV.VITE_MIN_GENERATE_INTERVAL_MS)
-    : 2000
-
-let minGenerateIntervalMs = DEFAULT_MIN_GENERATE_INTERVAL_MS
+let minGenerateIntervalMs = 2000
 let lastGenerateAt = 0
 
 export function setMinGenerateInterval(ms) {
   minGenerateIntervalMs = ms
-}
-
-async function callApiWithKey(prompt, systemContent, apiKey) {
-  const { url, model } = resolveProvider(apiKey)
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        { role: 'system', content: systemContent },
-        { role: 'user', content: prompt },
-      ],
-      temperature: 0.8,
-    }),
-  })
-  if (!res.ok) {
-    const error = new Error(`AI API error (${res.status})`)
-    error.status = res.status
-    throw error
-  }
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content ?? ''
-}
-
-async function callApi(prompt, systemContent) {
-  let lastError
-  for (let attempt = 0; attempt < API_KEYS.length; attempt++) {
-    try {
-      return await callApiWithKey(prompt, systemContent, getNextApiKey())
-    } catch (err) {
-      lastError = err
-      const retryable =
-        !err.status ||
-        [401, 403, 429].includes(err.status) ||
-        err.status >= 500
-      if (!retryable) throw err
-    }
-  }
-  throw lastError
 }
 
 function slug(text) {
@@ -218,15 +135,15 @@ function mockGenerate(toolId, params) {
       ].join('\n')
     case 'script':
       return [
-        `[HOOK 0-3s] — Pose the question everyone asks about ${params.topic}.`,
+        `[HOOK 0-3s] â€” Pose the question everyone asks about ${params.topic}.`,
         ``,
-        `[BODY 3-${Math.round(params.duration * 0.6)}s] — 3 key points, one per shot, fast pace.`,
+        `[BODY 3-${Math.round(params.duration * 0.6)}s] â€” 3 key points, one per shot, fast pace.`,
         ``,
-        `[CLIMAX ${Math.round(params.duration * 0.6)}-${params.duration - 5}s] — The reveal or the plot twist.`,
+        `[CLIMAX ${Math.round(params.duration * 0.6)}-${params.duration - 5}s] â€” The reveal or the plot twist.`,
         ``,
-        `[CTA ${params.duration - 5}-${params.duration}s] — "Follow for part 2!"`,
+        `[CTA ${params.duration - 5}-${params.duration}s] â€” "Follow for part 2!"`,
         ``,
-        `_Demo mode: set VITE_AI_API_KEY for full generations._`,
+        `_Demo mode: connect Supabase for real AI generations._`,
       ].join('\n')
     case 'hashtag': {
       const tag = slug(params.niche)
@@ -237,12 +154,12 @@ function mockGenerate(toolId, params) {
         ``,
         `Niche: #${tag.toLowerCase()}${params.platform.split(' ')[0].toLowerCase()} #${tag.toLowerCase()}2026 #${tag.toLowerCase()}forbeginners #${tag.toLowerCase()}community`,
         ``,
-        `_Demo mode: set VITE_AI_API_KEY for full generations._`,
+        `_Demo mode: connect Supabase for real AI generations._`,
       ].join('\n')
     }
     case 'title':
       return [
-        `**Score: 62/100** — decent title but too generic.`,
+        `**Score: 62/100** â€” decent title but too generic.`,
         ``,
         `**Analysis:**`,
         `- Too long, risk of truncation`,
@@ -254,11 +171,34 @@ function mockGenerate(toolId, params) {
         `2. The X method in 3 steps (step 2 changes everything)`,
         `3. Why your X isn't working (and the 1-minute fix)`,
         ``,
-        `_Demo mode: set VITE_AI_API_KEY for full generations._`,
+        `_Demo mode: connect Supabase for real AI generations._`,
       ].join('\n')
     default:
       throw new Error(`Unknown tool: ${toolId}`)
   }
+}
+
+async function throwInvokeError(error) {
+  let kind = ''
+  try {
+    if (error instanceof FunctionsHttpError) {
+      const payload = await error.context.json()
+      kind = typeof payload?.error === 'string' ? payload.error : ''
+    }
+  } catch {
+    /* body illisible -> erreur gÃ©nÃ©rique */
+  }
+  if (kind === 'credits' || /credit/i.test(error.message ?? '')) {
+    throw new Error('Not enough credits. Please upgrade to PRO.')
+  }
+  if (kind === 'rate_limit' || /rate limit|too many/i.test(error.message ?? '')) {
+    throw new Error('Rate limit exceeded. Please wait a moment.')
+  }
+  if (kind === 'unauthorized') {
+    throw new Error('Session expired. Please log in again.')
+  }
+  console.error('[generate] invoke failed:', error)
+  throw new Error('AI API error')
 }
 
 export async function generate(toolId, params) {
@@ -273,16 +213,30 @@ export async function generate(toolId, params) {
   }
   lastGenerateAt = now
 
-  // Seuls les champs validés atteignent le moteur de prompts
+  // Seuls les champs validÃ©s quittent le frontend
   const safeParams = validateParams(toolId, params)
 
-  const prompt = buildToolPrompt(toolId, safeParams)
-  if (API_KEYS.length === 0) {
+  // Mode dÃ©mo : aucun backend configurÃ©
+  if (!isSupabaseConfigured || !supabase) {
     await new Promise((r) => setTimeout(r, 600))
     return mockGenerate(toolId, safeParams)
   }
-  const result = await callApi(prompt, SYSTEM_PROMPT(resolveLanguage()))
-  return validateOutput(toolId, result)
+
+  // Production : Edge Function (auth JWT + validation + crÃ©dits + secrets)
+  const { data, error } = await supabase.functions.invoke('generate', {
+    body: {
+      tool: toolId,
+      language: resolveLanguage(),
+      input: safeParams,
+    },
+  })
+  if (error) await throwInvokeError(error)
+
+  const content = data?.result
+  if (typeof content !== 'string' || !content.trim()) {
+    throw new Error('AI API error')
+  }
+  return content
 }
 
 export { isSupabaseConfigured }

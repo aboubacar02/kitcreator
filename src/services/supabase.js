@@ -1,9 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 
-const ENV = import.meta.env || {}
-
-const supabaseUrl = ENV.VITE_SUPABASE_URL
-const supabaseAnonKey = ENV.VITE_SUPABASE_ANON_KEY
+// IMPORTANT : accès statique aux variables d'environnement uniquement.
+// `import.meta.env` utilisé comme objet entier (ou indexé dynamiquement)
+// ferait inliner TOUT le .env.local dans le bundle (fuite de clés).
+// Le try/catch rend le module chargeable sous Node pur (tests).
+let supabaseUrl
+let supabaseAnonKey
+try {
+  supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+  supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+} catch {
+  /* Node sans Vite : mode démo */
+}
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
 
@@ -82,8 +90,8 @@ export async function ensureProfile(user) {
 export async function consumeCredits(userId, amount) {
   if (!supabase) throw new Error('Supabase non configuré')
   const { data, error } = await supabase.rpc('consume_credits', {
-    user_id: userId,
-    amount,
+    p_user_id: userId,
+    p_amount: amount,
   })
   if (error) throw error
   return data

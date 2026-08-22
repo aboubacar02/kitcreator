@@ -8,13 +8,13 @@ import {
   getProfile,
   signOut,
   onAuthStateChange,
-  consumeCredits,
   isSupabaseConfigured,
 } from '../services/supabase.js'
 import {
   getLocalCredits,
   consumeLocalCredits,
 } from '../services/credits.js'
+import { getTool } from '../services/aiEngine.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
 
 export default function Dashboard() {
@@ -77,13 +77,18 @@ export default function Dashboard() {
     }
   }, [navigate])
 
-  async function consume(amount) {
-    if (isSupabaseConfigured && session?.user?.id) {
-      await consumeCredits(session.user.id, amount)
-      const updated = await getProfile(session.user.id)
-      if (updated) setProfile(updated)
-    } else {
-      setLocalCredits(consumeLocalCredits(amount))
+  async function refreshCredits(toolId) {
+    // Le débit réel est fait côté serveur (Edge Function) ; ici on
+    // resynchronise l'affichage, ou on débite localement en mode démo.
+    try {
+      if (isSupabaseConfigured && session?.user?.id) {
+        const updated = await getProfile(session.user.id)
+        if (updated) setProfile(updated)
+      } else if (toolId) {
+        setLocalCredits(consumeLocalCredits(getTool(toolId).credits))
+      }
+    } catch {
+      /* rafraîchissement best-effort */
     }
   }
 
@@ -123,7 +128,7 @@ export default function Dashboard() {
               {t('setup.profileMissing')}
             </p>
           )}
-          <Outlet context={{ user, credits, consume }} />
+          <Outlet context={{ user, credits, refreshCredits }} />
         </main>
       </div>
     </div>

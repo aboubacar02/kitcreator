@@ -12,7 +12,7 @@ const DURATIONS = ['15', '30', '60']
 const STYLES = ['Educational', 'Storytelling', 'Funny', 'Persuasive']
 
 export default function ScriptWriter() {
-  const { consume } = useOutletContext()
+  const { refreshCredits } = useOutletContext()
   const { t } = useI18n()
   const [topic, setTopic] = useState('')
   const [duration, setDuration] = useState(DURATIONS[1])
@@ -29,12 +29,12 @@ export default function ScriptWriter() {
     setResult('')
     setLoading(true)
     try {
-      await consume(getTool('script').credits)
       const text = await generate('script', { topic, duration, style })
       setResult(text)
       requestAnimationFrame(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
+      await refreshCredits('script')
     } catch (err) {
       setError(friendlyError(err, t))
     } finally {

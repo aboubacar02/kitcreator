@@ -1,4 +1,4 @@
-const PLANS = [
+﻿const PLANS = [
   {
     name: 'Starter',
     price: '$9.99',
@@ -9,7 +9,7 @@ const PLANS = [
       'All 4 tools included',
       '7-day history',
     ],
-    checkoutKey: 'VITE_CHECKOUT_STARTER',
+    id: 'starter',
   },
   {
     name: 'Pro',
@@ -22,7 +22,7 @@ const PLANS = [
       'Unlimited history',
       'Priority support',
     ],
-    checkoutKey: 'VITE_CHECKOUT_PRO',
+    id: 'pro',
     highlighted: true,
   },
   {
@@ -36,13 +36,21 @@ const PLANS = [
       'API access',
       'Dedicated onboarding',
     ],
-    checkoutKey: 'VITE_CHECKOUT_AGENCY',
+    id: 'agency',
   },
 ]
 
+// AccÃ¨s statique uniquement : `import.meta.env[clÃ©]` (dynamique) ferait
+// inliner tout le .env.local dans le bundle.
+const CHECKOUT_URLS = {
+  starter: import.meta.env.VITE_CHECKOUT_STARTER,
+  pro: import.meta.env.VITE_CHECKOUT_PRO,
+  agency: import.meta.env.VITE_CHECKOUT_AGENCY,
+}
+
 export default function PricingModal({ onClose }) {
   function handleCheckout(plan) {
-    const url = import.meta.env[plan.checkoutKey]
+    const url = CHECKOUT_URLS[plan.id]
     if (url) {
       window.location.href = url
     }
