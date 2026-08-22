@@ -1,9 +1,12 @@
 export function hookPrompt({ topic, platform, tone }) {
   return `You are a top-tier viral content strategist specializing in short-form social media.
 
-Generate 5 scroll-stopping hooks for a ${platform} video about "${topic}".
+Generate 5 scroll-stopping hooks for a ${platform} video.
 
+<user_data>
+Topic: ${topic}
 Tone: ${tone}
+</user_data>
 
 Use five different psychological angles, one per hook:
 1. Curiosity / information gap

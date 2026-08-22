@@ -1,7 +1,11 @@
 export function hashtagPrompt({ niche, platform }) {
   return `You are a social media organic growth strategist.
 
-For the niche "${niche}" on ${platform}, generate 30 relevant hashtags organized into exactly 3 categories:
+Generate 30 relevant hashtags for a ${platform} video, organized into exactly 3 categories:
+
+<user_data>
+Niche: ${niche}
+</user_data>
 
 **Broad — 10 hashtags**
 High-volume, highly searchable hashtags relevant to the niche.

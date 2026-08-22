@@ -62,6 +62,7 @@ const STRINGS = {
     'errors.generic':
       'Unable to generate content. Please try again in a few moments.',
     'errors.credits': 'Not enough credits left today. Upgrade to PRO or come back tomorrow.',
+    'errors.rate': 'Too many requests. Please wait a few seconds before trying again.',
 
     'settings.title': 'Settings',
     'settings.subtitle': 'Manage your account and subscription.',
@@ -174,6 +175,7 @@ const STRINGS = {
     'errors.generic':
       'Impossible de générer le contenu. Réessaie dans quelques instants.',
     'errors.credits': 'Plus assez de crédits aujourd’hui. Passe PRO ou reviens demain.',
+    'errors.rate': 'Trop de requêtes. Patientez quelques secondes avant de réessayer.',
 
     'settings.title': 'Paramètres',
     'settings.subtitle': 'Gère ton compte et ton abonnement.',
@@ -286,6 +288,7 @@ const STRINGS = {
     'errors.generic':
       'No se pudo generar el contenido. Inténtalo de nuevo en unos momentos.',
     'errors.credits': 'No quedan créditos suficientes hoy. Pásate a PRO o vuelve mañana.',
+    'errors.rate': 'Demasiadas solicitudes. Espera unos segundos antes de reintentar.',
 
     'settings.title': 'Ajustes',
     'settings.subtitle': 'Gestiona tu cuenta y tu suscripción.',
@@ -354,8 +357,12 @@ export function t(key, vars) {
 }
 
 export function friendlyError(err, translateFn) {
-  if (err?.message && /credit/i.test(err.message)) {
+  const message = err?.message ?? ''
+  if (/credit/i.test(message)) {
     return translateFn('errors.credits')
+  }
+  if (/rate limit|too many/i.test(message)) {
+    return translateFn('errors.rate')
   }
   console.error(err)
   return translateFn('errors.generic')

@@ -103,3 +103,92 @@ as $$
 $$;
 
 grant execute on function public.profiles_count() to anon, authenticated;
+
+-- ============================================================
+-- 7. DURCISSEMENT SÉCURITÉ
+-- ============================================================
+
+-- 7a. SUPPRIME la policy UPDATE large : sans cela, un utilisateur connecté
+-- pouvait exécuter depuis son navigateur :
+--   supabase.from('profiles').update({ credits: 999999, is_pro: true })
+-- Toute modification du profil doit passer par les fonctions SECURITY DEFINER.
+drop policy if exists "Les utilisateurs peuvent mettre à jour leur propre profil"
+  on public.profiles;
+
+-- 7b. Journal des générations : sert au rate limiting côté serveur.
+create table if not exists public.generations (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users on delete cascade,
+  tool text,
+  created_at timestamptz default timezone('utc'::text, now())
+);
+
+alter table public.generations enable row level security;
+
+drop policy if exists "Lecture de ses propres generations" on public.generations;
+create policy "Lecture de ses propres generations"
+  on public.generations for select
+  using ( auth.uid() = user_id );
+
+drop policy if exists "Insertion de ses propres generations" on public.generations;
+create policy "Insertion de ses propres generations"
+  on public.generations for insert
+  with check ( auth.uid() = user_id );
+
+create index if not exists generations_user_created_idx
+  on public.generations (user_id, created_at);
+
+-- 7c. consume_credits v2 :
+--   - autorisation : un utilisateur ne peut consommer que SES crédits
+--     (l'ancienne version acceptait n'importe quel user_id) ;
+--   - validation : montant borné 1..10 ;
+--   - rate limiting : max 30 générations par heure glissante ;
+--   - atomicité conservée (décrément conditionnel).
+create or replace function public.consume_credits(p_user_id uuid, p_amount int)
+returns int
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  remaining int;
+  recent_count int;
+begin
+  -- Autorisation : l'appelant authentifié ne peut agir que sur son compte
+  if auth.uid() is null or p_user_id is null or p_user_id <> auth.uid() then
+    raise exception 'Forbidden: you can only consume your own credits.';
+  end if;
+
+  -- Validation des entrées serveur
+  if p_amount is null or p_amount < 1 or p_amount > 10 then
+    raise exception 'Invalid credit amount.';
+  end if;
+
+  -- Rate limiting : fenêtre glissante d'une heure
+  select count(*) into recent_count
+    from public.generations
+    where user_id = auth.uid()
+      and created_at > now() - interval '1 hour';
+
+  if recent_count >= 30 then
+    raise exception 'Rate limit exceeded. Please wait before generating again.';
+  end if;
+
+  update public.profiles
+    set credits = credits - p_amount,
+        updated_at = timezone('utc'::text, now())
+    where id = auth.uid() and credits >= p_amount
+    returning credits into remaining;
+
+  if remaining is null then
+    raise exception 'Not enough credits. Please upgrade to PRO.';
+  end if;
+
+  insert into public.generations (user_id, tool)
+    values (auth.uid(), 'tool');
+
+  return remaining;
+end;
+$$;
+
+grant execute on function public.consume_credits(uuid, int) to authenticated;

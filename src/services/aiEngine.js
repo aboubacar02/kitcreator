@@ -2,36 +2,38 @@ import { isSupabaseConfigured } from './supabase.js'
 import { resolveLanguage } from './language.js'
 import { SYSTEM_PROMPT, buildToolPrompt, validateOutput } from '../prompts/index.js'
 
+const ENV = import.meta.env || {}
+
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
-const DEFAULT_URL = import.meta.env.VITE_AI_API_URL || 'https://api.openai.com/v1/chat/completions'
-const DEFAULT_MODEL = import.meta.env.VITE_AI_MODEL || 'gpt-4o-mini'
+const DEFAULT_URL = ENV.VITE_AI_API_URL || 'https://api.openai.com/v1/chat/completions'
+const DEFAULT_MODEL = ENV.VITE_AI_MODEL || 'gpt-4o-mini'
 
 function resolveProvider(key) {
   if (/^(AIza|AQ\.)/.test(key)) {
     return {
       url: GEMINI_URL,
-      model: import.meta.env.VITE_AI_MODEL_GEMINI || 'gemini-3.6-flash',
+      model: ENV.VITE_AI_MODEL_GEMINI || 'gemini-3.6-flash',
     }
   }
   if (key.startsWith('gsk_')) {
     return {
       url: GROQ_URL,
-      model: import.meta.env.VITE_AI_MODEL_GROQ || 'openai/gpt-oss-120b',
+      model: ENV.VITE_AI_MODEL_GROQ || 'openai/gpt-oss-120b',
     }
   }
   return { url: DEFAULT_URL, model: DEFAULT_MODEL }
 }
 
 const API_KEYS = [
-  import.meta.env.VITE_AI_API_KEY,
-  import.meta.env.VITE_AI_KEY_1,
-  import.meta.env.VITE_AI_KEY_2,
-  import.meta.env.VITE_AI_KEY_3,
-  import.meta.env.VITE_AI_KEY_4,
-  import.meta.env.VITE_AI_KEY_5,
-  import.meta.env.VITE_AI_KEY_6,
+  ENV.VITE_AI_API_KEY,
+  ENV.VITE_AI_KEY_1,
+  ENV.VITE_AI_KEY_2,
+  ENV.VITE_AI_KEY_3,
+  ENV.VITE_AI_KEY_4,
+  ENV.VITE_AI_KEY_5,
+  ENV.VITE_AI_KEY_6,
 ].filter(Boolean)
 
 let currentKeyIndex = 0
@@ -71,6 +73,90 @@ export const TOOLS = [
 
 export function getTool(id) {
   return TOOLS.find((t) => t.id === id)
+}
+
+// ------------------------------------------------------------
+// Validation stricte des entrées utilisateur (défense en profondeur)
+// Le frontend ne fait jamais confiance aux valeurs envoyées.
+// ------------------------------------------------------------
+export const INPUT_LIMITS = {
+  topic: 300,
+  niche: 150,
+  title: 300,
+  platform: 40,
+}
+
+const ALLOWED_DURATIONS = ['15', '30', '60']
+const ALLOWED_TONES = ['Energetic', 'Curious', 'Bold', 'Inspirational', 'Funny']
+const ALLOWED_STYLES = ['Educational', 'Storytelling', 'Funny', 'Persuasive']
+
+function requireText(value, name, maxLength) {
+  if (typeof value !== 'string') {
+    throw new Error(`Invalid ${name}.`)
+  }
+  const cleaned = value.replace(/\s+/g, ' ').trim().slice(0, maxLength)
+  if (!cleaned) {
+    throw new Error(`Invalid ${name}.`)
+  }
+  return cleaned
+}
+
+function requireOneOf(value, name, allowedValues) {
+  const raw = typeof value === 'string' ? value.trim() : ''
+  if (!allowedValues.includes(raw)) {
+    throw new Error(`Invalid ${name}.`)
+  }
+  return raw
+}
+
+export function validateParams(toolId, params) {
+  const input = params && typeof params === 'object' ? params : {}
+  switch (toolId) {
+    case 'hook':
+      return {
+        topic: requireText(input.topic, 'topic', INPUT_LIMITS.topic),
+        platform: requireText(input.platform ?? 'TikTok', 'platform', INPUT_LIMITS.platform),
+        tone: requireOneOf(input.tone ?? 'Energetic', 'tone', ALLOWED_TONES),
+      }
+    case 'script': {
+      const durationRaw = String(input.duration ?? '30')
+      if (!ALLOWED_DURATIONS.includes(durationRaw)) {
+        throw new Error('Invalid duration.')
+      }
+      return {
+        topic: requireText(input.topic, 'topic', INPUT_LIMITS.topic),
+        duration: Number(durationRaw),
+        style: requireOneOf(input.style ?? 'Educational', 'style', ALLOWED_STYLES),
+      }
+    }
+    case 'hashtag':
+      return {
+        niche: requireText(input.niche, 'niche', INPUT_LIMITS.niche),
+        platform: requireText(input.platform ?? 'TikTok', 'platform', INPUT_LIMITS.platform),
+      }
+    case 'title':
+      return {
+        title: requireText(input.title, 'title', INPUT_LIMITS.title),
+      }
+    default:
+      throw new Error('Unknown tool.')
+  }
+}
+
+// ------------------------------------------------------------
+// Anti-spam client : intervalle minimum entre deux générations
+// (le rate limiting serveur reste la source de vérité)
+// ------------------------------------------------------------
+const DEFAULT_MIN_GENERATE_INTERVAL_MS =
+  Number(ENV.VITE_MIN_GENERATE_INTERVAL_MS) > 0
+    ? Number(ENV.VITE_MIN_GENERATE_INTERVAL_MS)
+    : 2000
+
+let minGenerateIntervalMs = DEFAULT_MIN_GENERATE_INTERVAL_MS
+let lastGenerateAt = 0
+
+export function setMinGenerateInterval(ms) {
+  minGenerateIntervalMs = ms
 }
 
 async function callApiWithKey(prompt, systemContent, apiKey) {
@@ -176,10 +262,24 @@ function mockGenerate(toolId, params) {
 }
 
 export async function generate(toolId, params) {
-  const prompt = buildToolPrompt(toolId, params)
+  const tool = getTool(toolId)
+  if (!tool) {
+    throw new Error('Unknown tool.')
+  }
+
+  const now = Date.now()
+  if (minGenerateIntervalMs > 0 && now - lastGenerateAt < minGenerateIntervalMs) {
+    throw new Error('Rate limit exceeded. Please wait a moment.')
+  }
+  lastGenerateAt = now
+
+  // Seuls les champs validés atteignent le moteur de prompts
+  const safeParams = validateParams(toolId, params)
+
+  const prompt = buildToolPrompt(toolId, safeParams)
   if (API_KEYS.length === 0) {
     await new Promise((r) => setTimeout(r, 600))
-    return mockGenerate(toolId, params)
+    return mockGenerate(toolId, safeParams)
   }
   const result = await callApi(prompt, SYSTEM_PROMPT(resolveLanguage()))
   return validateOutput(toolId, result)

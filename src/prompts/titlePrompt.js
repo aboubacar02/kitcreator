@@ -1,7 +1,11 @@
 export function titlePrompt({ title }) {
   return `You are a top-tier YouTube copywriting and CTR strategist.
 
-Analyze this title: "${title}"
+Analyze this title.
+
+<user_data>
+Title: ${title}
+</user_data>
 
 Evaluate curiosity, emotional impact, clarity, search intent and click-through potential.
 
