@@ -102,9 +102,9 @@ function validateInput(tool: string, input: unknown): SafeInput {
 //
 // Rotation multi-clés : chaque fournisseur accepte plusieurs clés
 // de COMPTES DISTINCTS (GEMINI_API_KEY, GEMINI_API_KEY_2..6, etc.).
-// En cas d'échec (quota, indispo), on passe à la clé suivante
-// puis au fournisseur suivant. Plusieurs clés du MÊME compte
-// n'augmentent pas le quota (limites par compte/projet).
+// En cas d'échec (quota, indispo), on passe à la clé suivante,
+// puis au modèle suivant (fallback), puis au fournisseur suivant.
+// Plusieurs clés du MÊME compte n'augmentent pas le quota.
 // ------------------------------------------------------------
 interface Provider {
   name: string
@@ -126,32 +126,50 @@ function collectKeys(prefix: string): string[] {
   return keys
 }
 
+function dedupeModels(models: Array<string | undefined>): string[] {
+  return [...new Set(models.filter((m): m is string => Boolean(m)))]
+}
+
 function availableAttempts(): Provider[] {
   const defs = [
     {
       name: 'gemini',
       url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-      model: Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.6-flash',
+      models: dedupeModels([
+        Deno.env.get('GEMINI_MODEL'),
+        'gemini-3.6-flash',
+        'gemini-flash-latest',
+        'gemini-2.5-flash',
+      ]),
     },
     {
       name: 'groq',
       url: 'https://api.groq.com/openai/v1/chat/completions',
-      model: Deno.env.get('GROQ_MODEL') ?? 'openai/gpt-oss-120b',
+      models: dedupeModels([
+        Deno.env.get('GROQ_MODEL'),
+        'openai/gpt-oss-120b',
+      ]),
     },
     {
       name: 'openai',
       url: 'https://api.openai.com/v1/chat/completions',
-      model: Deno.env.get('OPENAI_MODEL') ?? 'gpt-4o-mini',
+      models: dedupeModels([
+        Deno.env.get('OPENAI_MODEL'),
+        'gpt-4o-mini',
+      ]),
     },
   ]
   const list: Provider[] = []
   for (const def of defs) {
     collectKeys(def.name.toUpperCase()).forEach((key, idx) => {
-      list.push({
-        name: idx === 0 ? def.name : `${def.name}#${idx + 1}`,
-        url: def.url,
-        model: def.model,
-        key,
+      const keyLabel = idx === 0 ? def.name : `${def.name}#${idx + 1}`
+      def.models.forEach((model, mIdx) => {
+        list.push({
+          name: mIdx === 0 ? keyLabel : `${keyLabel}/${model}`,
+          url: def.url,
+          model,
+          key,
+        })
       })
     })
   }
