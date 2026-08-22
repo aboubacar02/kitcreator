@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-const COLORS = ['139,92,246', '59,130,246']
+const COLORS = ['249,115,22', '14,165,233']
 const GRID_GAP = 30
 const REPEL_RADIUS = 110
 const GLOW_RADIUS = 220
@@ -51,6 +51,8 @@ export default function AnimatedBackground() {
     const trail = { ...target }
 
     const onMove = (e) => {
+      // Les zones de travail restent calmes : le fond réagit seulement autour de l'interface.
+      if (e.target.closest('[data-background-lock]')) return
       target.x = e.clientX
       target.y = e.clientY
     }
@@ -126,11 +128,11 @@ export default function AnimatedBackground() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#0b0f19]"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#09090b]"
     >
-      <div className="animate-nebula-breathe absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(147,51,234,0.10),transparent_50%),radial-gradient(ellipse_at_80%_80%,rgba(59,130,246,0.08),transparent_50%),radial-gradient(ellipse_at_60%_30%,rgba(168,85,247,0.06),transparent_45%)]" />
+      <div className="animate-nebula-breathe absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(249,115,22,0.10),transparent_50%),radial-gradient(ellipse_at_80%_80%,rgba(14,165,233,0.08),transparent_50%),radial-gradient(ellipse_at_60%_30%,rgba(249,115,22,0.06),transparent_45%)]" />
 
-      <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_var(--mx)_var(--my),rgba(139,92,246,0.22),transparent_75%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(600px_circle_at_var(--mx)_var(--my),rgba(249,115,22,0.20),transparent_75%)]" />
 
       <div className="absolute inset-0 bg-[radial-gradient(480px_circle_at_var(--tx)_var(--ty),rgba(59,130,246,0.14),transparent_75%)]" />
 

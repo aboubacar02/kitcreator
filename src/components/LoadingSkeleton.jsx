@@ -1,25 +1,54 @@
-import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { Sparkles, WandSparkles } from 'lucide-react'
 import { useI18n } from '../i18n/LanguageContext.jsx'
 
 export default function LoadingSkeleton() {
   const { t } = useI18n()
+  const reduceMotion = useReducedMotion()
+  const lineWidths = ['w-full', 'w-[78%]', 'w-[90%]', 'w-[58%]']
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="space-y-4 rounded-xl border border-slate-800/80 bg-slate-900/50 p-5"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.32 }}
+      className="relative overflow-hidden rounded-2xl border border-brand-500/20 bg-zinc-900/85 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)] sm:p-6"
       role="status"
       aria-live="polite"
     >
-      <p className="flex items-center gap-2 text-sm font-medium text-brand-300">
-        <Sparkles className="h-4 w-4 animate-pulse" />
-        {t('common.loadingText')}
-      </p>
-      <div className="space-y-3">
-        <div className="h-4 w-3/4 animate-pulse rounded-full bg-slate-800" />
-        <div className="h-4 w-1/2 animate-pulse rounded-full bg-slate-800" />
-        <div className="h-4 w-2/3 animate-pulse rounded-full bg-slate-800" />
+      <div className="pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full bg-brand-500/15 blur-3xl" />
+      <div className="relative flex items-start gap-4">
+        <motion.div
+          animate={reduceMotion ? undefined : { rotate: [0, 10, -10, 0], scale: [1, 1.08, 1] }}
+          transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15 text-brand-300"
+        >
+          <WandSparkles className="h-5 w-5" />
+        </motion.div>
+        <div className="min-w-0 flex-1">
+          <p className="flex items-center gap-2 text-sm font-bold text-brand-200">
+            <Sparkles className="h-4 w-4" />
+            {t('common.loadingText')}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">Analyse du sujet, création des idées et mise en forme…</p>
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+            <motion.div
+              className="h-full w-1/3 rounded-full bg-gradient-to-r from-brand-600 via-brand-300 to-brand-500"
+              animate={reduceMotion ? { x: 0 } : { x: ['-115%', '315%'] }}
+              transition={{ duration: 1.65, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="relative mt-6 space-y-3 border-t border-white/[0.06] pt-5">
+        {lineWidths.map((width, index) => (
+          <motion.div
+            key={width}
+            className={`h-3 rounded-full bg-gradient-to-r from-white/[0.05] via-white/[0.12] to-white/[0.05] ${width}`}
+            animate={reduceMotion ? { opacity: 0.7 } : { opacity: [0.45, 0.95, 0.45] }}
+            transition={{ duration: 1.25, delay: index * 0.13, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
       </div>
     </motion.div>
   )

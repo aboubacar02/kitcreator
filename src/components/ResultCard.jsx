@@ -112,9 +112,18 @@ function CopyButton({ text }) {
 }
 
 function Celebration() {
-  const particles = Array.from({ length: 10 })
+  const particles = Array.from({ length: 22 })
   return (
-    <div className="pointer-events-none absolute left-1/2 top-0">
+    <div className="pointer-events-none absolute left-1/2 top-8">
+      {[0, 1].map((ring) => (
+        <motion.span
+          key={`ring-${ring}`}
+          initial={{ opacity: 0.65, scale: 0.15 }}
+          animate={{ opacity: 0, scale: ring === 0 ? 2.8 : 4.2 }}
+          transition={{ duration: 0.7, delay: ring * 0.1, ease: 'easeOut' }}
+          className="absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-300/70"
+        />
+      ))}
       {particles.map((_, i) => {
         const angle = (i / particles.length) * Math.PI * 2
         return (
@@ -122,14 +131,14 @@ function Celebration() {
             key={i}
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
             animate={{
-              x: Math.cos(angle) * 80,
-              y: Math.sin(angle) * 60 + 40,
+              x: Math.cos(angle) * (95 + (i % 3) * 22),
+              y: Math.sin(angle) * (70 + (i % 4) * 12) + 36,
               opacity: 0,
               scale: 0,
             }}
-            transition={{ duration: 0.9, ease: 'easeOut' }}
+            transition={{ duration: 0.95, delay: (i % 5) * 0.025, ease: 'easeOut' }}
             className={`absolute h-1.5 w-1.5 rounded-full ${
-              i % 3 === 0 ? 'bg-brand-400' : i % 3 === 1 ? 'bg-fuchsia-400' : 'bg-white'
+              i % 3 === 0 ? 'bg-brand-300' : i % 3 === 1 ? 'bg-sky-300' : 'bg-white'
             }`}
           />
         )
@@ -146,7 +155,8 @@ export default function ResultCard({ title, content }) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="relative w-full max-w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-6"
+      data-background-lock
+      className="relative w-full max-w-full overflow-hidden rounded-2xl border border-brand-500/20 bg-zinc-900/90 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.25)] sm:p-6"
     >
       <Celebration />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">

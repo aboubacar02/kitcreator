@@ -13,10 +13,12 @@ export default function HashtagFinder() {
   const { t } = useI18n()
   const [niche, setNiche] = useState('')
   const [platform, setPlatform] = useState('TikTok')
+  const [keywords, setKeywords] = useState('')
   const [result, setResult] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const resultRef = useRef(null)
+  const loadingRef = useRef(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -24,8 +26,11 @@ export default function HashtagFinder() {
     setError('')
     setResult('')
     setLoading(true)
+    requestAnimationFrame(() => {
+      loadingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
     try {
-      const text = await generate('hashtag', { niche, platform })
+      const text = await generate('hashtag', { niche, platform, keywords })
       setResult(text)
       requestAnimationFrame(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -45,7 +50,7 @@ export default function HashtagFinder() {
         <p className="mt-1 text-sm text-slate-400">{t('tools.hashtag.desc')}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="card space-y-4">
+      <form onSubmit={handleSubmit} data-background-lock className="card space-y-4">
         <div>
           <label htmlFor="niche" className="label">
             {t('form.niche.label')}
@@ -58,6 +63,11 @@ export default function HashtagFinder() {
             placeholder={t('form.niche.placeholder')}
             className="input"
           />
+        </div>
+        <div>
+          <label htmlFor="keywords" className="label">Mots-clés à inclure <span className="normal-case tracking-normal text-slate-500">(optionnel)</span></label>
+          <input id="keywords" value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder="Ex. routine du matin, Paris, productivité…" className="input" />
+          <p className="mt-2 text-xs text-slate-500">Sépare les idées par des virgules pour obtenir des hashtags plus précis.</p>
         </div>
         <div>
           <label className="label">{t('form.platform')}</label>
@@ -73,7 +83,9 @@ export default function HashtagFinder() {
         </GenerateButton>
       </form>
 
-      {loading && <LoadingSkeleton />}
+      <div ref={loadingRef} className="scroll-mt-24">
+        {loading && <LoadingSkeleton />}
+      </div>
       <div ref={resultRef} className="scroll-mt-24">
         {result && !loading && (
           <ResultCard title={t('result.title')} content={result} />

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
+import { Sparkles } from 'lucide-react'
 import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
 import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
@@ -21,6 +22,7 @@ export default function HookGenerator() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const resultRef = useRef(null)
+  const loadingRef = useRef(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -28,6 +30,9 @@ export default function HookGenerator() {
     setError('')
     setResult('')
     setLoading(true)
+    requestAnimationFrame(() => {
+      loadingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
     try {
       const text = await generate('hook', { topic, platform, tone })
       setResult(text)
@@ -44,12 +49,18 @@ export default function HookGenerator() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold text-white">{t('tools.hook')}</h2>
-        <p className="mt-1 text-sm text-slate-400">{t('tools.hook.desc')}</p>
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/60 px-6 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+        <div className="absolute -right-10 -top-14 h-40 w-40 rounded-full bg-brand-500/15 blur-3xl" />
+        <div className="relative">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-200">
+            <Sparkles className="h-3.5 w-3.5" /> AI creative studio
+          </div>
+          <h2 className="text-3xl font-extrabold tracking-tight text-white">{t('tools.hook')}</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-400">{t('tools.hook.desc')}</p>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="card space-y-4">
+      <form onSubmit={handleSubmit} data-background-lock className="card space-y-5">
         <div>
           <label htmlFor="topic" className="label">
             {t('form.topic.label')}
@@ -86,7 +97,9 @@ export default function HookGenerator() {
         </GenerateButton>
       </form>
 
-      {loading && <LoadingSkeleton />}
+      <div ref={loadingRef} className="scroll-mt-24">
+        {loading && <LoadingSkeleton />}
+      </div>
       <div ref={resultRef} className="scroll-mt-24">
         {result && !loading && (
           <ResultCard title={t('result.title')} content={result} />

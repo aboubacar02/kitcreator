@@ -15,6 +15,7 @@ export default function TitleAnalyzer() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const resultRef = useRef(null)
+  const loadingRef = useRef(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -22,6 +23,9 @@ export default function TitleAnalyzer() {
     setError('')
     setResult('')
     setLoading(true)
+    requestAnimationFrame(() => {
+      loadingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
     try {
       const text = await generate('title', { title })
       setResult(text)
@@ -43,7 +47,7 @@ export default function TitleAnalyzer() {
         <p className="mt-1 text-sm text-slate-400">{t('tools.title.desc')}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="card space-y-4">
+      <form onSubmit={handleSubmit} data-background-lock className="card space-y-4">
         <div>
           <label htmlFor="video-title" className="label">
             {t('form.yourTitle.label')}
@@ -68,7 +72,9 @@ export default function TitleAnalyzer() {
         </GenerateButton>
       </form>
 
-      {loading && <LoadingSkeleton />}
+      <div ref={loadingRef} className="scroll-mt-24">
+        {loading && <LoadingSkeleton />}
+      </div>
       <div ref={resultRef} className="scroll-mt-24">
         {result && !loading && (
           <ResultCard title={t('result.title')} content={result} />

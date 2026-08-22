@@ -10,7 +10,7 @@ export default function GenerateButton({ loading, disabled, children }) {
       disabled={loading || disabled}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
-      className="btn-primary w-full !py-3.5 !text-base shadow-lg shadow-brand-600/20"
+      className="btn-primary w-full !rounded-xl !py-4 !text-base shadow-lg shadow-brand-500/20"
     >
       {loading ? (
         <Zap className="h-5 w-5 animate-spin" />

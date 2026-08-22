@@ -4,12 +4,13 @@
 
 html {
   min-height: 100%;
-  background-color: #0b0f19;
+  background-color: #09090b;
 }
 
 body {
   min-height: 100%;
-  background-color: transparent;
+  background: radial-gradient(circle at 82% -5%, rgba(249,115,22,.14), transparent 27rem), radial-gradient(circle at 9% 30%, rgba(14,165,233,.07), transparent 26rem), #09090b;
+  color: #f4f4f5;
 }
 
 @keyframes nebula-breathe {
@@ -31,23 +32,29 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-brand-600/25 transition-all duration-200 hover:bg-brand-500 hover:shadow-brand-500/25 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-brand-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-400 hover:shadow-brand-500/30 active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:text-white;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white;
   }
   .input {
-    @apply w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition-all duration-200 hover:border-brand-500/60 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/50;
+    @apply w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition-all duration-200 hover:border-white/20 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15;
   }
   .label {
     @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400;
   }
   .card {
-    @apply rounded-2xl border border-slate-700/60 bg-surface/70 p-6 shadow-[0_20px_50px_rgba(139,92,246,0.15)] backdrop-blur-xl;
+    @apply rounded-2xl border border-white/10 bg-zinc-900/75 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl;
   }
   .text-gradient {
     @apply bg-gradient-to-r from-white via-white to-brand-300 bg-clip-text text-transparent;
   }
+}
+
+::selection { background: rgba(249,115,22,.35); color: white; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
 
 @layer utilities {

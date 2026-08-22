@@ -10,7 +10,7 @@ export default function Sidebar({ user }) {
   const initial = (user?.email || '?').charAt(0).toUpperCase()
 
   return (
-    <aside className="hidden w-full shrink-0 flex-col gap-2 border-b border-slate-800/80 bg-surface/80 p-4 backdrop-blur-md md:flex md:w-64 md:border-b-0 md:border-r md:p-6">
+    <aside className="hidden w-full shrink-0 flex-col gap-2 border-b border-white/[0.08] bg-zinc-950/35 p-4 backdrop-blur-md md:flex md:w-64 md:border-b-0 md:border-r md:p-5">
       <nav className="flex flex-1 flex-col gap-2">
         {TOOLS.map((tool) => {
           const Icon = TOOL_ICONS[tool.id]
@@ -21,8 +21,8 @@ export default function Sidebar({ user }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
                   isActive
-                    ? 'bg-brand-600 text-white'
-                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+                    ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/15'
+                    : 'text-slate-400 hover:bg-white/[0.06] hover:text-white'
                 }`
               }
             >
@@ -39,8 +39,8 @@ export default function Sidebar({ user }) {
           className={({ isActive }) =>
             `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
               isActive
-                ? 'bg-brand-600 text-white'
-                : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+                    ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/15'
+                    : 'text-slate-400 hover:bg-white/[0.06] hover:text-white'
             }`
           }
         >

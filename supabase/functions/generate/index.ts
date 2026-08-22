@@ -32,7 +32,7 @@ const ALLOWED_ORIGINS = [
 // ------------------------------------------------------------
 // Validation serveur (source de vérité ; miroir du frontend)
 // ------------------------------------------------------------
-const LIMITS = { topic: 300, niche: 150, title: 300, platform: 40 }
+const LIMITS = { topic: 300, niche: 150, title: 300, platform: 40, audience: 160, objective: 160, keywords: 180 }
 const ALLOWED_DURATIONS = ['15', '30', '60']
 const ALLOWED_TONES = ['Energetic', 'Curious', 'Bold', 'Inspirational', 'Funny']
 const ALLOWED_STYLES = ['Educational', 'Storytelling', 'Funny', 'Persuasive']
@@ -61,6 +61,11 @@ function requireOneOf(value: unknown, name: string, allowed: string[]): string {
   return raw
 }
 
+function optionalText(value: unknown, maxLength: number): string {
+  if (typeof value !== 'string') return ''
+  return value.replace(/\s+/g, ' ').trim().slice(0, maxLength)
+}
+
 interface SafeInput {
   [key: string]: string | number
 }
@@ -81,12 +86,15 @@ function validateInput(tool: string, input: unknown): SafeInput {
         topic: requireText(raw.topic, 'topic', LIMITS.topic),
         duration: Number(durationRaw),
         style: requireOneOf(raw.style ?? 'Educational', 'style', ALLOWED_STYLES),
+        audience: optionalText(raw.audience, LIMITS.audience),
+        objective: optionalText(raw.objective, LIMITS.objective),
       }
     }
     case 'hashtag':
       return {
         niche: requireText(raw.niche, 'niche', LIMITS.niche),
         platform: requireText(raw.platform ?? 'TikTok', 'platform', LIMITS.platform),
+        keywords: optionalText(raw.keywords, LIMITS.keywords),
       }
     case 'title':
       return {

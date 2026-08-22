@@ -49,6 +49,9 @@ export const INPUT_LIMITS = {
   niche: 150,
   title: 300,
   platform: 40,
+  audience: 160,
+  objective: 160,
+  keywords: 180,
 }
 
 const ALLOWED_DURATIONS = ['15', '30', '60']
@@ -74,6 +77,11 @@ function requireOneOf(value, name, allowedValues) {
   return raw
 }
 
+function optionalText(value, maxLength) {
+  if (typeof value !== 'string') return ''
+  return value.replace(/\s+/g, ' ').trim().slice(0, maxLength)
+}
+
 export function validateParams(toolId, params) {
   const input = params && typeof params === 'object' ? params : {}
   switch (toolId) {
@@ -92,12 +100,15 @@ export function validateParams(toolId, params) {
         topic: requireText(input.topic, 'topic', INPUT_LIMITS.topic),
         duration: Number(durationRaw),
         style: requireOneOf(input.style ?? 'Educational', 'style', ALLOWED_STYLES),
+        audience: optionalText(input.audience, INPUT_LIMITS.audience),
+        objective: optionalText(input.objective, INPUT_LIMITS.objective),
       }
     }
     case 'hashtag':
       return {
         niche: requireText(input.niche, 'niche', INPUT_LIMITS.niche),
         platform: requireText(input.platform ?? 'TikTok', 'platform', INPUT_LIMITS.platform),
+        keywords: optionalText(input.keywords, INPUT_LIMITS.keywords),
       }
     case 'title':
       return {

@@ -17,10 +17,13 @@ export default function ScriptWriter() {
   const [topic, setTopic] = useState('')
   const [duration, setDuration] = useState(DURATIONS[1])
   const [style, setStyle] = useState(STYLES[0])
+  const [audience, setAudience] = useState('')
+  const [objective, setObjective] = useState('')
   const [result, setResult] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const resultRef = useRef(null)
+  const loadingRef = useRef(null)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -28,8 +31,11 @@ export default function ScriptWriter() {
     setError('')
     setResult('')
     setLoading(true)
+    requestAnimationFrame(() => {
+      loadingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
     try {
-      const text = await generate('script', { topic, duration, style })
+      const text = await generate('script', { topic, duration, style, audience, objective })
       setResult(text)
       requestAnimationFrame(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -49,7 +55,7 @@ export default function ScriptWriter() {
         <p className="mt-1 text-sm text-slate-400">{t('tools.script.desc')}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="card space-y-4">
+      <form onSubmit={handleSubmit} data-background-lock className="card space-y-4">
         <div>
           <label htmlFor="topic" className="label">
             {t('form.topic.label')}
@@ -80,6 +86,16 @@ export default function ScriptWriter() {
             }}
           />
         </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="audience" className="label">Pour qui est cette vidéo ? <span className="normal-case tracking-normal text-slate-500">(optionnel)</span></label>
+            <input id="audience" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder="Ex. étudiants, mamans, entrepreneurs…" className="input" />
+          </div>
+          <div>
+            <label htmlFor="objective" className="label">Objectif de la vidéo <span className="normal-case tracking-normal text-slate-500">(optionnel)</span></label>
+            <input id="objective" value={objective} onChange={(e) => setObjective(e.target.value)} placeholder="Ex. faire commenter, vendre, expliquer…" className="input" />
+          </div>
+        </div>
         {error && (
           <p className="animate-shake rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
             {error}
@@ -90,7 +106,9 @@ export default function ScriptWriter() {
         </GenerateButton>
       </form>
 
-      {loading && <LoadingSkeleton />}
+      <div ref={loadingRef} className="scroll-mt-24">
+        {loading && <LoadingSkeleton />}
+      </div>
       <div ref={resultRef} className="scroll-mt-24">
         {result && !loading && (
           <ResultCard title={t('result.title')} content={result} />

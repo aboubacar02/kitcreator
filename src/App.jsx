@@ -14,19 +14,21 @@ export default function App() {
   return (
     <LanguageProvider>
       <AnimatedBackground />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route index element={<Navigate to="hook" replace />} />
-          <Route path="hook" element={<HookGenerator />} />
-          <Route path="script" element={<ScriptWriter />} />
-          <Route path="hashtag" element={<HashtagFinder />} />
-          <Route path="title" element={<TitleAnalyzer />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div className="relative z-10">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<Navigate to="hook" replace />} />
+            <Route path="hook" element={<HookGenerator />} />
+            <Route path="script" element={<ScriptWriter />} />
+            <Route path="hashtag" element={<HashtagFinder />} />
+            <Route path="title" element={<TitleAnalyzer />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </LanguageProvider>
   )
 }
