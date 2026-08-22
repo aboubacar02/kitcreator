@@ -99,6 +99,12 @@ function validateInput(tool: string, input: unknown): SafeInput {
 
 // ------------------------------------------------------------
 // Fournisseurs IA — SECRETS SERVEUR uniquement
+//
+// Rotation multi-clés : chaque fournisseur accepte plusieurs clés
+// de COMPTES DISTINCTS (GEMINI_API_KEY, GEMINI_API_KEY_2..6, etc.).
+// En cas d'échec (quota, indispo), on passe à la clé suivante
+// puis au fournisseur suivant. Plusieurs clés du MÊME compte
+// n'augmentent pas le quota (limites par compte/projet).
 // ------------------------------------------------------------
 interface Provider {
   name: string
@@ -107,33 +113,46 @@ interface Provider {
   key: string
 }
 
-function availableProviders(): Provider[] {
-  const list: Provider[] = []
-  const gemini = Deno.env.get('GEMINI_API_KEY')
-  if (gemini) {
-    list.push({
+const MAX_KEYS_PER_PROVIDER = 6
+
+function collectKeys(prefix: string): string[] {
+  const keys: string[] = []
+  const primary = Deno.env.get(`${prefix}_API_KEY`)
+  if (primary) keys.push(primary)
+  for (let i = 2; i <= MAX_KEYS_PER_PROVIDER; i++) {
+    const extra = Deno.env.get(`${prefix}_API_KEY_${i}`)
+    if (extra && !keys.includes(extra)) keys.push(extra)
+  }
+  return keys
+}
+
+function availableAttempts(): Provider[] {
+  const defs = [
+    {
       name: 'gemini',
       url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
       model: Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.6-flash',
-      key: gemini,
-    })
-  }
-  const groq = Deno.env.get('GROQ_API_KEY')
-  if (groq) {
-    list.push({
+    },
+    {
       name: 'groq',
       url: 'https://api.groq.com/openai/v1/chat/completions',
       model: Deno.env.get('GROQ_MODEL') ?? 'openai/gpt-oss-120b',
-      key: groq,
-    })
-  }
-  const openai = Deno.env.get('OPENAI_API_KEY')
-  if (openai) {
-    list.push({
+    },
+    {
       name: 'openai',
       url: 'https://api.openai.com/v1/chat/completions',
       model: Deno.env.get('OPENAI_MODEL') ?? 'gpt-4o-mini',
-      key: openai,
+    },
+  ]
+  const list: Provider[] = []
+  for (const def of defs) {
+    collectKeys(def.name.toUpperCase()).forEach((key, idx) => {
+      list.push({
+        name: idx === 0 ? def.name : `${def.name}#${idx + 1}`,
+        url: def.url,
+        model: def.model,
+        key,
+      })
     })
   }
   return list
@@ -172,17 +191,17 @@ async function generateWithProviders(
   prompt: string,
   systemContent: string,
 ): Promise<string> {
-  const providers = availableProviders()
-  if (providers.length === 0) {
+  const attempts = availableAttempts()
+  if (attempts.length === 0) {
     throw new Error('no provider configured')
   }
   let lastError: unknown
-  for (const provider of providers) {
+  for (const attempt of attempts) {
     try {
-      return await callProvider(provider, prompt, systemContent)
+      return await callProvider(attempt, prompt, systemContent)
     } catch (err) {
       lastError = err
-      console.error(`[generate] provider "${provider.name}" failed:`, err)
+      console.error(`[generate] attempt "${attempt.name}" failed:`, err)
     }
   }
   throw lastError instanceof Error ? lastError : new Error('all providers failed')
