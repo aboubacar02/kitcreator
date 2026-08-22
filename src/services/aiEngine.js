@@ -34,6 +34,13 @@ export const TOOLS = [
     description: 'Score your titles and get more clickable variants.',
     credits: 1,
   },
+  {
+    id: 'pack',
+    name: 'Content Pack',
+    description:
+      'One click: hooks, script, title, hashtags and next video ideas.',
+    credits: 4,
+  },
 ]
 
 export function getTool(id) {
@@ -114,6 +121,13 @@ export function validateParams(toolId, params) {
       return {
         title: requireText(input.title, 'title', INPUT_LIMITS.title),
       }
+    case 'pack':
+      return {
+        topic: requireText(input.topic, 'topic', INPUT_LIMITS.topic),
+        platform: requireText(input.platform ?? 'TikTok', 'platform', INPUT_LIMITS.platform),
+        audience: optionalText(input.audience, INPUT_LIMITS.audience),
+        objective: optionalText(input.objective, INPUT_LIMITS.objective),
+      }
     default:
       throw new Error('Unknown tool.')
   }
@@ -170,7 +184,7 @@ function mockGenerate(toolId, params) {
     }
     case 'title':
       return [
-        `**Score: 62/100** â€” decent title but too generic.`,
+        `**Score: 62/100** — decent title but too generic.`,
         ``,
         `**Analysis:**`,
         `- Too long, risk of truncation`,
@@ -181,6 +195,35 @@ function mockGenerate(toolId, params) {
         `1. I tested X: here's what nobody tells you`,
         `2. The X method in 3 steps (step 2 changes everything)`,
         `3. Why your X isn't working (and the 1-minute fix)`,
+        ``,
+        `_Demo mode: connect Supabase for real AI generations._`,
+      ].join('\n')
+    case 'pack':
+      return [
+        `## 🎣 5 Hooks`,
+        `1. Stop making this mistake with ${params.topic} in 2026!`,
+        `2. Nobody is talking about this ${params.topic} hack...`,
+        `3. If I had to restart ${params.topic} from scratch, I'd do this.`,
+        `4. The truth about ${params.topic} that nobody tells you.`,
+        `5. 3 seconds to understand ${params.topic} (worth it).`,
+        ``,
+        `## 🎬 Script (~30 seconds)`,
+        `[HOOK 0-3s] — Hook #2, spoken straight to camera.`,
+        `[BODY 3-25s] — 3 key points, one per shot.`,
+        `[CTA 25-30s] — "Follow for part 2!"`,
+        ``,
+        `## 🏷️ Title`,
+        `The ${params.topic} method in 3 steps (step 2 changes everything)`,
+        ``,
+        `## #️⃣ Hashtags`,
+        `Broad: #tips #viral #fyp #learnontiktok`,
+        `Medium: #${slug(params.topic).toLowerCase()}tips #dailytips`,
+        `Niche: #${slug(params.topic).toLowerCase()}2026`,
+        ``,
+        `## 💡 Next 3 video ideas`,
+        `1. Common mistakes in ${params.topic}.`,
+        `2. My ${params.topic} routine, step by step.`,
+        `3. I tested ${params.topic} for 7 days.`,
         ``,
         `_Demo mode: connect Supabase for real AI generations._`,
       ].join('\n')

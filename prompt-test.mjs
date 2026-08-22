@@ -17,12 +17,14 @@ const p1 = buildToolPrompt('hook', { topic: 'fitness', platform: 'TikTok', tone:
 const p2 = buildToolPrompt('script', { topic: 'ecommerce', duration: '30', style: 'Storytelling' })
 const p3 = buildToolPrompt('hashtag', { niche: 'crypto', platform: 'YouTube Shorts' })
 const p4 = buildToolPrompt('title', { title: 'How I make money online' })
+const p5 = buildToolPrompt('pack', { topic: 'fitness', platform: 'TikTok', audience: 'beginners' })
 
-check('T1a buildToolPrompt retourne 4 prompts non vides', [p1, p2, p3, p4].every((p) => typeof p === 'string' && p.length > 100))
+check('T1a buildToolPrompt retourne 5 prompts non vides', [p1, p2, p3, p4, p5].every((p) => typeof p === 'string' && p.length > 100))
 check('T1b hook contient sujet + plateforme + ton', p1.includes('fitness') && p1.includes('TikTok') && p1.includes('Energetic'))
 check('T1c script contient duree + style', p2.includes('30-second') && p2.includes('Storytelling'))
 check('T1d hashtag contient niche + plateforme', p3.includes('crypto') && p3.includes('YouTube Shorts'))
 check('T1e title contient le titre', p4.includes('How I make money online'))
+check('T1f pack contient les 5 sections + sujet + audience', p5.includes('5 Hooks') && p5.includes('Script') && p5.includes('Title') && p5.includes('Hashtags') && p5.includes('Next 3 video ideas') && p5.includes('fitness') && p5.includes('beginners'))
 
 // T2: SYSTEM_PROMPT par langue
 const fr = SYSTEM_PROMPT('fr')

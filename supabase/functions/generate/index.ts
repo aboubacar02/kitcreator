@@ -44,6 +44,7 @@ const TOOL_COSTS: Record<string, number> = {
   script: 2,
   hashtag: 1,
   title: 1,
+  pack: 4,
 }
 
 class InvalidInput extends Error {}
@@ -99,6 +100,13 @@ function validateInput(tool: string, input: unknown): SafeInput {
     case 'title':
       return {
         title: requireText(raw.title, 'title', LIMITS.title),
+      }
+    case 'pack':
+      return {
+        topic: requireText(raw.topic, 'topic', LIMITS.topic),
+        platform: requireText(raw.platform ?? 'TikTok', 'platform', LIMITS.platform),
+        audience: optionalText(raw.audience, LIMITS.audience),
+        objective: optionalText(raw.objective, LIMITS.objective),
       }
     default:
       throw new InvalidInput('Unknown tool.')

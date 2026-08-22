@@ -13,6 +13,7 @@ const STRINGS = {
     'tools.script': 'Short Script Writer',
     'tools.hashtag': 'Smart Hashtag Finder',
     'tools.title': 'Title Analyzer',
+    'tools.pack': 'Content Pack',
     'tools.hook.desc':
       'Scroll-stopping hooks optimized for US & EU TikTok, Instagram Reels and YouTube Shorts.',
     'tools.script.desc':
@@ -21,6 +22,8 @@ const STRINGS = {
       'A balanced mix of broad, medium and niche hashtags to maximize your reach.',
     'tools.title.desc':
       'Score your titles and get more clickable variants in one click.',
+    'tools.pack.desc':
+      'One topic, one click: 5 hooks, a script, a title, hashtags and your next 3 video ideas.',
 
     'sidebar.settings': 'Settings',
     'sidebar.myAccount': 'My account',
@@ -28,6 +31,7 @@ const STRINGS = {
     'form.topic.label': 'Niche, topic, or keyword',
     'form.topic.placeholder.hook': 'e.g. Fitness tips, E-commerce, AI tools...',
     'form.topic.placeholder.script': 'e.g. How I grew my shop to $10k/month...',
+    'form.topic.placeholder.pack': 'e.g. My fitness journey, Budget meals, AI side hustle...',
     'form.platform': 'Platform',
     'form.tone': 'Tone',
     'form.duration': 'Duration (seconds)',
@@ -37,6 +41,11 @@ const STRINGS = {
       'e.g. Home workouts, Dropshipping, Personal finance...',
     'form.yourTitle.label': 'Your video title',
     'form.yourTitle.placeholder': 'Paste the title you want to analyze...',
+    'form.audience': 'Target audience',
+    'form.audience.placeholder': 'e.g. Beginner entrepreneurs, 18-25...',
+    'form.objective': 'Objective',
+    'form.objective.placeholder': 'e.g. Sell a product, grow fast...',
+    'form.optional': 'optional',
 
     'tone.Energetic': 'Energetic',
     'tone.Curious': 'Curious',
@@ -52,6 +61,7 @@ const STRINGS = {
     'btn.generateScript': 'Generate Script',
     'btn.findHashtags': 'Find Hashtags',
     'btn.analyzeTitle': 'Analyze Title',
+    'btn.generatePack': 'Generate my Content Pack',
     'common.generating': 'Generating...',
     'common.loadingText': 'The AI is writing your content...',
 
@@ -127,6 +137,7 @@ const STRINGS = {
     'tools.script': 'Rédacteur de scripts',
     'tools.hashtag': 'Recherche de hashtags',
     'tools.title': 'Analyseur de titres',
+    'tools.pack': 'Pack de contenu',
     'tools.hook.desc':
       'Des accroches qui stoppent le scroll, optimisées pour TikTok, Instagram Reels et YouTube Shorts.',
     'tools.script.desc':
@@ -135,6 +146,8 @@ const STRINGS = {
       'Un mix équilibré de hashtags larges, moyens et de niche pour maximiser ta portée.',
     'tools.title.desc':
       'Note tes titres et obtiens des variantes plus cliquables en un clic.',
+    'tools.pack.desc':
+      'Un sujet, un clic : 5 accroches, 1 script, 1 titre, les hashtags et tes 3 prochaines idées de vidéos.',
 
     'sidebar.settings': 'Paramètres',
     'sidebar.myAccount': 'Mon compte',
@@ -142,6 +155,7 @@ const STRINGS = {
     'form.topic.label': 'Niche, sujet ou mot-clé',
     'form.topic.placeholder.hook': 'ex. Astuces fitness, E-commerce, Outils IA...',
     'form.topic.placeholder.script': 'ex. Comment j’ai fait passer ma boutique à 10k€/mois...',
+    'form.topic.placeholder.pack': 'ex. Mon parcours fitness, Repas à petit budget, Business IA...',
     'form.platform': 'Plateforme',
     'form.tone': 'Ton',
     'form.duration': 'Durée (secondes)',
@@ -150,6 +164,11 @@ const STRINGS = {
     'form.niche.placeholder': 'ex. Sport à la maison, Dropshipping, Finance perso...',
     'form.yourTitle.label': 'Titre de ta vidéo',
     'form.yourTitle.placeholder': 'Colle ici le titre à analyser...',
+    'form.audience': 'Audience cible',
+    'form.audience.placeholder': 'ex. Entrepreneurs débutants, 18-25 ans...',
+    'form.objective': 'Objectif',
+    'form.objective.placeholder': 'ex. Vendre un produit, grossir vite...',
+    'form.optional': 'optionnel',
 
     'tone.Energetic': 'Énergique',
     'tone.Curious': 'Curieux',
@@ -165,6 +184,7 @@ const STRINGS = {
     'btn.generateScript': 'Générer le script',
     'btn.findHashtags': 'Trouver les hashtags',
     'btn.analyzeTitle': 'Analyser le titre',
+    'btn.generatePack': 'Générer mon Pack de contenu',
     'common.generating': 'Génération...',
     'common.loadingText': 'L’IA génère ton contenu...',
 
@@ -240,6 +260,7 @@ const STRINGS = {
     'tools.script': 'Redactor de guiones',
     'tools.hashtag': 'Búsqueda de hashtags',
     'tools.title': 'Analizador de títulos',
+    'tools.pack': 'Pack de contenido',
     'tools.hook.desc':
       'Ganchos que detienen el scroll, optimizados para TikTok, Instagram Reels y YouTube Shorts.',
     'tools.script.desc':
@@ -248,6 +269,8 @@ const STRINGS = {
       'Una mezcla equilibrada de hashtags amplios, medios y de nicho para maximizar tu alcance.',
     'tools.title.desc':
       'Puntúa tus títulos y consigue variantes más clicables en un clic.',
+    'tools.pack.desc':
+      'Un tema, un clic: 5 ganchos, 1 guion, 1 título, los hashtags y tus 3 próximas ideas de vídeos.',
 
     'sidebar.settings': 'Ajustes',
     'sidebar.myAccount': 'Mi cuenta',
@@ -255,6 +278,7 @@ const STRINGS = {
     'form.topic.label': 'Nicho, tema o palabra clave',
     'form.topic.placeholder.hook': 'ej. Consejos de fitness, E-commerce, Herramientas IA...',
     'form.topic.placeholder.script': 'ej. Cómo llevé mi tienda a 10k€/mes...',
+    'form.topic.placeholder.pack': 'ej. Mi camino fitness, Comidas económicas, Negocio con IA...',
     'form.platform': 'Plataforma',
     'form.tone': 'Tono',
     'form.duration': 'Duración (segundos)',
@@ -263,6 +287,11 @@ const STRINGS = {
     'form.niche.placeholder': 'ej. Ejercicio en casa, Dropshipping, Finanzas personales...',
     'form.yourTitle.label': 'Título de tu vídeo',
     'form.yourTitle.placeholder': 'Pega aquí el título a analizar...',
+    'form.audience': 'Audiencia objetivo',
+    'form.audience.placeholder': 'ej. Emprendedores principiantes, 18-25...',
+    'form.objective': 'Objetivo',
+    'form.objective.placeholder': 'ej. Vender un producto, crecer rápido...',
+    'form.optional': 'opcional',
 
     'tone.Energetic': 'Enérgico',
     'tone.Curious': 'Curioso',
@@ -278,6 +307,7 @@ const STRINGS = {
     'btn.generateScript': 'Generar guion',
     'btn.findHashtags': 'Buscar hashtags',
     'btn.analyzeTitle': 'Analizar título',
+    'btn.generatePack': 'Generar mi Pack de contenido',
     'common.generating': 'Generando...',
     'common.loadingText': 'La IA está creando tu contenido...',
 
