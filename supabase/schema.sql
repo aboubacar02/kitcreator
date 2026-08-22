@@ -144,6 +144,11 @@ create index if not exists generations_user_created_idx
 --   - validation : montant borné 1..10 ;
 --   - rate limiting : max 30 générations par heure glissante ;
 --   - atomicité conservée (décrément conditionnel).
+-- Postgres ne permet pas de RENOMMER les parametres d'une fonction
+-- existante via CREATE OR REPLACE : on supprime l'ancienne version
+-- (signatures user_id/amount de l'ancien tutoriel) avant de recreer.
+drop function if exists public.consume_credits(uuid, int);
+
 create or replace function public.consume_credits(p_user_id uuid, p_amount int)
 returns int
 language plpgsql
