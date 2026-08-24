@@ -79,7 +79,7 @@ export default function LandingPage() {
                 {t('landing.ctaExplore')}
               </a>
             </motion.div>
-            <motion.p variants={item} className="mt-4 text-xs text-zinc-400">
+            <motion.p variants={item} className="mt-4 text-xs text-zinc-600">
               {t('landing.note')}
             </motion.p>
             <motion.div variants={item} className="mt-10">
@@ -88,7 +88,7 @@ export default function LandingPage() {
           </motion.div>
         </section>
 
-        <section id="tools" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+        <section id="tools" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-16">
           <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
             {t('landing.toolsTitle')}
           </h2>
@@ -97,7 +97,7 @@ export default function LandingPage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
-            className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             {TOOLS.map((tool) => (
               <motion.div

@@ -66,13 +66,13 @@ export default function SocialProof() {
               ease: 'easeInOut',
               delay: index * 0.25,
             }}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-zinc-100 text-xs font-bold text-white ${avatar.gradient}`}
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-zinc-200 text-xs font-medium text-zinc-700"
           >
             {avatar.initials}
           </motion.div>
         ))}
       </div>
-      <p className="max-w-xs text-center text-sm text-zinc-500 sm:max-w-none sm:text-left">
+      <p className="max-w-xs text-center text-sm text-zinc-600 sm:max-w-none sm:text-left">
         <span className="font-semibold text-zinc-900">
           <Counter to={count ?? FALLBACK_COUNT} locale={LOCALES[lang] ?? 'en-US'} />
         </span>{' '}
