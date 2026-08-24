@@ -339,3 +339,27 @@ drop policy if exists "manage own creator profile" on public.creator_profiles;
 create policy "manage own creator profile" on public.creator_profiles
   for all using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- ============================================================
+-- 9b. WORKSPACE v2 : statuts de production sur saved_projects.
+-- ============================================================
+alter table public.saved_projects
+  add column if not exists platform text not null default 'TikTok';
+alter table public.saved_projects
+  add column if not exists niche text not null default '';
+alter table public.saved_projects
+  add column if not exists topic text not null default '';
+alter table public.saved_projects
+  add column if not exists status text not null default 'draft';
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'saved_projects_status_check'
+  ) then
+    alter table public.saved_projects
+      add constraint saved_projects_status_check
+      check (status in ('draft','done','archived'));
+  end if;
+end $$;
+create index if not exists saved_projects_user_status_idx
+  on public.saved_projects (user_id, status);

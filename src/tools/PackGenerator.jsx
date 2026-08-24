@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Check, Copy, Loader2, Package, Save } from 'lucide-react'
+import { Check, Loader2, Package, Save } from 'lucide-react'
+import CopyButton from '../components/CopyButton.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
 import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
 import PlatformSelector from '../components/PlatformSelector.jsx'
@@ -8,29 +9,6 @@ import { generate } from '../services/aiEngine.js'
 import { supabase, isSupabaseConfigured } from '../services/supabase.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
 import { friendlyError } from '../i18n/strings.js'
-
-function CopyButton({ value }) {
-  const { t } = useI18n()
-  const [copied, setCopied] = useState(false)
-  return (
-    <button
-      type="button"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(value)
-          setCopied(true)
-          setTimeout(() => setCopied(false), 1500)
-        } catch {
-          /* clipboard indisponible */
-        }
-      }}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-slate-300 transition hover:bg-white/[0.08]"
-    >
-      {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-      {copied ? t('result.copied') : t('result.copy')}
-    </button>
-  )
-}
 
 function SectionTitle({ icon, children, action }) {
   return (
@@ -89,6 +67,10 @@ export default function PackGenerator() {
       user_id: user.id,
       title: topic.trim().slice(0, 120),
       type: 'pack',
+      status: 'draft',
+      platform,
+      niche: '',
+      topic: topic.trim().slice(0, 300),
       content: result,
     })
     setSaveState(saveError ? 'error' : 'done')

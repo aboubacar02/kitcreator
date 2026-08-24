@@ -10,6 +10,7 @@ import HashtagFinder from './tools/HashtagFinder.jsx'
 import TitleAnalyzer from './tools/TitleAnalyzer.jsx'
 import PackGenerator from './tools/PackGenerator.jsx'
 import KitBot from './tools/KitBot.jsx'
+import Workspace from './pages/Workspace.jsx'
 import { LanguageProvider } from './i18n/LanguageContext.jsx'
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="title" element={<TitleAnalyzer />} />
             <Route path="pack" element={<PackGenerator />} />
             <Route path="kitbot" element={<KitBot />} />
+            <Route path="workspace" element={<Workspace />} />
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
