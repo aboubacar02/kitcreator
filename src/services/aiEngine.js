@@ -312,7 +312,7 @@ function demoAgentReply(message) {
   ].join('\n')
 }
 
-export async function sendAgentMessage(message, history = []) {
+export async function sendAgentMessage(message, history = [], contextPack = null) {
   const cleaned = typeof message === 'string' ? message.trim().slice(0, MAX_AGENT_MESSAGE_LENGTH) : ''
   if (!cleaned) throw new Error('Empty message.')
 
@@ -327,13 +327,16 @@ export async function sendAgentMessage(message, history = []) {
     .map((m) => ({ role: m.role, content: m.content.slice(0, 1500) }))
     .slice(-MAX_AGENT_HISTORY_MESSAGES)
 
-  const { data, error } = await supabase.functions.invoke('agent-chat', {
-    body: {
-      message: cleaned,
-      history: safeHistory,
-      language: resolveLanguage(),
-    },
-  })
+  const body = {
+    message: cleaned,
+    history: safeHistory,
+    language: resolveLanguage(),
+  }
+  if (contextPack && typeof contextPack === 'object' && !Array.isArray(contextPack)) {
+    body.context_pack = contextPack
+  }
+
+  const { data, error } = await supabase.functions.invoke('agent-chat', { body })
   if (error) await throwInvokeError(error)
 
   const reply = data?.reply

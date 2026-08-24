@@ -18,12 +18,43 @@ import {
   generateWithProviders,
   type ChatMessage,
 } from '../_shared/ai.ts'
+import { parseStructuredPack } from '../../../src/prompts/validators.js'
 
 const ALLOWED_LANGUAGES = ['fr', 'en', 'es']
 const AGENT_COST = 1
 const MAX_MESSAGE_LENGTH = 2000
 const MAX_HISTORY_MESSAGES = 12
 const MAX_HISTORY_MESSAGE_LENGTH = 1500
+
+// Contexte optionnel "pack à améliorer" : revalidé par le même parseur
+// durci que la génération (forme + longueurs bornées), jamais cru tel quel.
+function serializePackContext(raw: unknown): string {
+  let pack
+  try {
+    pack = parseStructuredPack(raw)
+  } catch {
+    return ''
+  }
+  const lines: string[] = []
+  lines.push('<current_pack>')
+  if (Array.isArray(pack.hooks)) {
+    lines.push('Hooks:')
+    pack.hooks.forEach((h, i) => {
+      lines.push(`${i + 1}. "${h.text}"${h.visual ? ` [visual: ${h.visual}]` : ''}`)
+    })
+  }
+  if (pack.script) {
+    lines.push(`Script intro (0-5s): ${pack.script.intro}`)
+    lines.push(`Script body (5-45s): ${pack.script.body}`)
+    if (pack.script.broll_ideas.length) lines.push(`B-roll ideas: ${pack.script.broll_ideas.join(' | ')}`)
+    if (pack.script.cta) lines.push(`CTA (45-60s): ${pack.script.cta}`)
+  }
+  if (pack.seo_title) lines.push(`SEO title: ${pack.seo_title}`)
+  if (pack.hashtags.length) lines.push(`Hashtags: ${pack.hashtags.join(' ')}`)
+  if (pack.next_ideas.length) lines.push(`Next video ideas: ${pack.next_ideas.join(' | ')}`)
+  lines.push('</current_pack>')
+  return lines.join('\n')
+}
 
 function sanitizeHistory(raw: unknown): ChatMessage[] {
   if (!Array.isArray(raw)) return []
@@ -146,13 +177,15 @@ Deno.serve(async (req: Request) => {
       '</creator_profile>',
     ].join('\n')
 
-    // 5. Génération (secrets serveur uniquement), remboursement si échec
+    // 5. Contexte pack optionnel (demande "améliore ce pack")
+    const packContext = serializePackContext(body.context_pack)
+    const systemContent = packContext
+      ? `${SYSTEM_PROMPT(language)}\n\n${kitbotPersona}\n\nThe creator is working on this existing content pack. When asked to improve, rewrite or adapt it, output the FULL updated version (same structure), ready to use.\n\n${packContext}`
+      : `${SYSTEM_PROMPT(language)}\n\n${kitbotPersona}`
+
+    // 6. Génération (secrets serveur uniquement), remboursement si échec
     try {
-      const reply = await generateWithProviders(
-        message,
-        `${SYSTEM_PROMPT(language)}\n\n${kitbotPersona}`,
-        history,
-      )
+      const reply = await generateWithProviders(message, systemContent, history)
       if (!reply.trim()) {
         throw new Error('empty generation')
       }

@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
 import {
   CheckCircle2,
   Eye,
   EyeOff,
   FolderKanban,
+  Loader2,
   RotateCcw,
+  Sparkles,
   Star,
   Trash2,
 } from 'lucide-react'
 import CopyButton from '../components/CopyButton.jsx'
 import LoadingSkeleton from '../components/LoadingSkeleton.jsx'
 import * as workspace from '../services/workspace.js'
+import { sendAgentMessage } from '../services/aiEngine.js'
+import { supabase, isSupabaseConfigured } from '../services/supabase.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
 import { friendlyError } from '../i18n/strings.js'
 
@@ -21,6 +25,116 @@ const TABS = [
   { id: 'done', label: 'ws.tabDone' },
   { id: 'fav', label: 'ws.tabFav' },
 ]
+
+const IMPROVEMENT_PRESETS = [
+  ['imp.hooks', '🔥'],
+  ['imp.script', '✍️'],
+  ['imp.cta', '🎯'],
+  ['imp.instagram', '📱'],
+  ['imp.youtube', '▶️'],
+  ['imp.short30', '⚡'],
+  ['imp.pedagogic', '🧠'],
+  ['imp.natural', '💬'],
+]
+
+function ImprovementPanel({ project }) {
+  const { user, refreshCredits } = useOutletContext()
+  const { t } = useI18n()
+  const [reply, setReply] = useState('')
+  const [instruction, setInstruction] = useState('')
+  const [busyKey, setBusyKey] = useState('')
+  const [error, setError] = useState('')
+  const [saveState, setSaveState] = useState('idle')
+
+  async function improve(key) {
+    if (busyKey) return
+    const text = t(`improve.${key}`)
+    setBusyKey(key)
+    setError('')
+    setSaveState('idle')
+    try {
+      const answer = await sendAgentMessage(text, [], project.content)
+      setReply(answer)
+      setInstruction(text)
+      await refreshCredits('kitbot')
+    } catch (err) {
+      setError(friendlyError(err, t))
+    } finally {
+      setBusyKey('')
+    }
+  }
+
+  async function saveVersion() {
+    if (!isSupabaseConfigured || !supabase || !user || !reply) return
+    setSaveState('saving')
+    const { error: saveError } = await supabase.from('saved_projects').insert({
+      user_id: user.id,
+      title: `${project.title} — v2`.slice(0, 140),
+      type: project.type,
+      status: 'draft',
+      platform: project.platform,
+      niche: project.niche,
+      topic: project.topic,
+      content: { ...project.content, improvement: { instruction, text: reply } },
+    })
+    setSaveState(saveError ? 'error' : 'done')
+    if (!saveError) setTimeout(() => setSaveState('idle'), 2500)
+  }
+
+  return (
+    <section data-background-lock className="rounded-xl border border-brand-500/20 bg-brand-500/[0.04] p-4">
+      <h5 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-brand-200">
+        <Sparkles className="h-4 w-4" /> {t('improve.title')}
+      </h5>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {IMPROVEMENT_PRESETS.map(([key, emoji]) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => improve(key)}
+            disabled={Boolean(busyKey)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <span aria-hidden>{emoji}</span> {t(`improve.${key}`)}
+          </button>
+        ))}
+      </div>
+      {busyKey && (
+        <p className="mt-3 flex items-center gap-2 text-xs font-medium text-slate-400">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" /> KitBot réécrit... ⚡
+        </p>
+      )}
+      {error && (
+        <p className="animate-shake mt-3 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+          {error}
+        </p>
+      )}
+      {reply && !busyKey && (
+        <div className="mt-3 space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <h6 className="text-xs font-bold uppercase tracking-wider text-slate-300">{t('improve.result')}</h6>
+            <CopyButton value={reply} />
+          </div>
+          <div className="max-h-64 overflow-y-auto whitespace-pre-wrap rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm leading-relaxed text-slate-200">
+            {reply}
+          </div>
+          <button
+            type="button"
+            onClick={saveVersion}
+            disabled={!isSupabaseConfigured || !user || saveState === 'saving' || saveState === 'done'}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-brand-500/30 bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-200 transition hover:bg-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {saveState === 'done' ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Sparkles className="h-3.5 w-3.5" />}
+            {saveState === 'done' ? t('improve.saved') : saveState === 'saving' ? t('common.generating') : t('improve.saveVersion')}
+          </button>
+          {saveState === 'error' && (
+            <p className="text-xs text-red-300">{t('errors.generic')}</p>
+          )}
+        </div>
+      )}
+    </section>
+  )
+}
 
 const STATUS_STYLES = {
   draft: 'border-amber-400/30 bg-amber-400/10 text-amber-300',
@@ -106,6 +220,22 @@ function PackDetail({ content }) {
           <ol className="list-inside list-decimal space-y-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm text-slate-200">
             {content.next_ideas.map((idea, i) => <li key={i}>{idea}</li>)}
           </ol>
+        </section>
+      )}
+      {content.improvement?.text && (
+        <section className="rounded-lg border border-brand-500/20 bg-brand-500/[0.04] px-3 py-2">
+          <div className="mb-1.5 flex items-center justify-between gap-3">
+            <h5 className="flex items-center gap-1.5 text-sm font-bold uppercase tracking-wider text-brand-200">
+              ✨ {t('ws.improvedVersion')}
+            </h5>
+            <CopyButton value={content.improvement.text} />
+          </div>
+          {content.improvement.instruction && (
+            <p className="mb-1.5 text-xs italic text-slate-500">{content.improvement.instruction}</p>
+          )}
+          <div className="max-h-64 overflow-y-auto whitespace-pre-wrap text-sm leading-relaxed text-slate-200">
+            {content.improvement.text}
+          </div>
         </section>
       )}
     </div>
@@ -207,8 +337,9 @@ function ProjectCard({ project, onChanged, onDeleted }) {
       </div>
 
       {expanded && (
-        <div className="border-t border-white/[0.06] pt-4">
+        <div className="space-y-4 border-t border-white/[0.06] pt-4">
           <PackDetail content={project.content} />
+          {Array.isArray(project.content?.hooks) && <ImprovementPanel project={project} />}
         </div>
       )}
     </article>
