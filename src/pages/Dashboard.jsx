@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { CalendarDays } from 'lucide-react'
 import Navbar from '../components/Navbar.jsx'
 import Sidebar from '../components/Sidebar.jsx'
+import CopyButton from '../components/CopyButton.jsx'
 import {
   getSession,
   ensureProfile,
@@ -15,6 +17,7 @@ import {
   consumeLocalCredits,
 } from '../services/credits.js'
 import { getTool } from '../services/aiEngine.js'
+import { getWeeklyBriefing } from '../services/briefing.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
 
 export default function Dashboard() {
@@ -23,6 +26,7 @@ export default function Dashboard() {
   const [profile, setProfile] = useState(null)
   const [localCredits, setLocalCredits] = useState(getLocalCredits())
   const [loading, setLoading] = useState(true)
+  const [briefing, setBriefing] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -32,6 +36,17 @@ export default function Dashboard() {
     }
     let mounted = true
 
+    async function loadBriefing() {
+      try {
+        const data = await getWeeklyBriefing()
+        if (mounted && data?.briefing?.ideas) {
+          setBriefing(data.briefing)
+        }
+      } catch {
+        /* pas de briefing -> pas de bannière ; réessaie à la prochaine connexion */
+      }
+    }
+
     async function init() {
       const currentSession = await getSession()
       if (!mounted) return
@@ -39,6 +54,7 @@ export default function Dashboard() {
       if (currentSession?.user) {
         const userProfile = await ensureProfile(currentSession.user)
         if (mounted) setProfile(userProfile)
+        loadBriefing()
       }
       setLoading(false)
     }
@@ -127,6 +143,22 @@ export default function Dashboard() {
             <p className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-300">
               {t('setup.profileMissing')}
             </p>
+          )}
+          {briefing?.ideas && (
+            <details data-background-lock className="mb-6 rounded-xl border border-brand-500/25 bg-brand-500/[0.06] px-4 py-3">
+              <summary className="flex cursor-pointer select-none items-center gap-2.5 text-sm font-bold text-brand-200">
+                <CalendarDays className="h-4.5 w-4.5 shrink-0" />
+                {t('brief.title')}
+                <span className="ml-auto normal-case tracking-normal"><CopyButton value={briefing.ideas} /></span>
+              </summary>
+              <p className="mt-2 text-xs text-slate-400">{t('brief.subtitle')}</p>
+              <div className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-200">
+                {briefing.ideas}
+              </div>
+              <Link to="/dashboard/workspace" className="mt-3 inline-block text-xs font-semibold text-brand-300 underline-offset-2 hover:underline">
+                {t('brief.viewWorkspace')} →
+              </Link>
+            </details>
           )}
           <Outlet context={{ user, credits, refreshCredits }} />
         </main>

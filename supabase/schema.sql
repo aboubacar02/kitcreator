@@ -363,3 +363,11 @@ begin
 end $$;
 create index if not exists saved_projects_user_status_idx
   on public.saved_projects (user_id, status);
+-- ============================================================
+-- BRIEFING HEBDO : une seule veille par utilisateur et par semaine.
+-- week_start est stocke dans content (JSONB) ; l'index partiel unique
+-- rend tout doublon impossible meme en cas de requetes concurrentes.
+-- ============================================================
+create unique index if not exists uq_briefing_week
+  on public.saved_projects (user_id, (content->>'week_start'))
+  where type = 'briefing';

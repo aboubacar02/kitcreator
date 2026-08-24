@@ -74,6 +74,9 @@ const STRINGS = {
     'improve.short30': 'Make a condensed 30-second version.',
     'improve.pedagogic': 'Make the content more educational and structured.',
     'improve.natural': 'Make the tone more natural and conversational.',
+    'brief.title': '📅 Monday briefing — 5 ideas for this week',
+    'brief.subtitle': 'Prepared by KitBot from your niche, audience and usual tone. Saved in your Workspace.',
+    'brief.viewWorkspace': 'View in my Workspace',
 
     'sidebar.settings': 'Settings',
     'sidebar.myAccount': 'My account',
@@ -255,6 +258,9 @@ const STRINGS = {
     'improve.short30': 'Fais une version condensée en 30 secondes.',
     'improve.pedagogic': 'Rends le contenu plus pédagogique et structuré.',
     'improve.natural': 'Rends le ton plus naturel et conversationnel.',
+    'brief.title': '📅 Briefing du lundi — 5 idées pour cette semaine',
+    'brief.subtitle': 'Préparé par KitBot à partir de ta niche, ton audience et ton ton habituel. Sauvegardé dans ton Workspace.',
+    'brief.viewWorkspace': 'Voir dans mon Workspace',
 
     'sidebar.settings': 'Paramètres',
     'sidebar.myAccount': 'Mon compte',
@@ -435,6 +441,9 @@ const STRINGS = {
     'improve.short30': 'Haz una versión condensada de 30 segundos.',
     'improve.pedagogic': 'Haz el contenido más educativo y estructurado.',
     'improve.natural': 'Haz el tono más natural y conversacional.',
+    'brief.title': '📅 Resumen del lunes — 5 ideas para esta semana',
+    'brief.subtitle': 'Preparado por KitBot según tu nicho, tu audiencia y tu tono habitual. Guardado en tu espacio.',
+    'brief.viewWorkspace': 'Ver en mi espacio',
 
     'sidebar.settings': 'Ajustes',
     'sidebar.myAccount': 'Mi cuenta',
