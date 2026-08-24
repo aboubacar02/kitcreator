@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+﻿import { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Crown, LogOut, Settings, User, X, Zap } from 'lucide-react'
@@ -36,7 +36,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-zinc-900/40 md:hidden"
             aria-hidden="true"
           />
           <motion.aside
@@ -44,17 +44,17 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed bottom-0 left-0 top-0 z-50 flex w-[85%] max-w-xs flex-col overflow-y-auto border-r border-slate-800 bg-[#0d1320] p-5 md:hidden"
+            className="fixed bottom-0 left-0 top-0 z-50 flex w-[85%] max-w-xs flex-col overflow-y-auto border-r border-zinc-200 bg-white p-5 md:hidden"
             role="dialog"
             aria-modal="true"
             aria-label={t('nav.menu')}
           >
             <div className="mb-6 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-brand-600 px-2.5 py-1 text-lg font-black text-white">
-                  KC
+              <div className="flex items-center gap-2.5">
+                <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-base font-bold text-white">
+                  K
                 </div>
-                <span className="text-lg font-bold tracking-wide text-white">
+                <span className="text-base font-semibold tracking-tight text-zinc-900">
                   KitCreator
                 </span>
               </div>
@@ -62,16 +62,16 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 ref={closeRef}
                 onClick={onClose}
                 aria-label={t('nav.menu')}
-                className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <p className="mb-2 px-2 text-xs font-medium text-zinc-400">
               {t('drawer.navigate')}
             </p>
-            <nav className="flex flex-col gap-1.5">
+            <nav className="flex flex-col gap-1">
               {TOOLS.map((tool) => {
                 const Icon = TOOL_ICONS[tool.id]
                 return (
@@ -80,10 +80,10 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                     to={`/dashboard/${tool.id}`}
                     onClick={onClose}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                      `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                         isActive
-                          ? 'bg-brand-600 text-white'
-                          : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+                          ? 'bg-zinc-100 font-medium text-zinc-900'
+                          : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
                       }`
                     }
                   >
@@ -96,10 +96,10 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 to="/dashboard/settings"
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-brand-600 text-white'
-                      : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+                      ? 'bg-zinc-100 font-medium text-zinc-900'
+                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
                   }`
                 }
               >
@@ -108,9 +108,9 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
               </NavLink>
             </nav>
 
-            <div className="mt-auto space-y-3 border-t border-slate-800 pt-4">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-800 bg-surface px-3 py-1.5 text-xs font-semibold text-slate-300">
-                <Zap className="h-3.5 w-3.5 text-brand-400" />
+            <div className="mt-auto space-y-3 border-t border-zinc-200 pt-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-800">
+                <Zap className="h-3.5 w-3.5 text-zinc-500" />
                 {isSupabaseConfigured
                   ? t('nav.credits', { n: credits })
                   : t('nav.freeCredits', { n: credits, total: DAILY_LIMIT })}
@@ -132,13 +132,13 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                   onClose()
                   onSignOut()
                 }}
-                className="btn-ghost w-full !py-2.5 !text-sm !text-red-300 hover:!border-red-500/50 hover:!text-red-200"
+                className="btn-ghost w-full !py-2.5 !text-sm !text-red-600 hover:!border-red-200 hover:!bg-red-50"
               >
                 <LogOut className="h-4 w-4" />
                 {t('nav.logout')}
               </button>
 
-              <div className="flex items-center gap-2 pt-1 text-xs text-slate-500">
+              <div className="flex items-center gap-2 pt-1 text-xs text-zinc-400">
                 <User className="h-3.5 w-3.5" />
                 KitCreator
               </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Copy } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
@@ -7,56 +7,56 @@ import { useI18n } from '../i18n/LanguageContext.jsx'
 
 const markdownComponents = {
   h1: ({ children }) => (
-    <h1 className="mb-3 mt-5 break-words text-xl font-bold text-white first:mt-0">
+    <h1 className="mb-3 mt-5 break-words text-lg font-semibold text-zinc-900 first:mt-0">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="mb-2 mt-5 break-words text-lg font-bold text-white first:mt-0">
+    <h2 className="mb-2 mt-5 break-words text-base font-semibold text-zinc-900 first:mt-0">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="mb-2 mt-4 break-words text-base font-semibold text-white first:mt-0">
+    <h3 className="mb-2 mt-4 break-words text-sm font-semibold text-zinc-900 first:mt-0">
       {children}
     </h3>
   ),
   p: ({ children }) => (
-    <p className="my-3 break-words text-sm leading-relaxed text-slate-200 first:mt-0 last:mb-0">
+    <p className="my-3 break-words text-sm leading-relaxed text-zinc-700 first:mt-0 last:mb-0">
       {children}
     </p>
   ),
   strong: ({ children }) => (
-    <strong className="font-semibold text-white">{children}</strong>
+    <strong className="font-semibold text-zinc-900">{children}</strong>
   ),
-  em: ({ children }) => <em className="italic text-slate-300">{children}</em>,
+  em: ({ children }) => <em className="italic text-zinc-500">{children}</em>,
   ul: ({ children }) => (
-    <ul className="my-3 list-disc space-y-1.5 pl-5 marker:text-brand-400">
+    <ul className="my-3 list-disc space-y-1.5 pl-5 marker:text-brand-600">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="my-3 list-decimal space-y-1.5 pl-5 marker:text-brand-400">
+    <ol className="my-3 list-decimal space-y-1.5 pl-5 marker:text-brand-600">
       {children}
     </ol>
   ),
   li: ({ children }) => (
-    <li className="break-words pl-1 text-sm leading-relaxed text-slate-200">
+    <li className="break-words pl-1 text-sm leading-relaxed text-zinc-700">
       {children}
     </li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="my-3 border-l-2 border-brand-500 pl-4 italic text-slate-400">
+    <blockquote className="my-3 border-l-2 border-zinc-300 pl-4 italic text-zinc-500">
       {children}
     </blockquote>
   ),
   code: ({ inline, children }) =>
     inline ? (
-      <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[0.8em] text-brand-300">
+      <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[0.8em] text-brand-700">
         {children}
       </code>
     ) : (
-      <code className="block overflow-x-auto rounded-lg bg-slate-950/80 p-4 font-mono text-xs leading-relaxed text-slate-300">
+      <code className="block overflow-x-auto rounded-lg bg-zinc-50 p-4 font-mono text-xs leading-relaxed text-zinc-800">
         {children}
       </code>
     ),
@@ -66,12 +66,12 @@ const markdownComponents = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-brand-400 underline underline-offset-2 hover:text-brand-300"
+      className="text-brand-600 underline underline-offset-2 hover:text-brand-700"
     >
       {children}
     </a>
   ),
-  hr: () => <hr className="my-5 border-slate-800" />,
+  hr: () => <hr className="my-5 border-zinc-200" />,
 }
 
 function CopyButton({ text }) {
@@ -99,10 +99,10 @@ function CopyButton({ text }) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label={t('result.copy')}
-      className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+      className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
         copied
-          ? 'bg-green-500/15 text-green-400'
-          : 'bg-slate-800 text-slate-300 hover:bg-brand-600 hover:text-white'
+          ? 'bg-emerald-50 text-emerald-600'
+          : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
       }`}
     >
       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
@@ -121,7 +121,7 @@ function Celebration() {
           initial={{ opacity: 0.65, scale: 0.15 }}
           animate={{ opacity: 0, scale: ring === 0 ? 2.8 : 4.2 }}
           transition={{ duration: 0.7, delay: ring * 0.1, ease: 'easeOut' }}
-          className="absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-300/70"
+          className="absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-600/40"
         />
       ))}
       {particles.map((_, i) => {
@@ -138,7 +138,7 @@ function Celebration() {
             }}
             transition={{ duration: 0.95, delay: (i % 5) * 0.025, ease: 'easeOut' }}
             className={`absolute h-1.5 w-1.5 rounded-full ${
-              i % 3 === 0 ? 'bg-brand-300' : i % 3 === 1 ? 'bg-sky-300' : 'bg-white'
+              i % 3 === 0 ? 'bg-brand-500' : i % 3 === 1 ? 'bg-sky-400' : 'bg-zinc-400'
             }`}
           />
         )
@@ -156,11 +156,11 @@ export default function ResultCard({ title, content }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
       data-background-lock
-      className="relative w-full max-w-full overflow-hidden rounded-2xl border border-brand-500/20 bg-zinc-900/90 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.25)] sm:p-6"
+      className="relative w-full max-w-full overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6"
     >
       <Celebration />
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-4">
+        <h3 className="text-sm font-semibold text-zinc-900">
           {title ?? t('result.title')}
         </h3>
         <CopyButton text={content} />

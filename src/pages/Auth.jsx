@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   signIn,
@@ -18,8 +18,8 @@ export default function Auth() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  // Lien "réinitialiser le mot de passe" de Supabase : la session de
-  // récupération arrive dans l'URL (#access_token=...&type=recovery)
+  // Lien "rÃ©initialiser le mot de passe" de Supabase : la session de
+  // rÃ©cupÃ©ration arrive dans l'URL (#access_token=...&type=recovery)
   useEffect(() => {
     if (window.location.hash.includes('type=recovery')) {
       setMode('newpass')
@@ -65,22 +65,22 @@ export default function Auth() {
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-3">
-          <div className="rounded-xl bg-brand-600 px-3 py-1.5 text-xl font-black text-white">
+          <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-base font-bold text-white">
             KC
           </div>
-          <span className="text-2xl font-bold tracking-wide text-white">
+          <span className="text-xl font-semibold tracking-tight text-zinc-900">
             KitCreator
           </span>
         </Link>
 
         <div className="card">
-          <h1 className="text-xl font-bold text-white">
+          <h1 className="text-xl font-semibold text-zinc-900">
             {mode === 'login' && 'Log in'}
             {mode === 'signup' && 'Create your account'}
             {mode === 'forgot' && 'Reset your password'}
             {mode === 'newpass' && 'Choose a new password'}
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-zinc-500">
             {mode === 'login'
               ? 'Welcome back.'
               : mode === 'signup'
@@ -168,7 +168,7 @@ export default function Auth() {
                   setError('')
                   setInfo('')
                 }}
-                className="text-slate-400 underline-offset-2 hover:text-slate-200 hover:underline"
+                className="text-zinc-500 underline-offset-2 hover:text-zinc-700 hover:underline"
               >
                 Forgot password?
               </button>
@@ -178,9 +178,9 @@ export default function Auth() {
             <p className="mt-3 text-center text-xs">
               <button
                 onClick={() => setMode('login')}
-                className="text-slate-400 underline-offset-2 hover:text-slate-200 hover:underline"
+                className="text-zinc-500 underline-offset-2 hover:text-zinc-700 hover:underline"
               >
-                ← Back to login
+                â† Back to login
               </button>
             </p>
           )}
@@ -188,16 +188,16 @@ export default function Auth() {
           {(mode === 'login' || mode === 'signup') && (
             <>
               <div className="my-5 flex items-center gap-3">
-                <span className="h-px flex-1 bg-slate-800" />
-                <span className="text-xs text-slate-500">or</span>
-                <span className="h-px flex-1 bg-slate-800" />
+                <span className="h-px flex-1 bg-zinc-200" />
+                <span className="text-xs text-zinc-400">or</span>
+                <span className="h-px flex-1 bg-zinc-200" />
               </div>
 
               <button
                 onClick={() => signInWithGoogle().catch((err) => setError(err.message))}
                 disabled={!isSupabaseConfigured}
                 type="button"
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-700 bg-slate-800 py-2.5 font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-3 rounded-lg border border-zinc-200 bg-white py-2.5 font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -211,13 +211,13 @@ export default function Auth() {
           )}
 
           {mode !== 'forgot' && mode !== 'newpass' && (
-            <p className="mt-6 text-center text-sm text-slate-400">
+            <p className="mt-6 text-center text-sm text-zinc-500">
             {mode === 'login' ? (
               <>
                 No account yet?{' '}
                 <button
                   onClick={() => setMode('signup')}
-                  className="font-semibold text-brand-400 hover:text-brand-300"
+                  className="font-semibold text-brand-600 hover:text-brand-700"
                 >
                   Sign up
                 </button>
@@ -227,7 +227,7 @@ export default function Auth() {
                 Already registered?{' '}
                 <button
                   onClick={() => setMode('login')}
-                  className="font-semibold text-brand-400 hover:text-brand-300"
+                  className="font-semibold text-brand-600 hover:text-brand-700"
                 >
                   Log in
                 </button>

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+﻿import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
@@ -51,8 +51,8 @@ export default function ScriptWriter() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white">{t('tools.script')}</h2>
-        <p className="mt-1 text-sm text-slate-400">{t('tools.script.desc')}</p>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.script')}</h2>
+        <p className="mt-1 text-sm text-zinc-500">{t('tools.script.desc')}</p>
       </div>
 
       <form onSubmit={handleSubmit} data-background-lock className="card space-y-4">
@@ -88,11 +88,11 @@ export default function ScriptWriter() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="audience" className="label">{t('form.audience')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span></label>
+            <label htmlFor="audience" className="label">{t('form.audience')} <span className="normal-case tracking-normal text-zinc-400">({t('form.optional')})</span></label>
             <input id="audience" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder={t('form.audience.placeholder')} className="input" />
           </div>
           <div>
-            <label htmlFor="objective" className="label">{t('form.objective')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span></label>
+            <label htmlFor="objective" className="label">{t('form.objective')} <span className="normal-case tracking-normal text-zinc-400">({t('form.optional')})</span></label>
             <input id="objective" value={objective} onChange={(e) => setObjective(e.target.value)} placeholder={t('form.objective.placeholder')} className="input" />
           </div>
         </div>

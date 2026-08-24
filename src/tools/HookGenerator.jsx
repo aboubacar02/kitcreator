@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+﻿import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Sparkles } from 'lucide-react'
 import ResultCard from '../components/ResultCard.jsx'
@@ -49,14 +49,14 @@ export default function HookGenerator() {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/60 px-6 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
-        <div className="absolute -right-10 -top-14 h-40 w-40 rounded-full bg-brand-500/15 blur-3xl" />
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-sm">
+        
         <div className="relative">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-200">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
             <Sparkles className="h-3.5 w-3.5" /> AI creative studio
           </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white">{t('tools.hook')}</h2>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-400">{t('tools.hook.desc')}</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.hook')}</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-500">{t('tools.hook.desc')}</p>
         </div>
       </div>
 

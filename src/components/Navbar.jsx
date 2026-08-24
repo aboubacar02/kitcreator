@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Crown, LogOut, Menu, Zap } from 'lucide-react'
 import PricingModal from './PricingModal.jsx'
@@ -14,20 +14,20 @@ export default function Navbar({ credits, onSignOut }) {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-[72px] items-center justify-between gap-2 border-b border-white/[0.08] bg-ink/80 px-3 backdrop-blur-xl sm:px-6">
+      <header className="sticky top-0 z-30 flex h-[60px] items-center justify-between gap-2 border-b border-zinc-200 bg-white px-3 sm:px-6">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label={t('nav.menu')}
-            className="rounded-lg p-2 text-slate-300 transition hover:bg-slate-800 hover:text-white md:hidden"
+            className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 md:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
-          <Link to="/" className="flex shrink-0 items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-sm font-black text-white shadow-lg shadow-brand-500/25">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-sm font-bold text-white">
               K
             </div>
-            <h1 className="text-lg font-extrabold tracking-tight text-white">
+            <h1 className="text-base font-semibold tracking-tight text-zinc-900">
               KitCreator
             </h1>
           </Link>
@@ -40,9 +40,9 @@ export default function Navbar({ credits, onSignOut }) {
                 ? t('nav.credits', { n: credits })
                 : t('nav.freeCredits', { n: credits, total: DAILY_LIMIT })
             }
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-1.5 text-xs font-bold text-brand-200"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-800"
           >
-            <Zap className="h-3.5 w-3.5 text-brand-400" />
+            <Zap className="h-3.5 w-3.5 text-zinc-500" />
             {isSupabaseConfigured
               ? t('nav.credits', { n: credits })
               : t('nav.freeCredits', { n: credits, total: DAILY_LIMIT })}
@@ -51,17 +51,17 @@ export default function Navbar({ credits, onSignOut }) {
           <button
             onClick={() => setShowPricing(true)}
             aria-label={t('nav.upgrade')}
-            className="btn-primary !px-3 !py-1.5 !text-xs"
+            className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-zinc-800"
           >
-            <Crown className="h-4 w-4" />
-            <span className="hidden lg:inline">{t('nav.upgrade')}</span>
+            <span className="flex items-center gap-2"><Crown className="h-4 w-4" />
+            <span className="hidden lg:inline">{t('nav.upgrade')}</span></span>
           </button>
 
           <button
             onClick={onSignOut}
             aria-label={t('nav.logout')}
             title={t('nav.logout')}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg p-2 text-xs font-medium text-slate-400 transition hover:text-white"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg p-2 text-xs font-medium text-zinc-400 transition-colors hover:text-zinc-900"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden xl:inline">{t('nav.logout')}</span>

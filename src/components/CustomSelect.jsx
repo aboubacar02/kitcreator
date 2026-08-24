@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, ChevronDown } from 'lucide-react'
 
@@ -21,7 +21,7 @@ export default function CustomSelect({ label, options, value, onChange }) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         className={`input flex items-center justify-between text-left ${
-          open ? 'border-brand-500 ring-2 ring-brand-500/50' : ''
+          open ? 'border-zinc-400 ring-2 ring-zinc-200' : ''
         }`}
       >
         <span>{value}</span>
@@ -30,7 +30,7 @@ export default function CustomSelect({ label, options, value, onChange }) {
           transition={{ duration: 0.2 }}
           className="ml-2 shrink-0"
         >
-          <ChevronDown className="h-4 w-4 text-slate-400" />
+          <ChevronDown className="h-4 w-4 text-zinc-500" />
         </motion.span>
       </button>
 
@@ -41,7 +41,7 @@ export default function CustomSelect({ label, options, value, onChange }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-20 mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-slate-800 bg-slate-900 p-1 shadow-2xl shadow-black/50"
+            className="absolute z-20 mt-2 max-h-60 w-full overflow-y-auto rounded-lg border border-zinc-200 bg-white p-1 shadow-md"
           >
             {options.map((option) => (
               <li key={option}>
@@ -53,8 +53,8 @@ export default function CustomSelect({ label, options, value, onChange }) {
                   }}
                   className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition ${
                     option === value
-                      ? 'bg-brand-600/20 text-brand-300'
-                      : 'text-slate-300 hover:bg-brand-600/20 hover:text-brand-300'
+                      ? 'bg-zinc-100 font-medium text-zinc-900'
+                      : 'text-zinc-700 hover:bg-zinc-50'
                   }`}
                 >
                   {option}

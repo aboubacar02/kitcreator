@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+﻿import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
@@ -46,8 +46,8 @@ export default function HashtagFinder() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white">{t('tools.hashtag')}</h2>
-        <p className="mt-1 text-sm text-slate-400">{t('tools.hashtag.desc')}</p>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.hashtag')}</h2>
+        <p className="mt-1 text-sm text-zinc-500">{t('tools.hashtag.desc')}</p>
       </div>
 
       <form onSubmit={handleSubmit} data-background-lock className="card space-y-4">
@@ -65,9 +65,9 @@ export default function HashtagFinder() {
           />
         </div>
         <div>
-          <label htmlFor="keywords" className="label">{t('form.keywords')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span></label>
+          <label htmlFor="keywords" className="label">{t('form.keywords')} <span className="normal-case tracking-normal text-zinc-400">({t('form.optional')})</span></label>
           <input id="keywords" value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder={t('form.keywords.placeholder')} className="input" />
-          <p className="mt-2 text-xs text-slate-500">Sépare les idées par des virgules pour obtenir des hashtags plus précis.</p>
+          <p className="mt-2 text-xs text-zinc-400">SÃ©pare les idÃ©es par des virgules pour obtenir des hashtags plus prÃ©cis.</p>
         </div>
         <div>
           <label className="label">{t('form.platform')}</label>

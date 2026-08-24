@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { animate, motion } from 'framer-motion'
 import { isSupabaseConfigured, supabase } from '../services/supabase.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
@@ -66,14 +66,14 @@ export default function SocialProof() {
               ease: 'easeInOut',
               delay: index * 0.25,
             }}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#0b0f19] bg-gradient-to-br text-xs font-bold text-white ${avatar.gradient}`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-zinc-100 text-xs font-bold text-white ${avatar.gradient}`}
           >
             {avatar.initials}
           </motion.div>
         ))}
       </div>
-      <p className="max-w-xs text-center text-sm text-slate-400 sm:max-w-none sm:text-left">
-        <span className="font-bold text-white">
+      <p className="max-w-xs text-center text-sm text-zinc-500 sm:max-w-none sm:text-left">
+        <span className="font-semibold text-zinc-900">
           <Counter to={count ?? FALLBACK_COUNT} locale={LOCALES[lang] ?? 'en-US'} />
         </span>{' '}
         {t('social.proof')}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
 import { Crown, Languages, LogOut, User, Zap } from 'lucide-react'
 import PricingModal from '../components/PricingModal.jsx'
@@ -14,10 +14,10 @@ import { useI18n } from '../i18n/LanguageContext.jsx'
 function SectionTitle({ icon: Icon, children }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-brand-500/30 bg-brand-600/15 text-brand-300">
+      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
         <Icon className="h-4 w-4" />
       </div>
-      <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+      <h3 className="text-sm font-semibold text-zinc-900">
         {children}
       </h3>
     </div>
@@ -40,22 +40,22 @@ export default function Settings() {
   return (
     <div className="mx-auto max-w-2xl space-y-10">
       <div>
-        <h2 className="text-2xl font-bold text-white">{t('settings.title')}</h2>
-        <p className="mt-1 text-sm text-slate-400">{t('settings.subtitle')}</p>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('settings.title')}</h2>
+        <p className="mt-1 text-sm text-zinc-500">{t('settings.subtitle')}</p>
       </div>
 
       {/* Compte */}
       <section className="space-y-4">
         <SectionTitle icon={User}>{t('settings.section.account')}</SectionTitle>
         <div className="card flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-brand-500/50 bg-brand-600/25 text-lg font-bold text-brand-300">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-lg font-semibold text-zinc-600">
             {initial}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-white">
+            <p className="truncate text-sm font-semibold text-zinc-900">
               {user?.email}
             </p>
-            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-500">
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
@@ -66,16 +66,16 @@ export default function Settings() {
         </div>
       </section>
 
-      {/* Préférences */}
+      {/* PrÃ©fÃ©rences */}
       <section className="space-y-4">
         <SectionTitle icon={Languages}>
           {t('settings.section.preferences')}
         </SectionTitle>
         <div className="card space-y-3">
-          <p className="text-sm font-semibold text-slate-200">
+          <p className="text-sm font-semibold text-zinc-700">
             {t('settings.language')}
           </p>
-          <p className="text-xs leading-relaxed text-slate-500">
+          <p className="text-xs leading-relaxed text-zinc-400">
             {t('settings.languageHint')}
           </p>
           <div className="max-w-xs pt-1">
@@ -102,17 +102,17 @@ export default function Settings() {
         </SectionTitle>
         <div className="card flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-500/30 bg-brand-600/15 text-brand-300">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500">
               <Zap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-2xl font-extrabold leading-tight text-white">
+              <p className="text-2xl font-semibold leading-tight text-zinc-900">
                 {credits}
-                <span className="ml-2 align-middle text-sm font-medium text-slate-400">
-                  {t('settings.credits')} · {t('settings.freePlan').split(' — ')[0]}
+                <span className="ml-2 align-middle text-sm font-medium text-zinc-500">
+                  {t('settings.credits')} Â· {t('settings.freePlan').split(' â€” ')[0]}
                 </span>
               </p>
-              <p className="text-xs text-slate-500">{t('settings.upgradeHint')}</p>
+              <p className="text-xs text-zinc-400">{t('settings.upgradeHint')}</p>
             </div>
           </div>
           <button
@@ -136,7 +136,7 @@ export default function Settings() {
             <LogOut className="h-4 w-4" />
             {t('settings.logout')}
           </span>
-          <span className="mt-0.5 block pl-[26px] text-xs text-slate-500">
+          <span className="mt-0.5 block pl-[26px] text-xs text-zinc-400">
             {t('settings.logoutHint')}
           </span>
         </button>

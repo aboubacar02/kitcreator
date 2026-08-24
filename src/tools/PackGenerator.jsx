@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+﻿import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Check, Loader2, Package, Save } from 'lucide-react'
 import CopyButton from '../components/CopyButton.jsx'
@@ -13,7 +13,7 @@ import { friendlyError } from '../i18n/strings.js'
 function SectionTitle({ icon, children, action }) {
   return (
     <div className="mb-2 flex items-center justify-between gap-3">
-      <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-300">
+      <h4 className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
         <span aria-hidden>{icon}</span>
         {children}
       </h4>
@@ -80,14 +80,14 @@ export default function PackGenerator() {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/60 px-6 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
-        <div className="absolute -right-10 -top-14 h-40 w-40 rounded-full bg-brand-500/15 blur-3xl" />
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-sm">
+        
         <div className="relative">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-200">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
             <Package className="h-3.5 w-3.5" /> All-in-one
           </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white">{t('tools.pack')}</h2>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-400">{t('tools.pack.desc')}</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.pack')}</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-500">{t('tools.pack.desc')}</p>
         </div>
       </div>
 
@@ -112,7 +112,7 @@ export default function PackGenerator() {
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="audience" className="label">
-              {t('form.audience')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span>
+              {t('form.audience')} <span className="normal-case tracking-normal text-zinc-400">({t('form.optional')})</span>
             </label>
             <input
               id="audience"
@@ -125,7 +125,7 @@ export default function PackGenerator() {
           </div>
           <div>
             <label htmlFor="objective" className="label">
-              {t('form.objective')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span>
+              {t('form.objective')} <span className="normal-case tracking-normal text-zinc-400">({t('form.optional')})</span>
             </label>
             <input
               id="objective"
@@ -153,13 +153,13 @@ export default function PackGenerator() {
 
       {result && !loading && (
         <div ref={resultRef} data-background-lock className="card scroll-mt-24 space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-4">
-            <h3 className="text-lg font-bold text-white">{t('tools.pack')}</h3>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 pb-4">
+            <h3 className="text-base font-semibold text-zinc-900">{t('tools.pack')}</h3>
             <button
               type="button"
               onClick={handleSave}
               disabled={!isSupabaseConfigured || !user || saveState === 'saving' || saveState === 'done'}
-              className="inline-flex items-center gap-2 rounded-xl border border-brand-500/30 bg-brand-500/10 px-3.5 py-2 text-sm font-semibold text-brand-200 transition hover:bg-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-brand-500/30 bg-brand-500/10 px-3.5 py-2 text-sm font-semibold text-blue-700 transition hover:bg-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saveState === 'saving' ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -173,16 +173,16 @@ export default function PackGenerator() {
           </div>
 
           <section>
-            <SectionTitle icon="🎣">{t('pack.hooks')}</SectionTitle>
+            <SectionTitle icon="ðŸŽ£">{t('pack.hooks')}</SectionTitle>
             <ul className="space-y-2">
               {result.hooks.map((hook, i) => (
-                <li key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3">
-                  <p className="font-medium leading-snug text-white">
-                    <span className="mr-2 text-brand-300">{i + 1}.</span>
+                <li key={i} className="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3">
+                  <p className="font-medium leading-snug text-zinc-900">
+                    <span className="mr-2 text-zinc-400">{i + 1}.</span>
                     {hook.text}
                   </p>
                   {hook.visual && (
-                    <p className="mt-1.5 text-xs text-brand-200/80">🎬 {hook.visual}</p>
+                    <p className="mt-1.5 text-xs text-zinc-400">ðŸŽ¬ {hook.visual}</p>
                   )}
                 </li>
               ))}
@@ -191,50 +191,50 @@ export default function PackGenerator() {
 
           <section>
             <SectionTitle
-              icon="🎬"
+              icon="ðŸŽ¬"
               action={<CopyButton value={`${result.script.intro}\n\n${result.script.body}\n\n${result.script.cta}`} />}
             >
               {t('pack.script')}
             </SectionTitle>
-            <div className="space-y-3 rounded-xl border border-white/[0.06] bg-white/[0.03] p-4">
-              <p className="leading-relaxed text-slate-200">
-                <span className="font-semibold text-slate-400">[0-5s]</span> {result.script.intro}
+            <div className="space-y-3 rounded-xl border border-zinc-100 bg-zinc-50 p-4">
+              <p className="leading-relaxed text-zinc-700">
+                <span className="font-semibold text-zinc-500">[0-5s]</span> {result.script.intro}
               </p>
-              <p className="leading-relaxed text-slate-200">
-                <span className="font-semibold text-slate-400">[5-45s]</span> {result.script.body}
+              <p className="leading-relaxed text-zinc-700">
+                <span className="font-semibold text-zinc-500">[5-45s]</span> {result.script.body}
               </p>
               {result.script.broll_ideas.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-1">
                   {result.script.broll_ideas.map((idea, i) => (
                     <span
                       key={i}
-                      className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-xs text-slate-300"
+                      className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs text-zinc-700"
                     >
-                      🎥 {idea}
+                      ðŸŽ¥ {idea}
                     </span>
                   ))}
                 </div>
               )}
-              <p className="leading-relaxed text-slate-200">
-                <span className="font-semibold text-slate-400">[45-60s]</span> {result.script.cta}
+              <p className="leading-relaxed text-zinc-700">
+                <span className="font-semibold text-zinc-500">[45-60s]</span> {result.script.cta}
               </p>
             </div>
           </section>
 
           <div className="grid gap-6 md:grid-cols-2">
             <section>
-              <SectionTitle icon="📌" action={<CopyButton value={result.seo_title} />}>
+              <SectionTitle icon="ðŸ“Œ" action={<CopyButton value={result.seo_title} />}>
                 {t('pack.seoTitle')}
               </SectionTitle>
-              <p className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 leading-relaxed text-white">
+              <p className="rounded-lg border border-zinc-100 bg-zinc-50 px-4 py-3 leading-relaxed text-zinc-900">
                 {result.seo_title}
               </p>
             </section>
             <section>
-              <SectionTitle icon="#️⃣" action={<CopyButton value={hashtagsLine} />}>
+              <SectionTitle icon="#ï¸âƒ£" action={<CopyButton value={hashtagsLine} />}>
                 {t('pack.hashtags')}
               </SectionTitle>
-              <p className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-sm leading-relaxed text-brand-200">
+              <p className="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 text-sm leading-relaxed text-brand-700">
                 {hashtagsLine}
               </p>
             </section>
@@ -242,8 +242,8 @@ export default function PackGenerator() {
 
           {result.next_ideas.length > 0 && (
             <section>
-              <SectionTitle icon="💡">{t('pack.nextIdeas')}</SectionTitle>
-              <ol className="list-inside list-decimal space-y-1.5 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-slate-200">
+              <SectionTitle icon="ðŸ’¡">{t('pack.nextIdeas')}</SectionTitle>
+              <ol className="list-inside list-decimal space-y-1.5 rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 text-zinc-700">
                 {result.next_ideas.map((idea, i) => (
                   <li key={i}>{idea}</li>
                 ))}

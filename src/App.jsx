@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+﻿import { Navigate, Route, Routes } from 'react-router-dom'
 import AnimatedBackground from './components/AnimatedBackground.jsx'
 import LandingPage from './pages/LandingPage.jsx'
 import Auth from './pages/Auth.jsx'

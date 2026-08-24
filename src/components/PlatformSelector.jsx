@@ -1,23 +1,23 @@
-import { FaTiktok, FaYoutube, FaInstagram } from 'react-icons/fa'
+﻿import { FaTiktok, FaYoutube, FaInstagram } from 'react-icons/fa'
 
 const platforms = [
   {
     id: 'TikTok',
     name: 'TikTok',
     icon: FaTiktok,
-    activeColor: 'border-pink-500 bg-pink-500/10 text-pink-400',
+    activeColor: 'border-pink-500 bg-pink-50 text-pink-600',
   },
   {
     id: 'Instagram Reels',
     name: 'Reels',
     icon: FaInstagram,
-    activeColor: 'border-purple-500 bg-purple-500/10 text-purple-400',
+    activeColor: 'border-purple-500 bg-purple-50 text-purple-600',
   },
   {
     id: 'YouTube Shorts',
     name: 'Shorts',
     icon: FaYoutube,
-    activeColor: 'border-red-500 bg-red-500/10 text-red-400',
+    activeColor: 'border-red-500 bg-red-50 text-red-600',
   },
 ]
 
@@ -32,10 +32,10 @@ export default function PlatformSelector({ value, onChange }) {
             key={p.id}
             type="button"
             onClick={() => onChange(p.id)}
-            className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 transform active:scale-95 ${
+            className={`flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
               isSelected
-                ? `${p.activeColor} border-2 shadow-lg shadow-brand-500/10`
-                : 'border border-white/10 bg-black/15 text-slate-400 hover:border-white/20 hover:bg-white/[0.04] hover:text-white'
+                ? `${p.activeColor} border-2`
+                : 'border border-zinc-200 bg-white text-zinc-500 hover:border-zinc-300 hover:text-zinc-900'
             }`}
           >
             <Icon

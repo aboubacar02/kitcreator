@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { TOOLS } from '../services/aiEngine.js'
@@ -30,11 +30,11 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-brand-600 px-2.5 py-1 text-lg font-black text-white">
-            KC
+        <div className="flex items-center gap-2.5">
+          <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-sm font-bold text-white">
+            K
           </div>
-          <span className="text-lg font-bold tracking-wide text-white">
+          <span className="text-base font-semibold tracking-tight text-zinc-900">
             KitCreator
           </span>
         </div>
@@ -45,8 +45,6 @@ export default function LandingPage() {
 
       <main className="space-y-8">
         <section className="relative overflow-hidden">
-          <div className="pointer-events-none absolute left-1/2 top-1/4 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-brand-600/20 blur-[120px]" />
-          <div className="pointer-events-none absolute left-1/3 top-1/3 h-[300px] w-[300px] rounded-full bg-blue-600/15 blur-[100px]" />
           <motion.div
             variants={container}
             initial="hidden"
@@ -55,7 +53,7 @@ export default function LandingPage() {
           >
             <motion.h1
               variants={item}
-              className="text-gradient mt-6 text-4xl font-extrabold tracking-tight sm:text-6xl"
+              className="mt-6 text-4xl font-semibold tracking-tight text-zinc-900 sm:text-6xl"
             >
               {t('landing.heroTitle1')}
               <br />
@@ -63,7 +61,7 @@ export default function LandingPage() {
             </motion.h1>
             <motion.p
               variants={item}
-              className="mx-auto mt-6 max-w-2xl text-lg text-slate-400"
+              className="mx-auto mt-6 max-w-2xl text-lg text-zinc-500"
             >
               {t('landing.subtitle')}
             </motion.p>
@@ -73,7 +71,7 @@ export default function LandingPage() {
             >
               <Link
                 to="/auth"
-                className="btn-primary btn-shimmer !px-8 !py-3 !text-base"
+                className="btn-primary !px-8 !py-3 !text-base"
               >
                 {t('landing.ctaTry')}
               </Link>
@@ -81,7 +79,7 @@ export default function LandingPage() {
                 {t('landing.ctaExplore')}
               </a>
             </motion.div>
-            <motion.p variants={item} className="mt-4 text-xs text-slate-500">
+            <motion.p variants={item} className="mt-4 text-xs text-zinc-400">
               {t('landing.note')}
             </motion.p>
             <motion.div variants={item} className="mt-10">
@@ -91,7 +89,7 @@ export default function LandingPage() {
         </section>
 
         <section id="tools" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-          <h2 className="text-gradient text-center text-3xl font-bold sm:text-4xl">
+          <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
             {t('landing.toolsTitle')}
           </h2>
           <motion.div
@@ -107,20 +105,20 @@ export default function LandingPage() {
                 variants={item}
                 whileHover={{ y: -8 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="card transition-colors duration-300 hover:border-brand-500/50 hover:shadow-brand-600/20"
+                className="card transition-colors duration-300 hover:border-zinc-300"
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-brand-500/30 bg-brand-600/20 text-brand-300 backdrop-blur-sm">
-                  <span className="text-lg font-black">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-sm font-bold text-zinc-600">
+                  <span>
                     {TOOL_INITIALS[tool.id]}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-base font-semibold text-zinc-900">
                   {t(`tools.${tool.id}`)}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                <p className="mt-2 text-sm leading-relaxed text-zinc-500">
                   {t(`tools.${tool.id}.desc`)}
                 </p>
-                <p className="mt-4 text-xs font-semibold text-brand-400">
+                <p className="mt-4 text-xs font-medium text-brand-600">
                   {t('landing.creditPerRun', {
                     n: tool.credits,
                     n_s: tool.credits > 1 ? 's' : '',
@@ -131,9 +129,9 @@ export default function LandingPage() {
           </motion.div>
         </section>
 
-        <section className="border-t border-slate-800/60 bg-surface/40 py-24">
+        <section className="border-t border-zinc-100 bg-white py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-gradient text-center text-3xl font-bold sm:text-4xl">
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
               {t('landing.whyTitle')}
             </h2>
             <motion.div
@@ -145,11 +143,11 @@ export default function LandingPage() {
             >
               {features.map(({ key }) => (
                 <motion.div key={key} variants={item}>
-                  <h3 className="flex items-center gap-2 text-lg font-bold text-white">
-                    <ArrowRight className="h-5 w-5 shrink-0 text-brand-400" />
+                  <h3 className="flex items-center gap-2 text-base font-semibold text-zinc-900">
+                    <ArrowRight className="h-5 w-5 shrink-0 text-brand-600" />
                     {t(`landing.${key}.t`)}
                   </h3>
-                  <p className="mt-2 pl-7 text-sm leading-relaxed text-slate-400">
+                  <p className="mt-2 pl-7 text-sm leading-relaxed text-zinc-500">
                     {t(`landing.${key}.d`)}
                   </p>
                 </motion.div>
@@ -159,17 +157,17 @@ export default function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-4xl px-4 py-28 text-center sm:px-6">
-          <h2 className="text-gradient text-3xl font-bold sm:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
             {t('landing.finalTitle')}
           </h2>
-          <p className="mt-4 text-slate-400">{t('landing.finalText')}</p>
-          <Link to="/auth" className="btn-primary btn-shimmer mt-10 !px-10 !py-3 !text-base">
+          <p className="mt-4 text-zinc-500">{t('landing.finalText')}</p>
+          <Link to="/auth" className="btn-primary mt-10 !px-10 !py-3 !text-base">
             {t('landing.finalCta')}
           </Link>
         </section>
       </main>
 
-      <footer className="border-t border-slate-800 py-8 text-center text-sm text-slate-500">
+      <footer className="border-t border-zinc-200 py-8 text-center text-sm text-zinc-400">
         {t('landing.rights', { year: new Date().getFullYear() })}
       </footer>
     </div>

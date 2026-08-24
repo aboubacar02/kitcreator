@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Bot, Check, Loader2, Send, Trash2 } from 'lucide-react'
 import { AGENT_COST, sendAgentMessage } from '../services/aiEngine.js'
@@ -68,8 +68,8 @@ function ProfilePanel() {
 
   return (
     <details data-background-lock className="card">
-      <summary className="cursor-pointer select-none text-sm font-bold uppercase tracking-wider text-slate-300">
-        🧠 {t('profile.title')}
+      <summary className="cursor-pointer select-none text-sm font-semibold text-zinc-900">
+        ðŸ§  {t('profile.title')}
       </summary>
       <form onSubmit={handleSave} className="mt-4 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -99,7 +99,7 @@ function ProfilePanel() {
         </div>
         <button type="submit"
           disabled={!isSupabaseConfigured || !user || loading || saveState === 'saving'}
-          className="inline-flex items-center gap-2 rounded-xl border border-brand-500/30 bg-brand-500/10 px-3.5 py-2 text-sm font-semibold text-brand-200 transition hover:bg-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50">
+          className="inline-flex items-center gap-2 rounded-xl border border-brand-500/30 bg-brand-500/10 px-3.5 py-2 text-sm font-semibold text-blue-700 transition hover:bg-brand-500/20 disabled:cursor-not-allowed disabled:opacity-50">
           {saveState === 'saving' ? <Loader2 className="h-4 w-4 animate-spin" />
             : saveState === 'done' ? <Check className="h-4 w-4 text-emerald-400" /> : null}
           {saveState === 'done' ? t('profile.saved') : t('profile.save')}
@@ -122,7 +122,7 @@ export default function KitBot() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, sending])
 
-  // Mémoire : on recharge les 20 derniers échanges au montage
+  // MÃ©moire : on recharge les 20 derniers Ã©changes au montage
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase || !user) return
     let cancelled = false
@@ -188,16 +188,16 @@ export default function KitBot() {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/60 px-6 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
-        <div className="absolute -right-10 -top-14 h-40 w-40 rounded-full bg-brand-500/15 blur-3xl" />
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-sm">
+        
         <div className="relative flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-brand-500/30 bg-brand-500/15 text-brand-300">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
             <Bot className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white">KitBot</h2>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-400">{t('tools.kitbot.desc')}</p>
-            <p className="mt-1 text-xs font-medium text-brand-200/80">{t('chat.costHint')}</p>
+            <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">KitBot</h2>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-500">{t('tools.kitbot.desc')}</p>
+            <p className="mt-1 text-xs font-medium text-zinc-400">{t('chat.costHint')}</p>
           </div>
         </div>
       </div>
@@ -211,12 +211,12 @@ export default function KitBot() {
             onClick={clearHistory}
             title={t('chat.clear')}
             aria-label={t('chat.clear')}
-            className="absolute right-3 top-3 rounded-lg p-1.5 text-slate-500 transition hover:bg-white/[0.06] hover:text-slate-300"
+            className="absolute right-3 top-3 rounded-lg p-1.5 text-zinc-400 transition hover:bg-zinc-50 hover:text-zinc-700"
           >
             <Trash2 className="h-4 w-4" />
           </button>
         )}
-        <div className="max-w-[85%] self-start rounded-2xl rounded-bl-sm border border-white/[0.06] bg-white/[0.04] px-4 py-3 text-sm leading-relaxed text-slate-200">
+        <div className="max-w-[85%] self-start rounded-2xl rounded-bl-sm border border-zinc-100 bg-zinc-50 px-4 py-3 text-sm leading-relaxed text-zinc-700">
           {t('chat.welcome')}
         </div>
         {messages.map((m, i) => (
@@ -224,15 +224,15 @@ export default function KitBot() {
             key={i}
             className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
               m.role === 'user'
-                ? 'self-end rounded-br-sm bg-brand-500 font-medium text-white'
-                : 'self-start rounded-bl-sm border border-white/[0.06] bg-white/[0.04] text-slate-200'
+                ? 'self-end rounded-br-sm bg-zinc-900 font-medium text-white'
+                : 'self-start rounded-bl-sm border border-zinc-100 bg-zinc-50 text-zinc-700'
             }`}
           >
             {m.content}
           </div>
         ))}
         {sending && (
-          <div className="flex items-center gap-2 self-start text-xs font-medium text-slate-400">
+          <div className="flex items-center gap-2 self-start text-xs font-medium text-zinc-500">
             <Loader2 className="h-3.5 w-3.5 animate-spin" /> {t('chat.thinking')}
           </div>
         )}
@@ -258,7 +258,7 @@ export default function KitBot() {
           <button
             type="submit"
             disabled={sending || !input.trim()}
-            className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-500 text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-zinc-900 text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={t('chat.send')}
           >
             {sending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}

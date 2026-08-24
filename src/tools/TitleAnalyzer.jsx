@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+﻿import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import ResultCard from '../components/ResultCard.jsx'
 import GenerateButton from '../components/GenerateButton.jsx'
@@ -43,8 +43,8 @@ export default function TitleAnalyzer() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white">{t('tools.title')}</h2>
-        <p className="mt-1 text-sm text-slate-400">{t('tools.title.desc')}</p>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.title')}</h2>
+        <p className="mt-1 text-sm text-zinc-500">{t('tools.title.desc')}</p>
       </div>
 
       <form onSubmit={handleSubmit} data-background-lock className="card space-y-4">
