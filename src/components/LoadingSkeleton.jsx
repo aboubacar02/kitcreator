@@ -12,7 +12,7 @@ export default function LoadingSkeleton() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduceMotion ? 0 : 0.32 }}
-      className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-6"
+      className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-5 shadow-md sm:p-6"
       role="status"
       aria-live="polite"
     >

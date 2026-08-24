@@ -80,7 +80,7 @@ export default function PackGenerator() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-sm">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
         
         <div className="relative">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">

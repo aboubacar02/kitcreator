@@ -439,7 +439,7 @@ export default function Workspace() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-sm">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
         
         <div className="relative flex items-start justify-between gap-4">
           <div>

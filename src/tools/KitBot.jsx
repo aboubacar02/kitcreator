@@ -188,7 +188,7 @@ export default function KitBot() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-sm">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
         
         <div className="relative flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
