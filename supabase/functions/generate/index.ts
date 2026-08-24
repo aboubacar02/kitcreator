@@ -24,6 +24,7 @@ import {
   json,
   requireAuth,
   generateWithProviders,
+  logUsage,
 } from '../_shared/ai.ts'
 
 // ------------------------------------------------------------
@@ -182,6 +183,7 @@ Deno.serve(async (req: Request) => {
       if (!result || (typeof result === 'string' && !result.trim())) {
         throw new Error('empty generation')
       }
+      logUsage(userClient, user.id, tool, language)
       return json(req, 200, {
         ok: true,
         result,

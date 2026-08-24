@@ -65,8 +65,8 @@ export default function HashtagFinder() {
           />
         </div>
         <div>
-          <label htmlFor="keywords" className="label">Mots-clés à inclure <span className="normal-case tracking-normal text-slate-500">(optionnel)</span></label>
-          <input id="keywords" value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder="Ex. routine du matin, Paris, productivité…" className="input" />
+          <label htmlFor="keywords" className="label">{t('form.keywords')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span></label>
+          <input id="keywords" value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder={t('form.keywords.placeholder')} className="input" />
           <p className="mt-2 text-xs text-slate-500">Sépare les idées par des virgules pour obtenir des hashtags plus précis.</p>
         </div>
         <div>

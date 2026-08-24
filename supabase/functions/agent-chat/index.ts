@@ -16,6 +16,7 @@ import {
   json,
   requireAuth,
   generateWithProviders,
+  logUsage,
   type ChatMessage,
 } from '../_shared/ai.ts'
 import { parseStructuredPack } from '../../../src/prompts/validators.js'
@@ -189,6 +190,7 @@ Deno.serve(async (req: Request) => {
       if (!reply.trim()) {
         throw new Error('empty generation')
       }
+      logUsage(userClient, user.id, 'kitbot', language)
       return json(req, 200, {
         ok: true,
         reply,

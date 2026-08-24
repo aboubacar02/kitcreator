@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Bot, Check, Loader2, Send } from 'lucide-react'
+import { Bot, Check, Loader2, Send, Trash2 } from 'lucide-react'
 import { AGENT_COST, sendAgentMessage } from '../services/aiEngine.js'
 import { supabase, isSupabaseConfigured } from '../services/supabase.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
@@ -110,7 +110,7 @@ function ProfilePanel() {
 }
 
 export default function KitBot() {
-  const { refreshCredits } = useOutletContext()
+  const { refreshCredits, user } = useOutletContext()
   const { t } = useI18n()
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -121,6 +121,49 @@ export default function KitBot() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, sending])
+
+  // Mémoire : on recharge les 20 derniers échanges au montage
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase || !user) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const { data } = await supabase
+          .from('chat_messages')
+          .select('role, content')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(20)
+        if (!cancelled && data?.length) {
+          setMessages(data.reverse())
+        }
+      } catch {
+        /* pas d'historique -> chat vierge */
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [user])
+
+  async function clearHistory() {
+    setMessages([])
+    setError('')
+    if (isSupabaseConfigured && supabase && user) {
+      await supabase.from('chat_messages').delete().eq('user_id', user.id)
+    }
+  }
+
+  function persistMessages(userText, assistantText) {
+    if (!isSupabaseConfigured || !supabase || !user) return
+    supabase
+      .from('chat_messages')
+      .insert([
+        { user_id: user.id, role: 'user', content: userText },
+        { user_id: user.id, role: 'assistant', content: assistantText },
+      ])
+      .then(null, () => {})
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -134,6 +177,7 @@ export default function KitBot() {
     try {
       const reply = await sendAgentMessage(message, history)
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }])
+      persistMessages(message, reply)
       await refreshCredits('kitbot')
     } catch (err) {
       setError(friendlyError(err, t))
@@ -160,7 +204,18 @@ export default function KitBot() {
 
       <ProfilePanel />
 
-      <div data-background-lock className="card flex max-h-[52vh] min-h-[320px] flex-col gap-3 overflow-y-auto">
+      <div data-background-lock className="card relative flex max-h-[52vh] min-h-[320px] flex-col gap-3 overflow-y-auto">
+        {messages.length > 0 && (
+          <button
+            type="button"
+            onClick={clearHistory}
+            title={t('chat.clear')}
+            aria-label={t('chat.clear')}
+            className="absolute right-3 top-3 rounded-lg p-1.5 text-slate-500 transition hover:bg-white/[0.06] hover:text-slate-300"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
         <div className="max-w-[85%] self-start rounded-2xl rounded-bl-sm border border-white/[0.06] bg-white/[0.04] px-4 py-3 text-sm leading-relaxed text-slate-200">
           {t('chat.welcome')}
         </div>

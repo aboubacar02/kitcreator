@@ -371,3 +371,54 @@ create index if not exists saved_projects_user_status_idx
 create unique index if not exists uq_briefing_week
   on public.saved_projects (user_id, (content->>'week_start'))
   where type = 'briefing';
+-- ============================================================
+-- 11. TELEMETRIE MINIMALE : quel outil est utilise, quand.
+--     Insertion par les Edge Functions (JWT utilisateur) ; lecture
+--     agregee reservee a l'exploitation (pas de select pour le client).
+-- ============================================================
+create table if not exists public.usage_events (
+  id bigint generated always as identity primary key,
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  tool text not null,
+  language text not null default 'fr',
+  created_at timestamptz not null default timezone('utc'::text, now())
+);
+
+create index if not exists usage_events_tool_idx
+  on public.usage_events (tool, created_at desc);
+create index if not exists usage_events_user_idx
+  on public.usage_events (user_id, created_at desc);
+
+alter table public.usage_events enable row level security;
+
+drop policy if exists "insert own usage events" on public.usage_events;
+create policy "insert own usage events" on public.usage_events
+  for insert to authenticated with check (auth.uid() = user_id);
+
+-- ============================================================
+-- 12. MEMOIRE DE CHAT KITBOT : l'agent retrouve la conversation.
+-- ============================================================
+create table if not exists public.chat_messages (
+  id bigint generated always as identity primary key,
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  role text not null check (role in ('user','assistant')),
+  content text not null,
+  created_at timestamptz not null default timezone('utc'::text, now())
+);
+
+create index if not exists chat_messages_user_idx
+  on public.chat_messages (user_id, created_at desc);
+
+alter table public.chat_messages enable row level security;
+
+drop policy if exists "select own chat messages" on public.chat_messages;
+create policy "select own chat messages" on public.chat_messages
+  for select to authenticated using (auth.uid() = user_id);
+
+drop policy if exists "insert own chat messages" on public.chat_messages;
+create policy "insert own chat messages" on public.chat_messages
+  for insert to authenticated with check (auth.uid() = user_id);
+
+drop policy if exists "delete own chat messages" on public.chat_messages;
+create policy "delete own chat messages" on public.chat_messages
+  for delete to authenticated using (auth.uid() = user_id);

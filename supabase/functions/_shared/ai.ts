@@ -191,6 +191,24 @@ export interface ChatMessage {
   content: string
 }
 
+// Télémétrie minimale : une ligne par génération réussie.
+// Best-effort : ne doit JAMAIS faire échouer la requête principale.
+export async function logUsage(
+  userClient: ReturnType<typeof createClient>,
+  userId: string,
+  tool: string,
+  language = 'fr',
+): Promise<void> {
+  try {
+    const { error } = await userClient
+      .from('usage_events')
+      .insert({ user_id: userId, tool, language })
+    if (error) console.error('[usage] log rejected:', error.message)
+  } catch (err) {
+    console.error('[usage] log failed:', err)
+  }
+}
+
 export async function generateWithProviders(
   prompt: string,
   systemContent: string,

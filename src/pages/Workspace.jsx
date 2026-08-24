@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import {
   CheckCircle2,
+  Download,
   Eye,
   EyeOff,
   FolderKanban,
@@ -387,6 +388,48 @@ export default function Workspace() {
     }
   }
 
+  // Export .txt : dump récursif lisible de tout le contenu sauvegardé
+  function dumpValue(value, indent = '') {
+    if (value == null) return ''
+    if (typeof value === 'string') return value
+    if (Array.isArray(value)) {
+      return value.map((v) => `${indent}- ${dumpValue(v).trimStart()}`).join('\n')
+    }
+    return Object.entries(value)
+      .map(([key, v]) => {
+        const label = key.replace(/_/g, ' ')
+        if (v != null && typeof v === 'object') {
+          return `\n${indent}${label.toUpperCase()}\n${dumpValue(v, indent + '  ')}`
+        }
+        return `${indent}${label}: ${v}`
+      })
+      .join('\n')
+  }
+
+  function exportAll() {
+    const blocks = projects.map((p) =>
+      [
+        '='.repeat(52),
+        p.title || '(?)',
+        [p.platform, p.type, p.status, p.topic].filter(Boolean).join(' · '),
+        '',
+        dumpValue(p.content),
+        '',
+      ].join('\n'),
+    )
+    const blob = new Blob([`KitCreator — Workspace\n\n${blocks.join('\n')}`], {
+      type: 'text/plain;charset=utf-8',
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `kitcreator-workspace-${new Date().toISOString().slice(0, 10)}.txt`
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(url)
+  }
+
   const c = counts(projects)
   const visible =
     tab === 'all' ? projects
@@ -408,6 +451,15 @@ export default function Workspace() {
               <p className="mt-2 text-sm text-slate-400">{c.all} {t('ws.items')}</p>
             )}
           </div>
+          {!loading && !error && projects.length > 0 && (
+            <button
+              type="button"
+              onClick={exportAll}
+              className="inline-flex shrink-0 items-center gap-2 self-start rounded-xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/[0.08]"
+            >
+              <Download className="h-4 w-4" /> {t('ws.exportAll')}
+            </button>
+          )}
         </div>
       </div>
 

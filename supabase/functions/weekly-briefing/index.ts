@@ -17,6 +17,7 @@ import {
   json,
   requireAuth,
   generateWithProviders,
+  logUsage,
 } from '../_shared/ai.ts'
 
 function currentWeekStart(): string {
@@ -121,6 +122,8 @@ Deno.serve(async (req: Request) => {
     if (!ideas.trim()) {
       return json(req, 502, { error: 'generic' })
     }
+
+    logUsage(userClient, user.id, 'briefing', language)
 
     // 4. Sauvegarde Workspace (l'index unique absorbe les courses concurrentes)
     const row = {

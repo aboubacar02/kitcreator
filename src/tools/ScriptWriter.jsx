@@ -88,12 +88,12 @@ export default function ScriptWriter() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="audience" className="label">Pour qui est cette vidéo ? <span className="normal-case tracking-normal text-slate-500">(optionnel)</span></label>
-            <input id="audience" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder="Ex. étudiants, mamans, entrepreneurs…" className="input" />
+            <label htmlFor="audience" className="label">{t('form.audience')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span></label>
+            <input id="audience" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder={t('form.audience.placeholder')} className="input" />
           </div>
           <div>
-            <label htmlFor="objective" className="label">Objectif de la vidéo <span className="normal-case tracking-normal text-slate-500">(optionnel)</span></label>
-            <input id="objective" value={objective} onChange={(e) => setObjective(e.target.value)} placeholder="Ex. faire commenter, vendre, expliquer…" className="input" />
+            <label htmlFor="objective" className="label">{t('form.objective')} <span className="normal-case tracking-normal text-slate-500">({t('form.optional')})</span></label>
+            <input id="objective" value={objective} onChange={(e) => setObjective(e.target.value)} placeholder={t('form.objective.placeholder')} className="input" />
           </div>
         </div>
         {error && (
