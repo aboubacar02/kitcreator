@@ -24,7 +24,7 @@ check('T1b hook contient sujet + plateforme + ton', p1.includes('fitness') && p1
 check('T1c script contient duree + style', p2.includes('30-second') && p2.includes('Storytelling'))
 check('T1d hashtag contient niche + plateforme', p3.includes('crypto') && p3.includes('YouTube Shorts'))
 check('T1e title contient le titre', p4.includes('How I make money online'))
-check('T1f pack contient les 5 sections + sujet + audience', p5.includes('5 Hooks') && p5.includes('Script') && p5.includes('Title') && p5.includes('Hashtags') && p5.includes('Next 3 video ideas') && p5.includes('fitness') && p5.includes('beginners'))
+check('T1f pack exige un JSON structuré complet + sujet + audience', p5.includes('"hooks"') && p5.includes('"script"') && p5.includes('"seo_title"') && p5.includes('"broll_ideas"') && p5.includes('"next_ideas"') && p5.includes('valid JSON') && p5.includes('fitness') && p5.includes('beginners'))
 
 // T2: SYSTEM_PROMPT par langue
 const fr = SYSTEM_PROMPT('fr')

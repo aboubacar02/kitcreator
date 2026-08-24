@@ -280,3 +280,41 @@ revoke execute on function public.refund_credits(uuid, int) from public;
 revoke execute on function public.refund_credits(uuid, int) from anon;
 revoke execute on function public.refund_credits(uuid, int) from authenticated;
 grant execute on function public.refund_credits(uuid, int) to service_role;
+
+-- ============================================================
+-- 9. WORKSPACE : projets sauvegardes (packs, scripts, favoris).
+--    RLS stricte : chacun ne voit que SES lignes ; UPDATE autorise
+--    uniquement le basculement favori / edition de titre.
+-- ============================================================
+create table if not exists public.saved_projects (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  title text not null,
+  type text not null,
+  content jsonb not null,
+  is_favorite boolean not null default false,
+  created_at timestamptz not null default timezone('utc'::text, now()),
+  updated_at timestamptz not null default timezone('utc'::text, now())
+);
+
+create index if not exists saved_projects_user_created_idx
+  on public.saved_projects (user_id, created_at desc);
+
+alter table public.saved_projects enable row level security;
+
+drop policy if exists "select own projects" on public.saved_projects;
+create policy "select own projects" on public.saved_projects
+  for select using (auth.uid() = user_id);
+
+drop policy if exists "insert own projects" on public.saved_projects;
+create policy "insert own projects" on public.saved_projects
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "update own projects" on public.saved_projects;
+create policy "update own projects" on public.saved_projects
+  for update using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "delete own projects" on public.saved_projects;
+create policy "delete own projects" on public.saved_projects
+  for delete using (auth.uid() = user_id);

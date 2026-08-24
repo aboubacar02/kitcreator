@@ -198,35 +198,31 @@ function mockGenerate(toolId, params) {
         ``,
         `_Demo mode: connect Supabase for real AI generations._`,
       ].join('\n')
-    case 'pack':
-      return [
-        `## 🎣 5 Hooks`,
-        `1. Stop making this mistake with ${params.topic} in 2026!`,
-        `2. Nobody is talking about this ${params.topic} hack...`,
-        `3. If I had to restart ${params.topic} from scratch, I'd do this.`,
-        `4. The truth about ${params.topic} that nobody tells you.`,
-        `5. 3 seconds to understand ${params.topic} (worth it).`,
-        ``,
-        `## 🎬 Script (~30 seconds)`,
-        `[HOOK 0-3s] — Hook #2, spoken straight to camera.`,
-        `[BODY 3-25s] — 3 key points, one per shot.`,
-        `[CTA 25-30s] — "Follow for part 2!"`,
-        ``,
-        `## 🏷️ Title`,
-        `The ${params.topic} method in 3 steps (step 2 changes everything)`,
-        ``,
-        `## #️⃣ Hashtags`,
-        `Broad: #tips #viral #fyp #learnontiktok`,
-        `Medium: #${slug(params.topic).toLowerCase()}tips #dailytips`,
-        `Niche: #${slug(params.topic).toLowerCase()}2026`,
-        ``,
-        `## 💡 Next 3 video ideas`,
-        `1. Common mistakes in ${params.topic}.`,
-        `2. My ${params.topic} routine, step by step.`,
-        `3. I tested ${params.topic} for 7 days.`,
-        ``,
-        `_Demo mode: connect Supabase for real AI generations._`,
-      ].join('\n')
+    case 'pack': {
+      const nicheTag = slug(params.topic).toLowerCase() || 'topic'
+      return {
+        hooks: [
+          { text: `Stop making this mistake with ${params.topic} in 2026!`, visual: 'Red text overlay, finger pointing at camera' },
+          { text: `Nobody is talking about this ${params.topic} hack...`, visual: 'Quick zoom on face, whisper tone' },
+          { text: `If I had to restart ${params.topic} from scratch, I'd do this.`, visual: 'Screen recording of notes app' },
+          { text: `The truth about ${params.topic} that nobody tells you.`, visual: 'Shake head, cut to b-roll' },
+          { text: `3 seconds to understand ${params.topic} (worth it).`, visual: 'Countdown numbers on screen' },
+        ],
+        script: {
+          intro: `Here is the promise: master ${params.topic} without wasting time.`,
+          body: `Three key points, one per shot: the mistake everyone makes, the fix, and the result you can expect in 7 days.`,
+          broll_ideas: ['Phone screen close-up', 'Product or workspace b-roll', 'Before/after split screen'],
+          cta: 'Save this video for later and follow for part 2!',
+        },
+        seo_title: `The ${params.topic} method in 3 steps`,
+        hashtags: [`#${nicheTag}`, '#tips', '#viral', '#fyp', '#learnontiktok', `#${nicheTag}tips`, '#dailytips', `#${nicheTag}2026`],
+        next_ideas: [
+          `Common mistakes in ${params.topic}.`,
+          `My ${params.topic} routine, step by step.`,
+          `I tested ${params.topic} for 7 days.`,
+        ],
+      }
+    }
     default:
       throw new Error(`Unknown tool: ${toolId}`)
   }
@@ -287,6 +283,9 @@ export async function generate(toolId, params) {
   if (error) await throwInvokeError(error)
 
   const content = data?.result
+  const isStructuredObject =
+    content && typeof content === 'object' && !Array.isArray(content)
+  if (isStructuredObject) return content
   if (typeof content !== 'string' || !content.trim()) {
     throw new Error('AI API error')
   }

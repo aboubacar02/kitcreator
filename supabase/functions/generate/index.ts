@@ -19,7 +19,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { SYSTEM_PROMPT } from '../../../src/prompts/systemPrompt.js'
 import { buildToolPrompt } from '../../../src/prompts/index.js'
-import { validateOutput } from '../../../src/prompts/validators.js'
+import { validateOutput, parseStructuredPack } from '../../../src/prompts/validators.js'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
@@ -357,8 +357,8 @@ Deno.serve(async (req: Request) => {
         buildToolPrompt(tool, safeInput),
         SYSTEM_PROMPT(language),
       )
-      const result = validateOutput(tool, raw)
-      if (!result || !result.trim()) {
+      const result = tool === 'pack' ? parseStructuredPack(raw) : validateOutput(tool, raw)
+      if (!result || (typeof result === 'string' && !result.trim())) {
         throw new Error('empty generation')
       }
       return json(req, 200, {
