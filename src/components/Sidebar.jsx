@@ -11,7 +11,7 @@ export default function Sidebar({ user }) {
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
       isActive
-        ? 'bg-zinc-100 font-medium text-zinc-950'
+        ? 'bg-brand-50 font-semibold text-brand-700'
         : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
     }`
 

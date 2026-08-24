@@ -31,7 +31,7 @@ export default function LandingPage() {
     <div className="min-h-screen">
       <header className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-2.5">
-          <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-sm font-bold text-white">
+          <div className="rounded-lg bg-brand-600 px-2.5 py-1 text-sm font-bold text-white">
             K
           </div>
           <span className="text-base font-semibold tracking-tight text-zinc-950">

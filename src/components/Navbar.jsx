@@ -24,7 +24,7 @@ export default function Navbar({ credits, onSignOut }) {
             <Menu className="h-5 w-5" />
           </button>
           <Link to="/" className="flex shrink-0 items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-sm font-bold text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
               K
             </div>
             <h1 className="text-base font-semibold tracking-tight text-zinc-950">

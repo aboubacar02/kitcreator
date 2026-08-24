@@ -51,7 +51,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
           >
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-base font-bold text-white">
+                <div className="rounded-lg bg-brand-600 px-2.5 py-1 text-base font-bold text-white">
                   K
                 </div>
                 <span className="text-base font-semibold tracking-tight text-zinc-950">
@@ -82,7 +82,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                     className={({ isActive }) =>
                       `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                         isActive
-                          ? 'bg-zinc-100 font-medium text-zinc-950'
+                          ? 'bg-brand-50 font-semibold text-brand-700'
                           : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                       }`
                     }
@@ -98,7 +98,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      ? 'bg-brand-50 font-semibold text-brand-700'
                       : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                   }`
                 }
@@ -112,7 +112,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      ? 'bg-brand-50 font-semibold text-brand-700'
                       : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                   }`
                 }
@@ -126,7 +126,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      ? 'bg-brand-50 font-semibold text-brand-700'
                       : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                   }`
                 }

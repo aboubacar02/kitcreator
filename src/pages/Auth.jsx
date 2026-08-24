@@ -65,7 +65,7 @@ export default function Auth() {
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-3">
-          <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-base font-bold text-white">
+          <div className="rounded-lg bg-brand-600 px-2.5 py-1 text-base font-bold text-white">
             KC
           </div>
           <span className="text-xl font-semibold tracking-tight text-zinc-950">

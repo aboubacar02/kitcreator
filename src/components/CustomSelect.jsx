@@ -53,7 +53,7 @@ export default function CustomSelect({ label, options, value, onChange }) {
                   }}
                   className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition ${
                     option === value
-                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      ? 'bg-brand-50 font-semibold text-brand-700'
                       : 'text-zinc-700 hover:bg-zinc-50'
                   }`}
                 >
