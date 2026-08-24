@@ -7,17 +7,17 @@ import { useI18n } from '../i18n/LanguageContext.jsx'
 
 const markdownComponents = {
   h1: ({ children }) => (
-    <h1 className="mb-3 mt-5 break-words text-lg font-semibold text-zinc-900 first:mt-0">
+    <h1 className="mb-3 mt-5 break-words text-lg font-semibold text-zinc-950 first:mt-0">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="mb-2 mt-5 break-words text-base font-semibold text-zinc-900 first:mt-0">
+    <h2 className="mb-2 mt-5 break-words text-base font-semibold text-zinc-950 first:mt-0">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="mb-2 mt-4 break-words text-sm font-semibold text-zinc-900 first:mt-0">
+    <h3 className="mb-2 mt-4 break-words text-sm font-semibold text-zinc-950 first:mt-0">
       {children}
     </h3>
   ),
@@ -27,7 +27,7 @@ const markdownComponents = {
     </p>
   ),
   strong: ({ children }) => (
-    <strong className="font-semibold text-zinc-900">{children}</strong>
+    <strong className="font-semibold text-zinc-950">{children}</strong>
   ),
   em: ({ children }) => <em className="italic text-zinc-500">{children}</em>,
   ul: ({ children }) => (
@@ -160,7 +160,7 @@ export default function ResultCard({ title, content }) {
     >
       <Celebration />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-4">
-        <h3 className="text-sm font-semibold text-zinc-900">
+        <h3 className="text-sm font-semibold text-zinc-950">
           {title ?? t('result.title')}
         </h3>
         <CopyButton text={content} />

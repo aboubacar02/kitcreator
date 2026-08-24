@@ -49,13 +49,13 @@ export default function HookGenerator() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md transition-shadow duration-200 hover:shadow-lg">
         
         <div className="relative">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
             <Sparkles className="h-3.5 w-3.5" /> AI creative studio
           </div>
-          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.hook')}</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">{t('tools.hook')}</h2>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-500">{t('tools.hook.desc')}</p>
         </div>
       </div>

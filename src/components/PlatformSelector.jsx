@@ -35,7 +35,7 @@ export default function PlatformSelector({ value, onChange }) {
             className={`flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
               isSelected
                 ? `${p.activeColor} border-2`
-                : 'border border-zinc-200 bg-white text-zinc-500 hover:border-zinc-300 hover:text-zinc-900'
+                : 'border border-zinc-200 bg-white text-zinc-500 hover:border-zinc-300 hover:text-zinc-950'
             }`}
           >
             <Icon

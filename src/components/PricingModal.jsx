@@ -67,14 +67,14 @@ export default function PricingModal({ onClose }) {
       >
         <div className="mb-6 flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-zinc-900">Choose your plan</h2>
+            <h2 className="text-xl font-semibold text-zinc-950">Choose your plan</h2>
             <p className="mt-1 text-sm text-zinc-500">
               Secure payment via Stripe or Lemon Squeezy. Cancel anytime.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+            className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-950"
             aria-label="Close"
           >
             <svg
@@ -104,9 +104,9 @@ export default function PricingModal({ onClose }) {
                   Most popular
                 </span>
               )}
-              <h3 className="text-base font-semibold text-zinc-900">{plan.name}</h3>
+              <h3 className="text-base font-semibold text-zinc-950">{plan.name}</h3>
               <p className="mt-1">
-                <span className="text-3xl font-semibold tracking-tight text-zinc-900">{plan.price}</span>
+                <span className="text-3xl font-semibold tracking-tight text-zinc-950">{plan.price}</span>
                 <span className="text-sm text-zinc-500">{plan.period}</span>
               </p>
               <p className="mt-1 text-xs font-medium text-brand-600">{plan.credits}</p>

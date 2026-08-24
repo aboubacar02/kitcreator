@@ -68,7 +68,7 @@ function ProfilePanel() {
 
   return (
     <details data-background-lock className="card">
-      <summary className="cursor-pointer select-none text-sm font-semibold text-zinc-900">
+      <summary className="cursor-pointer select-none text-sm font-semibold text-zinc-950">
         ðŸ§  {t('profile.title')}
       </summary>
       <form onSubmit={handleSave} className="mt-4 space-y-4">
@@ -188,14 +188,14 @@ export default function KitBot() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md transition-shadow duration-200 hover:shadow-lg">
         
         <div className="relative flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
             <Bot className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">KitBot</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">KitBot</h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-500">{t('tools.kitbot.desc')}</p>
             <p className="mt-1 text-xs font-medium text-zinc-400">{t('chat.costHint')}</p>
           </div>
@@ -224,7 +224,7 @@ export default function KitBot() {
             key={i}
             className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
               m.role === 'user'
-                ? 'self-end rounded-br-sm bg-zinc-900 font-medium text-white'
+                ? 'self-end rounded-br-sm bg-zinc-950 font-medium text-white'
                 : 'self-start rounded-bl-sm border border-zinc-100 bg-zinc-50 text-zinc-700'
             }`}
           >

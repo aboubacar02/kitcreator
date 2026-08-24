@@ -129,7 +129,7 @@ export default function Dashboard() {
   const credits = isSupabaseConfigured ? (profile?.credits ?? 0) : localCredits
 
   return (
-    <div className="flex min-h-screen flex-col text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-950">
       <Navbar credits={credits} onSignOut={handleSignOut} />
       <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar user={user} />
@@ -146,7 +146,7 @@ export default function Dashboard() {
           )}
           {briefing?.ideas && (
             <details data-background-lock className="mb-6 rounded-xl border border-blue-100 bg-blue-50/60 p-5 shadow-sm">
-              <summary className="flex cursor-pointer select-none items-center gap-2.5 text-sm font-semibold text-zinc-900">
+              <summary className="flex cursor-pointer select-none items-center gap-2.5 text-sm font-semibold text-zinc-950">
                 <CalendarDays className="h-4.5 w-4.5 shrink-0 text-brand-600" />
                 {t('brief.title')}
                 <span className="ml-auto normal-case tracking-normal"><CopyButton value={briefing.ideas} /></span>

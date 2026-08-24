@@ -113,7 +113,7 @@ function ImprovementPanel({ project }) {
       {reply && !busyKey && (
         <div className="mt-3 space-y-3">
           <div className="flex items-center justify-between gap-3">
-            <h6 className="text-xs font-semibold text-zinc-900">{t('improve.result')}</h6>
+            <h6 className="text-xs font-semibold text-zinc-950">{t('improve.result')}</h6>
             <CopyButton value={reply} />
           </div>
           <div className="max-h-64 overflow-y-auto whitespace-pre-wrap rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2 text-sm leading-relaxed text-zinc-700">
@@ -156,7 +156,7 @@ function PackDetail({ content }) {
     <div className="space-y-5">
       {Array.isArray(content.hooks) && content.hooks.length > 0 && (
         <section>
-          <h5 className="mb-2 flex items-center gap-2 text-sm font-semibold text-zinc-900">
+          <h5 className="mb-2 flex items-center gap-2 text-sm font-semibold text-zinc-950">
             ðŸŽ£ {t('pack.hooks')}
           </h5>
           <ul className="space-y-1.5">
@@ -172,7 +172,7 @@ function PackDetail({ content }) {
       {content.script && (
         <section>
           <div className="mb-2 flex items-center justify-between gap-3">
-            <h5 className="text-sm font-semibold text-zinc-900">ðŸŽ¬ {t('pack.script')}</h5>
+            <h5 className="text-sm font-semibold text-zinc-950">ðŸŽ¬ {t('pack.script')}</h5>
             <CopyButton
               value={[content.script.intro, content.script.body, content.script.cta]
                 .filter(Boolean)
@@ -198,16 +198,16 @@ function PackDetail({ content }) {
           {content.seo_title && (
             <div>
               <div className="mb-2 flex items-center justify-between gap-3">
-                <h5 className="text-sm font-semibold text-zinc-900">ðŸ“Œ {t('pack.seoTitle')}</h5>
+                <h5 className="text-sm font-semibold text-zinc-950">ðŸ“Œ {t('pack.seoTitle')}</h5>
                 <CopyButton value={content.seo_title} />
               </div>
-              <p className="rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2 text-sm text-zinc-900">{content.seo_title}</p>
+              <p className="rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2 text-sm text-zinc-950">{content.seo_title}</p>
             </div>
           )}
           {Array.isArray(content.hashtags) && content.hashtags.length > 0 && (
             <div>
               <div className="mb-2 flex items-center justify-between gap-3">
-                <h5 className="text-sm font-semibold text-zinc-900">#ï¸âƒ£ {t('pack.hashtags')}</h5>
+                <h5 className="text-sm font-semibold text-zinc-950">#ï¸âƒ£ {t('pack.hashtags')}</h5>
                 <CopyButton value={content.hashtags.join(' ')} />
               </div>
               <p className="rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2 text-sm text-brand-700">{content.hashtags.join(' ')}</p>
@@ -217,7 +217,7 @@ function PackDetail({ content }) {
       )}
       {Array.isArray(content.next_ideas) && content.next_ideas.length > 0 && (
         <section>
-          <h5 className="mb-2 text-sm font-semibold text-zinc-900">ðŸ’¡ {t('pack.nextIdeas')}</h5>
+          <h5 className="mb-2 text-sm font-semibold text-zinc-950">ðŸ’¡ {t('pack.nextIdeas')}</h5>
           <ol className="list-inside list-decimal space-y-1 rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2 text-sm text-zinc-700">
             {content.next_ideas.map((idea, i) => <li key={i}>{idea}</li>)}
           </ol>
@@ -277,7 +277,7 @@ function ProjectCard({ project, onChanged, onDeleted }) {
     <article data-background-lock className="card space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="truncate font-semibold text-zinc-900">{project.title}</h3>
+          <h3 className="truncate font-semibold text-zinc-950">{project.title}</h3>
           <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-400">
             <span>{project.platform}</span>
             {project.niche && <><span aria-hidden>Â·</span><span>{project.niche}</span></>}
@@ -439,14 +439,14 @@ export default function Workspace() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md transition-shadow duration-200 hover:shadow-lg">
         
         <div className="relative flex items-start justify-between gap-4">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
               <FolderKanban className="h-3.5 w-3.5" /> Workspace
             </div>
-            <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('ws.title')}</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">{t('ws.title')}</h2>
             {!loading && !error && (
               <p className="mt-2 text-sm text-zinc-500">{c.all} {t('ws.items')}</p>
             )}
@@ -473,7 +473,7 @@ export default function Workspace() {
               className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold transition ${
                 tab === id
                   ? 'bg-zinc-900 text-white'
-                  : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                  : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
               }`}
             >
               {t(label)}
@@ -496,7 +496,7 @@ export default function Workspace() {
         <div data-background-lock className="card flex flex-col items-center gap-4 py-14 text-center">
           <FolderKanban className="h-12 w-12 text-zinc-400" />
           <div>
-            <h3 className="text-base font-semibold text-zinc-900">{t('ws.empty.title')}</h3>
+            <h3 className="text-base font-semibold text-zinc-950">{t('ws.empty.title')}</h3>
             <p className="mt-1 text-sm text-zinc-500">{t('ws.empty.text')}</p>
           </div>
           <Link

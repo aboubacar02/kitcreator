@@ -19,7 +19,7 @@ export default function Navbar({ credits, onSignOut }) {
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label={t('nav.menu')}
-            className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 md:hidden"
+            className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-950 md:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -27,7 +27,7 @@ export default function Navbar({ credits, onSignOut }) {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-sm font-bold text-white">
               K
             </div>
-            <h1 className="text-base font-semibold tracking-tight text-zinc-900">
+            <h1 className="text-base font-semibold tracking-tight text-zinc-950">
               KitCreator
             </h1>
           </Link>
@@ -61,7 +61,7 @@ export default function Navbar({ credits, onSignOut }) {
             onClick={onSignOut}
             aria-label={t('nav.logout')}
             title={t('nav.logout')}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg p-2 text-xs font-medium text-zinc-400 transition-colors hover:text-zinc-900"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg p-2 text-xs font-medium text-zinc-400 transition-colors hover:text-zinc-950"
           >
             <LogOut className="h-4 w-4" />
             <span className="hidden xl:inline">{t('nav.logout')}</span>

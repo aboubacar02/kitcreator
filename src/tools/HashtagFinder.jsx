@@ -46,7 +46,7 @@ export default function HashtagFinder() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.hashtag')}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">{t('tools.hashtag')}</h2>
         <p className="mt-1 text-sm text-zinc-500">{t('tools.hashtag.desc')}</p>
       </div>
 

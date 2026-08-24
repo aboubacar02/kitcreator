@@ -17,7 +17,7 @@ function SectionTitle({ icon: Icon, children }) {
       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500">
         <Icon className="h-4 w-4" />
       </div>
-      <h3 className="text-sm font-semibold text-zinc-900">
+      <h3 className="text-sm font-semibold text-zinc-950">
         {children}
       </h3>
     </div>
@@ -40,7 +40,7 @@ export default function Settings() {
   return (
     <div className="mx-auto max-w-2xl space-y-10">
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('settings.title')}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">{t('settings.title')}</h2>
         <p className="mt-1 text-sm text-zinc-500">{t('settings.subtitle')}</p>
       </div>
 
@@ -52,7 +52,7 @@ export default function Settings() {
             {initial}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-zinc-900">
+            <p className="truncate text-sm font-semibold text-zinc-950">
               {user?.email}
             </p>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-500">
@@ -106,7 +106,7 @@ export default function Settings() {
               <Zap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-2xl font-semibold leading-tight text-zinc-900">
+              <p className="text-2xl font-semibold leading-tight text-zinc-950">
                 {credits}
                 <span className="ml-2 align-middle text-sm font-medium text-zinc-500">
                   {t('settings.credits')} Â· {t('settings.freePlan').split(' â€” ')[0]}

@@ -51,7 +51,7 @@ export default function ScriptWriter() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.script')}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">{t('tools.script')}</h2>
         <p className="mt-1 text-sm text-zinc-500">{t('tools.script.desc')}</p>
       </div>
 

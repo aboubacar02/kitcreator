@@ -73,7 +73,7 @@ export default function SocialProof() {
         ))}
       </div>
       <p className="max-w-xs text-center text-sm text-zinc-600 sm:max-w-none sm:text-left">
-        <span className="font-semibold text-zinc-900">
+        <span className="font-semibold text-zinc-950">
           <Counter to={count ?? FALLBACK_COUNT} locale={LOCALES[lang] ?? 'en-US'} />
         </span>{' '}
         {t('social.proof')}

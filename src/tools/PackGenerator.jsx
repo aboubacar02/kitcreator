@@ -13,7 +13,7 @@ import { friendlyError } from '../i18n/strings.js'
 function SectionTitle({ icon, children, action }) {
   return (
     <div className="mb-2 flex items-center justify-between gap-3">
-      <h4 className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
+      <h4 className="flex items-center gap-2 text-sm font-semibold text-zinc-950">
         <span aria-hidden>{icon}</span>
         {children}
       </h4>
@@ -80,13 +80,13 @@ export default function PackGenerator() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md">
+      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md transition-shadow duration-200 hover:shadow-lg">
         
         <div className="relative">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
             <Package className="h-3.5 w-3.5" /> All-in-one
           </div>
-          <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">{t('tools.pack')}</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">{t('tools.pack')}</h2>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-500">{t('tools.pack.desc')}</p>
         </div>
       </div>
@@ -154,7 +154,7 @@ export default function PackGenerator() {
       {result && !loading && (
         <div ref={resultRef} data-background-lock className="card scroll-mt-24 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 pb-4">
-            <h3 className="text-base font-semibold text-zinc-900">{t('tools.pack')}</h3>
+            <h3 className="text-base font-semibold text-zinc-950">{t('tools.pack')}</h3>
             <button
               type="button"
               onClick={handleSave}
@@ -177,7 +177,7 @@ export default function PackGenerator() {
             <ul className="space-y-2">
               {result.hooks.map((hook, i) => (
                 <li key={i} className="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3">
-                  <p className="font-medium leading-snug text-zinc-900">
+                  <p className="font-medium leading-snug text-zinc-950">
                     <span className="mr-2 text-zinc-400">{i + 1}.</span>
                     {hook.text}
                   </p>
@@ -226,7 +226,7 @@ export default function PackGenerator() {
               <SectionTitle icon="ðŸ“Œ" action={<CopyButton value={result.seo_title} />}>
                 {t('pack.seoTitle')}
               </SectionTitle>
-              <p className="rounded-lg border border-zinc-100 bg-zinc-50 px-4 py-3 leading-relaxed text-zinc-900">
+              <p className="rounded-lg border border-zinc-100 bg-zinc-50 px-4 py-3 leading-relaxed text-zinc-950">
                 {result.seo_title}
               </p>
             </section>

@@ -34,7 +34,7 @@ export default function LandingPage() {
           <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-sm font-bold text-white">
             K
           </div>
-          <span className="text-base font-semibold tracking-tight text-zinc-900">
+          <span className="text-base font-semibold tracking-tight text-zinc-950">
             KitCreator
           </span>
         </div>
@@ -53,7 +53,7 @@ export default function LandingPage() {
           >
             <motion.h1
               variants={item}
-              className="mt-6 text-4xl font-semibold tracking-tight text-zinc-900 sm:text-6xl"
+              className="mt-6 text-4xl font-semibold tracking-tight text-zinc-950 sm:text-6xl"
             >
               {t('landing.heroTitle1')}
               <br />
@@ -61,7 +61,7 @@ export default function LandingPage() {
             </motion.h1>
             <motion.p
               variants={item}
-              className="mx-auto mt-6 max-w-2xl text-lg text-zinc-500"
+              className="mx-auto mt-6 max-w-2xl text-lg text-zinc-600"
             >
               {t('landing.subtitle')}
             </motion.p>
@@ -89,7 +89,7 @@ export default function LandingPage() {
         </section>
 
         <section id="tools" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-16">
-          <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
             {t('landing.toolsTitle')}
           </h2>
           <motion.div
@@ -112,7 +112,7 @@ export default function LandingPage() {
                     {TOOL_INITIALS[tool.id]}
                   </span>
                 </div>
-                <h3 className="text-base font-semibold text-zinc-900">
+                <h3 className="text-base font-semibold text-zinc-950">
                   {t(`tools.${tool.id}`)}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-zinc-500">
@@ -131,7 +131,7 @@ export default function LandingPage() {
 
         <section className="border-t border-zinc-100 bg-white py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
               {t('landing.whyTitle')}
             </h2>
             <motion.div
@@ -143,7 +143,7 @@ export default function LandingPage() {
             >
               {features.map(({ key }) => (
                 <motion.div key={key} variants={item}>
-                  <h3 className="flex items-center gap-2 text-base font-semibold text-zinc-900">
+                  <h3 className="flex items-center gap-2 text-base font-semibold text-zinc-950">
                     <ArrowRight className="h-5 w-5 shrink-0 text-brand-600" />
                     {t(`landing.${key}.t`)}
                   </h3>
@@ -157,7 +157,7 @@ export default function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-4xl px-4 py-28 text-center sm:px-6">
-          <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
             {t('landing.finalTitle')}
           </h2>
           <p className="mt-4 text-zinc-500">{t('landing.finalText')}</p>

@@ -54,7 +54,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-base font-bold text-white">
                   K
                 </div>
-                <span className="text-base font-semibold tracking-tight text-zinc-900">
+                <span className="text-base font-semibold tracking-tight text-zinc-950">
                   KitCreator
                 </span>
               </div>
@@ -62,7 +62,7 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 ref={closeRef}
                 onClick={onClose}
                 aria-label={t('nav.menu')}
-                className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-950"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -82,8 +82,8 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                     className={({ isActive }) =>
                       `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                         isActive
-                          ? 'bg-zinc-100 font-medium text-zinc-900'
-                          : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                          ? 'bg-zinc-100 font-medium text-zinc-950'
+                          : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                       }`
                     }
                   >
@@ -98,8 +98,8 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-zinc-100 font-medium text-zinc-900'
-                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                   }`
                 }
               >
@@ -112,8 +112,8 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-zinc-100 font-medium text-zinc-900'
-                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                   }`
                 }
               >
@@ -126,8 +126,8 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive
-                      ? 'bg-zinc-100 font-medium text-zinc-900'
-                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                      ? 'bg-zinc-100 font-medium text-zinc-950'
+                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
                   }`
                 }
               >

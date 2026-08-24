@@ -68,13 +68,13 @@ export default function Auth() {
           <div className="rounded-lg bg-zinc-900 px-2.5 py-1 text-base font-bold text-white">
             KC
           </div>
-          <span className="text-xl font-semibold tracking-tight text-zinc-900">
+          <span className="text-xl font-semibold tracking-tight text-zinc-950">
             KitCreator
           </span>
         </Link>
 
         <div className="card">
-          <h1 className="text-xl font-semibold text-zinc-900">
+          <h1 className="text-xl font-semibold text-zinc-950">
             {mode === 'login' && 'Log in'}
             {mode === 'signup' && 'Create your account'}
             {mode === 'forgot' && 'Reset your password'}

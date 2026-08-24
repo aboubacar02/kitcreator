@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+﻿import { motion, useReducedMotion } from 'framer-motion'
 import { Sparkles, WandSparkles } from 'lucide-react'
 import { useI18n } from '../i18n/LanguageContext.jsx'
 
@@ -25,11 +25,11 @@ export default function LoadingSkeleton() {
           <WandSparkles className="h-5 w-5" />
         </motion.div>
         <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
+          <p className="flex items-center gap-2 text-sm font-semibold text-zinc-950">
             <Sparkles className="h-4 w-4 text-brand-600" />
             {t('common.loadingText')}
           </p>
-          <p className="mt-1 text-xs text-zinc-400">Analyse du sujet, création des idées et mise en forme…</p>
+          <p className="mt-1 text-xs text-zinc-400">Analyse du sujet, crÃ©ation des idÃ©es et mise en formeâ€¦</p>
           <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-zinc-100">
             <motion.div
               className="h-full w-1/3 rounded-full bg-zinc-900"
