@@ -1,4 +1,4 @@
-﻿import { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Check, Loader2, Package, Save } from 'lucide-react'
 import CopyButton from '../components/CopyButton.jsx'

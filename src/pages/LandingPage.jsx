@@ -53,7 +53,7 @@ export default function LandingPage() {
           >
             <motion.h1
               variants={item}
-              className="mt-6 text-4xl font-semibold tracking-tight text-zinc-950 sm:text-6xl"
+              className="mt-6 text-3xl font-semibold leading-tight tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl"
             >
               {t('landing.heroTitle1')}
               <br />
@@ -71,11 +71,11 @@ export default function LandingPage() {
             >
               <Link
                 to="/auth"
-                className="btn-primary !px-8 !py-3 !text-base"
+                className="btn-primary w-full !px-8 !py-3 !text-base sm:w-auto"
               >
                 {t('landing.ctaTry')}
               </Link>
-              <a href="#tools" className="btn-ghost !px-8 !py-3 !text-base">
+              <a href="#tools" className="btn-ghost w-full !px-8 !py-3 !text-base sm:w-auto">
                 {t('landing.ctaExplore')}
               </a>
             </motion.div>

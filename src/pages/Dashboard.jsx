@@ -133,7 +133,7 @@ export default function Dashboard() {
       <Navbar credits={credits} onSignOut={handleSignOut} />
       <div className="flex flex-1 flex-col md:flex-row">
         <Sidebar user={user} />
-        <main className="mx-auto w-full max-w-4xl flex-1 p-6 md:p-10">
+        <main className="mx-auto min-w-0 w-full max-w-4xl flex-1 p-6 md:p-10">
           {!isSupabaseConfigured && (
             <p className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
               {t('demo.notice')}

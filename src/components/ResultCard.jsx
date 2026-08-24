@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Check, Copy } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -111,17 +111,18 @@ function CopyButton({ text }) {
   )
 }
 
-function Celebration() {
-  const particles = Array.from({ length: 22 })
+function Celebration({ reduceMotion }) {
+  if (reduceMotion) return null
+  const particles = Array.from({ length: 16 })
   return (
     <div className="pointer-events-none absolute left-1/2 top-8">
       {[0, 1].map((ring) => (
         <motion.span
           key={`ring-${ring}`}
-          initial={{ opacity: 0.65, scale: 0.15 }}
-          animate={{ opacity: 0, scale: ring === 0 ? 2.8 : 4.2 }}
+          initial={{ opacity: 0.5, scale: 0.2 }}
+          animate={{ opacity: 0, scale: ring === 0 ? 2.6 : 3.8 }}
           transition={{ duration: 0.7, delay: ring * 0.1, ease: 'easeOut' }}
-          className="absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-600/40"
+          className="absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-600/25"
         />
       ))}
       {particles.map((_, i) => {
@@ -131,14 +132,14 @@ function Celebration() {
             key={i}
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
             animate={{
-              x: Math.cos(angle) * (95 + (i % 3) * 22),
-              y: Math.sin(angle) * (70 + (i % 4) * 12) + 36,
+              x: Math.cos(angle) * (85 + (i % 3) * 20),
+              y: Math.sin(angle) * (62 + (i % 4) * 12) + 32,
               opacity: 0,
               scale: 0,
             }}
-            transition={{ duration: 0.95, delay: (i % 5) * 0.025, ease: 'easeOut' }}
+            transition={{ duration: 0.9, delay: (i % 4) * 0.03, ease: 'easeOut' }}
             className={`absolute h-1.5 w-1.5 rounded-full ${
-              i % 3 === 0 ? 'bg-brand-500' : i % 3 === 1 ? 'bg-sky-400' : 'bg-zinc-400'
+              i % 3 === 0 ? 'bg-brand-500' : i % 3 === 1 ? 'bg-sky-400' : 'bg-zinc-300'
             }`}
           />
         )
@@ -149,16 +150,30 @@ function Celebration() {
 
 export default function ResultCard({ title, content }) {
   const { t } = useI18n()
+  const reduceMotion = useReducedMotion()
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 0.985 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       data-background-lock
       className="relative w-full max-w-full overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6"
     >
-      <Celebration />
+      <Celebration reduceMotion={reduceMotion} />
+      {!reduceMotion && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-10"
+          initial={{ x: '-120%' }}
+          animate={{ x: '120%' }}
+          transition={{ duration: 0.9, ease: 'easeInOut', delay: 0.12 }}
+          style={{
+            background:
+              'linear-gradient(105deg, transparent 32%, rgba(255,255,255,0.55) 50%, transparent 68%)',
+          }}
+        />
+      )}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-4">
         <h3 className="text-sm font-semibold text-zinc-950">
           {title ?? t('result.title')}

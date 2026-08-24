@@ -439,10 +439,10 @@ export default function Workspace() {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border border-zinc-200 bg-white px-6 py-6 shadow-md transition-shadow duration-200 hover:shadow-lg">
-        
-        <div className="relative flex items-start justify-between gap-4">
-          <div>
+      <div className="rounded-xl border border-zinc-200 bg-white px-4 py-5 shadow-md transition-shadow duration-200 hover:shadow-lg sm:px-6 sm:py-6">
+         
+        <div className="relative flex items-start justify-between gap-3 sm:gap-4">
+          <div className="min-w-0 flex-1">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
               <FolderKanban className="h-3.5 w-3.5" /> Workspace
             </div>
@@ -508,7 +508,7 @@ export default function Workspace() {
         </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         {visible.map((project) => (
           <ProjectCard
             key={project.id}

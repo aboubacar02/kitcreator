@@ -62,7 +62,7 @@ export default function PricingModal({ onClose }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-4xl rounded-xl border border-zinc-200 bg-white p-6 shadow-lg sm:p-8"
+        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-xl border border-zinc-200 bg-white p-6 shadow-lg sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-start justify-between">
