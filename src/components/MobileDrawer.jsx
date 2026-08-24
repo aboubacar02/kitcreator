@@ -1,7 +1,7 @@
 ﻿import { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Crown, LogOut, Settings, User, X, Zap } from 'lucide-react'
+import { Bot, Crown, FolderKanban, LogOut, Settings, User, X, Zap } from 'lucide-react'
 import { TOOLS } from '../services/aiEngine.js'
 import { TOOL_ICONS } from './toolIcons.js'
 import { isSupabaseConfigured } from '../services/supabase.js'
@@ -92,6 +92,34 @@ export default function MobileDrawer({ open, onClose, credits, onSignOut, onUpgr
                   </NavLink>
                 )
               })}
+              <NavLink
+                to="/dashboard/kitbot"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                    isActive
+                      ? 'bg-zinc-100 font-medium text-zinc-900'
+                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                  }`
+                }
+              >
+                <Bot className="h-4 w-4 shrink-0" />
+                KitBot
+              </NavLink>
+              <NavLink
+                to="/dashboard/workspace"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                    isActive
+                      ? 'bg-zinc-100 font-medium text-zinc-900'
+                      : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'
+                  }`
+                }
+              >
+                <FolderKanban className="h-4 w-4 shrink-0" />
+                {t('ws.title')}
+              </NavLink>
               <NavLink
                 to="/dashboard/settings"
                 onClick={onClose}
