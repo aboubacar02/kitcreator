@@ -318,3 +318,24 @@ create policy "update own projects" on public.saved_projects
 drop policy if exists "delete own projects" on public.saved_projects;
 create policy "delete own projects" on public.saved_projects
   for delete using (auth.uid() = user_id);
+-- ============================================================
+-- KITBOT : profil de marque / style du createur (memoire de l agent).
+-- RLS : chaque createur ne lit/ecrit que SA ligne (FOR ALL).
+-- ============================================================
+create table if not exists public.creator_profiles (
+  user_id uuid primary key references public.profiles(id) on delete cascade,
+  brand_name text,
+  niche text,
+  target_audience text,
+  content_tone text not null default 'Energetic',
+  favorite_formats text[] not null default '{}',
+  custom_instructions text,
+  updated_at timestamptz not null default timezone('utc'::text, now())
+);
+
+alter table public.creator_profiles enable row level security;
+
+drop policy if exists "manage own creator profile" on public.creator_profiles;
+create policy "manage own creator profile" on public.creator_profiles
+  for all using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);

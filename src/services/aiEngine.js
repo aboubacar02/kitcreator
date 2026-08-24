@@ -292,4 +292,55 @@ export async function generate(toolId, params) {
   return content
 }
 
+// ------------------------------------------------------------
+// KitBot — Directeur Artistique IA (Edge Function "agent-chat")
+// 1 crédit/message ; historique tronqué avant envoi.
+// ------------------------------------------------------------
+export const AGENT_COST = 1
+const MAX_AGENT_MESSAGE_LENGTH = 2000
+const MAX_AGENT_HISTORY_MESSAGES = 12
+
+function demoAgentReply(message) {
+  const topic = message.slice(0, 80)
+  return [
+    `[Mode démo] Bonne question : « ${topic} ».`,
+    '',
+    'Une fois Supabase connecté, je connaitrai ta niche, ton audience et ton ton habituel,',
+    'et je te répondrai avec des textes prêts à tourner.',
+    '',
+    '_Démo : connecte Supabase pour discuter avec le vrai KitBot._',
+  ].join('\n')
+}
+
+export async function sendAgentMessage(message, history = []) {
+  const cleaned = typeof message === 'string' ? message.trim().slice(0, MAX_AGENT_MESSAGE_LENGTH) : ''
+  if (!cleaned) throw new Error('Empty message.')
+
+  // Mode démo : aucun backend configuré
+  if (!isSupabaseConfigured || !supabase) {
+    await new Promise((r) => setTimeout(r, 600))
+    return demoAgentReply(cleaned)
+  }
+
+  const safeHistory = history
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 1500) }))
+    .slice(-MAX_AGENT_HISTORY_MESSAGES)
+
+  const { data, error } = await supabase.functions.invoke('agent-chat', {
+    body: {
+      message: cleaned,
+      history: safeHistory,
+      language: resolveLanguage(),
+    },
+  })
+  if (error) await throwInvokeError(error)
+
+  const reply = data?.reply
+  if (typeof reply !== 'string' || !reply.trim()) {
+    throw new Error('AI API error')
+  }
+  return reply
+}
+
 export { isSupabaseConfigured }

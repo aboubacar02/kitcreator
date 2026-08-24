@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Settings, User } from 'lucide-react'
+import { Bot, Settings, User } from 'lucide-react'
 import { TOOLS } from '../services/aiEngine.js'
 import { TOOL_ICONS } from './toolIcons.js'
 import { useI18n } from '../i18n/LanguageContext.jsx'
@@ -31,8 +31,21 @@ export default function Sidebar({ user }) {
             </NavLink>
           )
         })}
-      </nav>
 
+        <NavLink
+          to="/dashboard/kitbot"
+          className={({ isActive }) =>
+            `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+              isActive
+                ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/15'
+                : 'text-slate-400 hover:bg-white/[0.06] hover:text-white'
+            }`
+          }
+        >
+          <Bot className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">KitBot</span>
+        </NavLink>
+      </nav>
       <div className="space-y-2 border-t border-slate-800 pt-4">
         <NavLink
           to="/dashboard/settings"

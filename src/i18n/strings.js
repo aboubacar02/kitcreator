@@ -24,6 +24,24 @@ const STRINGS = {
       'Score your titles and get more clickable variants in one click.',
     'tools.pack.desc':
       'One topic, one click: 5 hooks, a script, a title, hashtags and your next 3 video ideas.',
+    'tools.kitbot.desc':
+      'Your AI art director: video ideas, rewrites, weekly planning. It knows your niche and your style.',
+    'chat.welcome':
+      'Hi, I am KitBot, your content director! Set up your profile above so I can sound like you. Try: "5 video ideas for this week" or "make this hook punchier".',
+    'chat.placeholder': 'Ask KitBot anything...',
+    'chat.send': 'Send',
+    'chat.thinking': 'KitBot is thinking...',
+    'chat.costHint': '⚡ 1 credit per message',
+    'profile.title': 'Creator profile — KitBot memory',
+    'profile.niche': 'Your niche',
+    'profile.niche.placeholder': 'e.g. Fitness, E-commerce, Personal development...',
+    'profile.audience': 'Target audience',
+    'profile.audience.placeholder': 'e.g. Beginners aged 18-25...',
+    'profile.tone': 'Usual tone',
+    'profile.instructions': 'Standing instructions',
+    'profile.instructions.placeholder': 'e.g. Never use strong words, always end with "follow me"...',
+    'profile.save': 'Save my profile',
+    'profile.saved': 'Profile saved!',
 
     'sidebar.settings': 'Settings',
     'sidebar.myAccount': 'My account',
@@ -155,6 +173,24 @@ const STRINGS = {
       'Note tes titres et obtiens des variantes plus cliquables en un clic.',
     'tools.pack.desc':
       'Un sujet, un clic : 5 accroches, 1 script, 1 titre, les hashtags et tes 3 prochaines idées de vidéos.',
+    'tools.kitbot.desc':
+      'Ton directeur artistique IA : idées de vidéos, réécritures, structure de semaine. Il connaît ta niche et ton style.',
+    'chat.welcome':
+      'Salut, je suis KitBot, ton directeur artistique ! Configure ton profil juste au-dessus pour que je parle comme toi. Essaie : « 5 idées de vidéos pour cette semaine » ou « rends cette accroche plus percutante ».',
+    'chat.placeholder': 'Demande quelque chose à KitBot...',
+    'chat.send': 'Envoyer',
+    'chat.thinking': 'KitBot réfléchit...',
+    'chat.costHint': '⚡ 1 crédit par message',
+    'profile.title': 'Profil créateur — la mémoire de KitBot',
+    'profile.niche': 'Ta niche',
+    'profile.niche.placeholder': 'ex. Fitness, E-commerce, Développement perso...',
+    'profile.audience': 'Audience cible',
+    'profile.audience.placeholder': 'ex. Débutants 18-25 ans...',
+    'profile.tone': 'Ton habituel',
+    'profile.instructions': 'Instructions permanentes',
+    'profile.instructions.placeholder': 'ex. Jamais de gros mots, toujours finir par « abonne-toi »...',
+    'profile.save': 'Enregistrer mon profil',
+    'profile.saved': 'Profil enregistré !',
 
     'sidebar.settings': 'Paramètres',
     'sidebar.myAccount': 'Mon compte',
@@ -285,6 +321,24 @@ const STRINGS = {
       'Puntúa tus títulos y consigue variantes más clicables en un clic.',
     'tools.pack.desc':
       'Un tema, un clic: 5 ganchos, 1 guion, 1 título, los hashtags y tus 3 próximas ideas de vídeos.',
+    'tools.kitbot.desc':
+      'Tu director artístico IA: ideas de vídeos, reescrituras, estructura semanal. Conoce tu nicho y tu estilo.',
+    'chat.welcome':
+      '¡Hola, soy KitBot, tu director artístico! Configura tu perfil aquí arriba para que hable como tú. Prueba: «5 ideas de vídeos para esta semana» o «haz este gancho más impactante».',
+    'chat.placeholder': 'Pídele algo a KitBot...',
+    'chat.send': 'Enviar',
+    'chat.thinking': 'KitBot está pensando...',
+    'chat.costHint': '⚡ 1 crédito por mensaje',
+    'profile.title': 'Perfil de creador — la memoria de KitBot',
+    'profile.niche': 'Tu nicho',
+    'profile.niche.placeholder': 'ej. Fitness, E-commerce, Desarrollo personal...',
+    'profile.audience': 'Audiencia objetivo',
+    'profile.audience.placeholder': 'ej. Principiantes de 18 a 25 años...',
+    'profile.tone': 'Tu tono habitual',
+    'profile.instructions': 'Instrucciones permanentes',
+    'profile.instructions.placeholder': 'ej. Nunca palabras fuertes, terminar siempre con «suscríbete»...',
+    'profile.save': 'Guardar mi perfil',
+    'profile.saved': '¡Perfil guardado!',
 
     'sidebar.settings': 'Ajustes',
     'sidebar.myAccount': 'Mi cuenta',
