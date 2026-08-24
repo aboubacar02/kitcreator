@@ -83,8 +83,8 @@ function ImprovementPanel({ project }) {
   }
 
   return (
-    <section data-background-lock className="rounded-lg border border-blue-100 bg-blue-50/50 p-4">
-      <h5 className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+    <section data-background-lock className="rounded-lg border border-brand-100 bg-brand-50/60 p-4">
+      <h5 className="flex items-center gap-2 text-sm font-semibold text-brand-700">
         <Sparkles className="h-4 w-4" /> {t('improve.title')}
       </h5>
       <div className="mt-3 flex flex-wrap gap-2">
@@ -226,7 +226,7 @@ function PackDetail({ content }) {
       {content.improvement?.text && (
         <section className="rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2">
           <div className="mb-1.5 flex items-center justify-between gap-3">
-            <h5 className="flex items-center gap-1.5 text-sm font-semibold text-blue-700">
+            <h5 className="flex items-center gap-1.5 text-sm font-semibold text-brand-700">
               âœ¨ {t('ws.improvedVersion')}
             </h5>
             <CopyButton value={content.improvement.text} />
@@ -472,7 +472,7 @@ export default function Workspace() {
               onClick={() => setTab(id)}
               className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold transition ${
                 tab === id
-                  ? 'bg-zinc-900 text-white'
+                  ? 'bg-brand-600 text-white'
                   : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-950'
               }`}
             >

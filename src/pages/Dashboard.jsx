@@ -145,7 +145,7 @@ export default function Dashboard() {
             </p>
           )}
           {briefing?.ideas && (
-            <details data-background-lock className="mb-6 rounded-xl border border-blue-100 bg-blue-50/60 p-5 shadow-sm">
+            <details data-background-lock className="mb-6 rounded-xl border border-brand-100 bg-brand-50/60 p-5 shadow-sm">
               <summary className="flex cursor-pointer select-none items-center gap-2.5 text-sm font-semibold text-zinc-950">
                 <CalendarDays className="h-4.5 w-4.5 shrink-0 text-brand-600" />
                 {t('brief.title')}

@@ -51,7 +51,7 @@ export default function Navbar({ credits, onSignOut }) {
           <button
             onClick={() => setShowPricing(true)}
             aria-label={t('nav.upgrade')}
-            className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-zinc-800"
+            className="rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-700"
           >
             <span className="flex items-center gap-2"><Crown className="h-4 w-4" />
             <span className="hidden lg:inline">{t('nav.upgrade')}</span></span>
